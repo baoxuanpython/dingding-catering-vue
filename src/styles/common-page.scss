@@ -1,0 +1,658 @@
+/**
+ * 主题：公共页面样式（订单管理、菜品管理等列表页面通用）
+ * > 创建日期：2026-10-13
+ * > 标签：#Vue3 #ElementPlus #公共样式 #深色主题
+ *
+ * 适用场景：
+ * - 所有包含"统计卡片 + 搜索表单 + 数据表格 + 分页"的列表页面
+ * - 使用 Element Plus 组件库的 CRUD 管理后台页面
+ *
+ * 包含模块：
+ * 1. 页面基础布局 (page-container)
+ * 2. 统计卡片 (stats-row, stat-card)
+ * 3. 搜索面板 (search-panel, search-form)
+ * 4. 表格面板 (table-panel)
+ * 5. 分页组件 (pagination-wrapper)
+ * 6. Element Plus 深色主题适配
+ *    - el-select 下拉框
+ *    - el-table 表格
+ *    - el-pagination 分页
+ *    - el-date-picker 日期选择器
+ * 7. 响应式断点
+ */
+
+/* ==================== 页面基础布局 ==================== */
+.page-container {
+  padding: 24px;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+/* ==================== 统计卡片 ==================== */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  .stat-icon {
+    font-size: 32px;
+    opacity: 0.8;
+  }
+
+  .stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    opacity: 0.7;
+  }
+
+  .stat-arrow {
+    font-size: 24px;
+    opacity: 0.3;
+    transition: all 0.3s;
+  }
+
+  &:hover .stat-arrow {
+    opacity: 0.6;
+    transform: translateX(4px);
+  }
+}
+
+/* 统计卡片 - 统一的基础样式（所有卡片默认外观一致） */
+.stat-card {
+  background: linear-gradient(
+    135deg,
+    rgba(144, 147, 153, 0.15) 0%,
+    rgba(144, 147, 153, 0.05) 100%
+  );
+  border: 1px solid rgba(144, 147, 153, 0.2);
+
+  .stat-value {
+    color: #909399;
+  }
+}
+
+/* 统计卡片激活状态（高亮显示） */
+.stat-card {
+  &.stat-active {
+    background: linear-gradient(
+      135deg,
+      rgba(103, 194, 58, 0.25) 0%,
+      rgba(103, 194, 58, 0.1) 100%
+    ) !important;
+    border: 2px solid rgba(103, 194, 58, 0.5) !important;
+    box-shadow: 0 8px 24px rgba(103, 194, 58, 0.2);
+    transform: translateY(-6px) scale(1.02);
+
+    .stat-value {
+      color: #67c23a;
+      font-size: 32px;
+      text-shadow: 0 2px 8px rgba(103, 194, 58, 0.3);
+    }
+
+    .stat-label {
+      color: var(--primary);
+      font-weight: 600;
+      opacity: 1;
+    }
+
+    .stat-arrow {
+      opacity: 1;
+      transform: translateX(6px);
+      color: var(--primary);
+    }
+
+    // 激活状态动画
+    animation: statPulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes statPulse {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(103, 194, 58, 0.2);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(103, 194, 58, 0.35);
+  }
+}
+
+/* 统计卡片自定义查询状态（混合条件查询高亮） */
+.stat-card {
+  &.stat-custom {
+    background: linear-gradient(
+      135deg,
+      rgba(64, 158, 255, 0.25) 0%,
+      rgba(114, 94, 255, 0.15) 100%
+    ) !important;
+    border: 2px solid rgba(64, 158, 255, 0.5) !important;
+    box-shadow: 0 8px 24px rgba(64, 158, 255, 0.25);
+    transform: translateY(-6px) scale(1.02);
+
+    .stat-value {
+      color: #409eff;
+      font-size: 32px;
+      text-shadow: 0 2px 8px rgba(64, 158, 255, 0.3);
+    }
+
+    .stat-label {
+      color: #725eff;
+      font-weight: 600;
+      opacity: 1;
+    }
+
+    .stat-arrow {
+      opacity: 1;
+      transform: translateX(6px);
+      color: #409eff;
+    }
+
+    // 自定义查询状态动画
+    animation: statCustomPulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes statCustomPulse {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(64, 158, 255, 0.25);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(114, 94, 255, 0.35);
+  }
+}
+
+/* ==================== 加载动画深色背景 ==================== */
+.el-loading-mask {
+  background-color: rgba(17, 24, 39, 0.85) !important; // 深色背景 (slate-900)
+  backdrop-filter: blur(8px);
+
+  .el-loading-spinner {
+    .circular {
+      .path {
+        stroke: var(--primary); // 使用主题色
+      }
+    }
+
+    .el-loading-text {
+      color: #e5e7eb; // 浅灰色文字
+    }
+  }
+}
+
+/* ==================== 搜索面板 ==================== */
+.search-panel {
+  padding: 20px 24px;
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: var(--shadow-light);
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+
+  .el-form-item {
+    margin-bottom: 0;
+  }
+
+  .search-input {
+    width: 180px;
+  }
+
+  .date-input {
+    width: 280px;
+  }
+
+  .action-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .search-btn,
+  .reset-btn,
+  .add-btn,
+  .batch-delete-btn {
+    height: 36px;
+  }
+
+  .reset-btn {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+
+    &:hover {
+      background-color: var(--primary-bg) !important;
+      color: var(--primary) !important;
+      border-color: var(--primary) !important;
+    }
+  }
+}
+
+/* ==================== 表格面板 ==================== */
+.table-panel {
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: var(--shadow-light);
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.table-count {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ==================== 通用内容样式 ==================== */
+.time-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.action-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+
+.amount-value,
+.price-value {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.status-tag {
+  font-weight: 500;
+}
+
+/* ==================== 分页 ==================== */
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* ==================== 弹窗通用样式 ==================== */
+.dialog-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+  padding-left: 12px;
+  border-left: 3px solid var(--primary);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+.detail-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.detail-value {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.amount-highlight {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ==================== Element Plus 深色主题适配 ==================== */
+
+/*
+ * 注意：以下样式分为两类：
+ * 1. Scoped 样式（用于组件内部）- 在各页面的 <style scoped> 中使用 :deep()
+ * 2. 全局样式（用于 Teleport 到 body 的元素）- 直接生效
+ */
+
+/* ---------- 1. el-select 下拉框深色主题 ---------- */
+
+/* 下拉框弹出层（Teleport 到 body，需要全局样式） */
+.el-select__popper,
+.el-popper.is-pure.is-light.el-tooltip.el-select__popper {
+  background-color: var(--bg-card) !important;
+}
+
+.el-select-dropdown {
+  background-color: var(--bg-card) !important;
+}
+
+.el-scrollbar {
+  background-color: var(--bg-card) !important;
+}
+
+.el-select-dropdown__wrap,
+.el-scrollbar__wrap,
+.el-scrollbar__wrap--hidden-default {
+  background-color: var(--bg-card) !important;
+  border-radius: 8px !important;
+}
+
+.el-select-dropdown__list,
+.el-scrollbar__view {
+  background-color: var(--bg-card) !important;
+  border-radius: 8px !important;
+}
+
+.el-select-dropdown__item {
+  background-color: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+
+  &:hover {
+    background-color: var(--primary-bg) !important;
+    color: var(--primary) !important;
+  }
+
+  &.is-selected {
+    background-color: var(--primary-bg) !important;
+    color: var(--primary) !important;
+    font-weight: 600;
+
+    &:hover {
+      background-color: var(--primary-bg) !important;
+      color: var(--primary) !important;
+    }
+  }
+}
+
+/* el-select 输入框本身背景色（Scoped） */
+.el-input__wrapper {
+  background-color: var(--bg-primary);
+  box-shadow: 0 0 0 1px var(--border-color) inset;
+}
+
+.el-select__wrapper {
+  background-color: var(--bg-primary) !important;
+}
+
+.el-select .el-input__wrapper {
+  background-color: var(--bg-primary) !important;
+}
+
+/* ---------- 2. el-table 表格深色主题（Scoped）---------- */
+.el-table {
+  --el-table-border-color: var(--border-color);
+  --el-table-header-bg-color: var(--bg-primary);
+  --el-table-row-hover-bg-color: rgba(103, 194, 58, 0.04);
+  --el-table-tr-bg-color: var(--bg-card);
+  --el-table-expanded-row-bg-color: var(--bg-card);
+  background-color: var(--bg-card);
+}
+
+.el-table th.el-table__cell {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.el-table td.el-table__cell {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background-color: var(--bg-primary);
+}
+
+.el-table__body tr:hover > td.el-table__cell {
+  background-color: rgba(103, 194, 58, 0.08) !important;
+}
+
+/* 表格单元格水平垂直居中 */
+.el-table .el-table__cell {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* ---------- 3. el-pagination 分页组件深色主题 ---------- */
+
+/* 分页内的下拉框弹出层（Teleport 到 body） */
+.el-pagination .el-select .el-input__wrapper {
+  background-color: var(--bg-primary) !important;
+}
+
+/* 分页按钮（Scoped） */
+.el-pagination {
+  --el-pagination-bg-color: var(--bg-primary);
+  --el-pagination-button-bg-color: var(--bg-primary);
+  --el-pagination-hover-color: var(--primary);
+}
+
+.el-pagination .el-pager li {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+
+  &.is-active {
+    background-color: var(--primary) !important;
+    color: #ffffff !important;
+  }
+}
+
+.el-pagination button {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+
+  &:hover:not(:disabled) {
+    color: var(--primary) !important;
+    border-color: var(--primary) !important;
+  }
+
+  &:disabled {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+    opacity: 0.6;
+  }
+}
+
+.el-pagination .btn-prev,
+.el-pagination .btn-next {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+
+  &:disabled {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+  }
+}
+
+/* ---------- 4. el-date-picker 日期选择器深色主题 ---------- */
+
+/* 日期选择器弹出层（Teleport 到 body） */
+.el-picker__popper {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.el-picker-panel {
+  background-color: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+}
+
+.el-date-picker {
+  background-color: var(--bg-card) !important;
+}
+
+.el-date-table td {
+  color: var(--text-primary);
+
+  &.available:hover {
+    color: var(--primary);
+  }
+
+  &.current:not(.disabled) .el-date-table-cell__text {
+    background-color: var(--primary);
+    color: #fff;
+  }
+
+  &.in-range .el-date-table-cell {
+    background-color: var(--primary-bg) !important;
+  }
+
+  &.start-date .el-date-table-cell,
+  &.end-date .el-date-table-cell {
+    background-color: var(--primary) !important;
+  }
+
+  &.start-date .el-date-table-cell__text,
+  &.end-date .el-date-table-cell__text {
+    color: #fff !important;
+  }
+
+  &.today .el-date-table-cell__text {
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  &.disabled .el-date-table-cell {
+    background-color: transparent;
+    color: var(--text-secondary);
+  }
+}
+
+.el-date-table th {
+  color: var(--text-secondary);
+}
+
+.el-picker-panel__icon-btn {
+  color: var(--text-primary) !important;
+}
+
+.el-picker-panel__body-wrapper {
+  background-color: var(--bg-card) !important;
+}
+
+.el-picker-panel__footer {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+
+  .el-button {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+
+    &--primary {
+      background-color: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+  }
+}
+
+/* ---------- 5. 图片预览弹窗深色主题 ---------- */
+.el-image-viewer__wrapper {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* ==================== 响应式断点 ==================== */
+@media (max-width: 1200px) {
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .search-form {
+    flex-direction: column;
+    align-items: stretch;
+
+    .el-form-item {
+      margin-right: 0;
+      width: 100%;
+    }
+
+    .search-input,
+    .date-input {
+      width: 100%;
+    }
+
+    .action-group {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

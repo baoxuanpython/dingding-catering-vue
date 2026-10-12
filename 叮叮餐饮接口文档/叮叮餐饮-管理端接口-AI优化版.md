@@ -1,0 +1,1001 @@
+# 叮叮餐饮-管理端接口文档（AI优化版）
+
+> 创建日期：2026-10-12
+> 标签：#API #管理端 #TypeScript
+
+## 通用说明
+
+### 基础路径
+
+```
+Base URL: /admin
+```
+
+### 统一响应格式
+
+```json
+{
+  "code": 1, // 状态码：1=成功，0=失败
+  "data": {}, // 响应数据（类型因接口而异）
+  "msg": "操作成功" // 提示信息
+}
+```
+
+### 统一分页响应格式
+
+```json
+{
+  "code": 1,
+  "data": {
+    "total": 100,
+    "records": [] // 当前页数据列表
+  },
+  "msg": null
+}
+```
+
+### 认证方式
+
+- 登录后返回 JWT token
+- 后续请求需在 Header 中携带 token（具体 Header 名称待确认，通常为 `Authorization` 或 `token`）
+
+---
+
+## 1. 分类管理 (Category)
+
+### 1.1 修改分类
+
+- **Path**: `PUT /admin/category`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface UpdateCategoryRequest {
+  id: number; // 分类id（必填）
+  name: string; // 分类名称（必填）
+  sort: number; // 排序（必填，int32）
+  type: number; // 分类类型：1=菜品分类，2=套餐分类（必填，int32）
+}
+```
+
+- **响应**: `ApiResponse<string>`
+
+### 1.2 分类分页查询
+
+- **Path**: `GET /admin/category/page`
+- **查询参数**:
+
+```typescript
+interface CategoryPageQuery {
+  name?: string; // 分类名称（可选，模糊查询）
+  page: number; // 页码（必填）
+  pageSize: number; // 每页记录数（必填）
+  type?: number; // 分类类型：1=菜品分类，2=套餐分类（可选）
+}
+```
+
+- **响应**: `ApiResponse<PageResult<Category>>`
+
+```typescript
+interface Category {
+  id: number;
+  type: number;
+  name: string;
+  sort: number;
+  status: number; // 状态
+  createTime: string;
+  updateTime: string;
+  createUser: number;
+  updateUser: number;
+}
+```
+
+### 1.3 启用/禁用分类
+
+- **Path**: `POST /admin/category/status/{status}`
+- **路径参数**:
+  - `status`: 1=启用，0=禁用
+- **查询参数**:
+  - `id`: 分类id（必填）
+- **响应**: `ApiResponse<string>`
+
+### 1.4 新增分类
+
+- **Path**: `POST /admin/category`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface CreateCategoryRequest {
+  name: string; // 分类名称（必填）
+  sort: number; // 排序（必填，int32，按照升序排序）
+  type: number; // 分类类型：1=菜品分类，2=套餐分类（必填，int32）
+}
+```
+
+- **响应**: `ApiResponse<string>`
+
+### 1.5 根据id删除分类
+
+- **Path**: `DELETE /admin/category`
+- **查询参数**:
+  - `id`: 分类id（必填）
+- **响应**: `ApiResponse<string>`
+
+### 1.6 根据类型查询分类列表
+
+- **Path**: `GET /admin/category/list`
+- **查询参数**:
+  - `type?`: 分类类型：1=菜品分类，2=套餐分类（可选）
+- **响应**: `ApiResponse<Category[]>`
+
+```typescript
+interface Category {
+  createTime?: string; // date-time
+  createUser?: number; // int64
+  id?: number; // int64
+  name?: string;
+  sort?: number; // int32
+  status?: number; // int32
+  type?: number; // int32
+  updateTime?: string; // date-time
+  updateUser?: number; // int64
+}
+```
+
+---
+
+## 2. 员工管理 (Employee)
+
+### 2.1 修改密码
+
+- **Path**: `PUT /admin/employee/editPassword`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface EditPasswordRequest {
+  empId: number; // 员工id（必填，int64）
+  newPassword: string; // 新密码（必填）
+  oldPassword: string; // 旧密码（必填）
+}
+```
+
+- **响应**: `ApiResponse<string>`
+
+### 2.2 启用/禁用员工账号
+
+- **Path**: `POST /admin/employee/status/{status}`
+- **路径参数**:
+  - `status`: 1=启用，0=禁用
+- **查询参数**:
+  - `id`: 员工id（必填）
+- **响应**: `ApiResponse<string>`
+
+### 2.3 员工分页查询
+
+- **Path**: `GET /admin/employee/page`
+- **查询参数**:
+
+```typescript
+interface EmployeePageQuery {
+  name?: string; // 员工姓名（可选，模糊查询）
+  page: number; // 页码（必填）
+  pageSize: number; // 每页记录数（必填）
+}
+```
+
+- **响应**: `ApiResponse<PageResult<Employee>>`
+
+```typescript
+interface Employee {
+  id: number;
+  username: string;
+  name: string;
+  password: string;
+  phone: string;
+  sex: string;
+  idNumber: string; // 身份证号
+  status: number;
+  createTime: string | null;
+  updateTime: string;
+  createUser: number | null;
+  updateUser: number;
+}
+```
+
+### 2.4 员工登录
+
+- **Path**: `POST /admin/employee/login`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface LoginRequest {
+  password: string; // 密码（必填）
+  username: string; // 用户名（必填）
+}
+```
+
+- **响应**: `ApiResponse<LoginResponse>`
+
+```typescript
+interface LoginResponse {
+  id?: number; // 主键值（int64）
+  name?: string; // 姓名
+  token?: string; // JWT令牌
+  userName?: string; // 用户名
+}
+```
+
+### 2.5 新增员工
+
+- **Path**: `POST /admin/employee`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface CreateEmployeeRequest {
+  id?: number; // 员工id（可选，int64）
+  idNumber: string; // 身份证（必填）
+  name: string; // 姓名（必填）
+  phone: string; // 手机号（必填）
+  sex: string; // 性别（必填）
+  username: string; // 用户名（必填）
+}
+```
+
+- **响应**: `ApiResponse<object>`
+
+### 2.6 根据id查询员工
+
+- **Path**: `GET /admin/employee/{id}`
+- **路径参数**:
+  - `id`: 员工id
+- **响应**: `ApiResponse<EmployeeDetail>`
+
+```typescript
+interface EmployeeDetail {
+  createTime?: string; // date-time
+  createUser?: number; // int64
+  id?: number; // int64
+  idNumber?: string; // 身份证号
+  name?: string;
+  password?: string;
+  phone?: string;
+  sex?: string;
+  status?: number; // int32
+  updateTime?: string; // date-time
+  updateUser?: number; // int64
+  username?: string;
+}
+```
+
+### 2.7 编辑员工信息
+
+- **Path**: `PUT /admin/employee`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface UpdateEmployeeRequest {
+  id: number; // 员工id（必填，int64）
+  idNumber: string; // 身份证（必填）
+  name: string; // 姓名（必填）
+  phone: string; // 手机号（必填）
+  sex: string; // 性别（必填）
+  username: string; // 用户名（必填）
+}
+```
+
+- **响应**: `ApiResponse<string>`
+
+### 2.8 退出登录
+
+- **Path**: `POST /admin/employee/logout`
+- **Content-Type**: `application/json`
+- **请求体**: 无
+- **响应**: `ApiResponse<string>`
+
+---
+
+## 3. 套餐管理 (Setmeal)
+
+### 3.1 修改套餐
+
+- **Path**: `PUT /admin/setmeal`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface UpdateSetmealRequest {
+  categoryId: number; // 分类id（必填，int64）
+  description?: string; // 套餐描述（可选）
+  id: number; // 套餐id（必填，int64）
+  image: string; // 套餐图片路径（必填）
+  name: string; // 套餐名称（必填）
+  price: number; // 套餐价格（必填）
+  setmealDishes: SetmealDishItem[]; // 套餐和菜品关联关系（必填）
+  status?: number; // 套餐起售状态（可选，int32）
+}
+
+interface SetmealDishItem {
+  copies: number; // 菜品份数（必填，int32）
+  dishId: number; // 菜品id（必填，int64）
+  id?: number; // 关系表主键值（可选，int64）
+  name: string; // 菜品名称（必填）
+  price: number; // 菜品价格（必填）
+  setmealId?: number; // 套餐id（可选，int64，修改时不强制要求）
+}
+```
+
+- **响应**: `ApiResponse<object>`
+
+### 3.2 套餐分页查询
+
+- **Path**: `GET /admin/setmeal/page`
+- **查询参数**:
+
+```typescript
+interface SetmealPageQuery {
+  categoryId?: number; // 分类id（可选）
+  name?: string; // 套餐名称（可选，模糊查询）
+  page: number; // 页码（必填）
+  pageSize: number; // 每页记录数（必填）
+  status?: number; // 套餐起售状态（可选）
+}
+```
+
+- **响应**: `ApiResponse<PageResult<SetmealVO>>`
+
+```typescript
+interface SetmealVO {
+  id: number;
+  categoryId: number;
+  name: string;
+  price: number;
+  status: number;
+  description: string;
+  image: string;
+  updateTime: string;
+  categoryName: string; // 分类名称（后端关联查询返回）
+}
+```
+
+### 3.3 套餐起售/停售
+
+- **Path**: `POST /admin/setmeal/status/{status}`
+- **路径参数**:
+  - `status`: 1=起售，0=停售
+- **查询参数**:
+  - `id`: 套餐id（必填）
+- **响应**: `ApiResponse<object>`
+
+### 3.4 批量删除套餐
+
+- **Path**: `DELETE /admin/setmeal`
+- **查询参数**:
+  - `ids`: 套餐id列表（必填，逗号分隔或数组）
+- **响应**: `ApiResponse<object>`
+
+### 3.5 新增套餐
+
+- **Path**: `POST /admin/setmeal`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface CreateSetmealRequest {
+  categoryId: number; // 分类id（必填，int64）
+  description?: string; // 套餐描述（可选）
+  id?: number; // 套餐id（可选，int64）
+  image: string; // 套餐图片（必填）
+  name: string; // 套餐名称（必填）
+  price: number; // 套餐价格（必填）
+  setmealDishes: CreateSetmealDishItem[]; // 套餐包含的菜品（必填）
+  status: number; // 套餐状态：1=起售，0=停售（必填，int32）
+}
+
+interface CreateSetmealDishItem {
+  copies: number; // 份数（必填，int32）
+  dishId: number; // 菜品id（必填，int64）
+  id?: number; // 套餐和菜品关系id（可选，int64）
+  name: string; // 菜品名称（必填）
+  price: number; // 菜品价格（必填）
+  setmealId: number; // 套餐id（必填，int64）
+}
+```
+
+- **响应**: `ApiResponse<object>`
+
+### 3.6 根据id查询套餐
+
+- **Path**: `GET /admin/setmeal/{id}`
+- **路径参数**:
+  - `id`: 套餐id
+- **响应**: `ApiResponse<SetmealDetail>`
+
+```typescript
+interface SetmealDetail {
+  categoryId: number;
+  categoryName: string;
+  description: string;
+  id: number;
+  image: string;
+  name: string;
+  price: number;
+  setmealDishes: SetmealDishItem[];
+  status: number;
+  updateTime: string; // date-time
+}
+```
+
+---
+
+## 4. 菜品管理 (Dish)
+
+### 4.1 修改菜品
+
+- **Path**: `PUT /admin/dish`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface UpdateDishRequest {
+  id: number; // 菜品id（必填，int64）
+  name: string; // 菜品名称（必填）
+  categoryId: number; // 分类id（必填，int64）
+  price: number; // 菜品价格（必填）
+  image: string; // 菜品图片路径（必填）
+  description?: string; // 菜品描述（可选）
+  status?: number; // 菜品状态：1=起售，0=停售（可选，int32）
+  flavors?: DishFlavor[]; // 口味（可选）
+}
+
+interface DishFlavor {
+  id?: number; // 口味id（可选，int64）
+  dishId?: number; // 菜品id（可选，int64）
+  name: string; // 口味名称（必填）
+  value: string; // 口味值（必填）
+}
+```
+
+- **响应**: `ApiResponse<string>`
+
+### 4.2 批量删除菜品
+
+- **Path**: `DELETE /admin/dish`
+- **查询参数**:
+  - `ids`: 菜品id列表，用逗号分隔（必填，示例：`1,2,3`）
+- **响应**: `ApiResponse<string>`
+
+### 4.3 新增菜品
+
+- **Path**: `POST /admin/dish`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface CreateDishRequest {
+  name: string; // 菜品名称（必填）
+  categoryId: number; // 分类id（必填，int64）
+  price: number; // 菜品价格（必填）
+  image: string; // 菜品图片路径（必填）
+  description?: string; // 菜品描述（可选）
+  status?: number; // 菜品状态：1=起售，0=停售（可选，int32）
+  flavors?: DishFlavor[]; // 口味（可选）
+}
+```
+
+- **响应**: `ApiResponse<string>`
+
+### 4.4 根据id查询菜品
+
+- **Path**: `GET /admin/dish/{id}`
+- **路径参数**:
+  - `id`: 菜品id（必填）
+- **响应**: `ApiResponse<DishDetail>`
+
+```typescript
+interface DishDetail {
+  id: number;
+  name: string;
+  categoryId: number;
+  categoryName: string;
+  price: number;
+  image: string;
+  description: string;
+  status: number; // 1=起售，0=停售
+  updateTime: string; // date-time
+  flavors: DishFlavor[];
+}
+```
+
+### 4.5 根据分类id查询菜品
+
+- **Path**: `GET /admin/dish/list`
+- **查询参数**:
+  - `categoryId`: 分类id（必填）
+- **响应**: `ApiResponse<Dish[]>`
+
+```typescript
+interface Dish {
+  id?: number;
+  name?: string;
+  categoryId?: number;
+  price?: number;
+  image?: string;
+  description?: string;
+  status?: number;
+  createTime?: string; // date-time
+  updateTime?: string; // date-time
+  createUser?: number;
+  updateUser?: number;
+}
+```
+
+### 4.6 菜品分页查询
+
+- **Path**: `GET /admin/dish/page`
+- **查询参数**:
+
+```typescript
+interface DishPageQuery {
+  page: number; // 页码（必填）
+  pageSize: number; // 每页记录数（必填）
+  name?: string; // 菜品名称（可选，模糊查询）
+  categoryId?: number; // 分类id（可选）
+  status?: number; // 菜品状态（可选）
+}
+```
+
+- **响应**: `ApiResponse<PageResult<DishVO>>`
+
+```typescript
+interface DishVO {
+  id: number;
+  name: string;
+  categoryId: number;
+  categoryName: string; // 分类名称
+  price: number;
+  image: string;
+  description: string;
+  status: number;
+  updateTime: string;
+}
+```
+
+### 4.7 菜品起售/停售
+
+- **Path**: `POST /admin/dish/status/{status}`
+- **路径参数**:
+  - `status`: 1=起售，0=停售
+- **查询参数**:
+  - `id`: 菜品id（必填）
+- **响应**: `ApiResponse<string>`
+
+---
+
+## 5. 订单管理 (Order)
+
+### 5.1 取消订单
+
+- **Path**: `PUT /admin/order/cancel`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface CancelOrderRequest {
+  id: number; // 订单id（必填，int64）
+  cancelReason: string; // 订单取消原因（必填）
+}
+```
+
+- **响应**: `ApiResponse<object>`
+
+### 5.2 各个状态的订单数量统计
+
+- **Path**: `GET /admin/order/statistics`
+- **响应**: `ApiResponse<OrderStatistics>`
+
+```typescript
+interface OrderStatistics {
+  toBeConfirmed: number; // 待接单数量（int32）
+  confirmed: number; // 待派送数量（int32）
+  deliveryInProgress: number; // 派送中数量（int32）
+  completed: number; // 已完成数量（int32）
+  cancelled: number; // 已取消数量（int32）
+  refunded: number; // 已退款数量（int32）
+}
+```
+
+### 5.3 完成订单
+
+- **Path**: `PUT /admin/order/complete/{id}`
+- **路径参数**:
+  - `id`: 订单id（必填）
+- **响应**: `ApiResponse<object>`
+
+### 5.4 拒单
+
+- **Path**: `PUT /admin/order/rejection`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface RejectOrderRequest {
+  id: number; // 订单id（必填，int64）
+  rejectionReason: string; // 拒单原因（必填）
+}
+```
+
+- **响应**: `ApiResponse<object>`
+
+### 5.5 接单
+
+- **Path**: `PUT /admin/order/confirm`
+- **Content-Type**: `application/json`
+- **请求体**:
+
+```typescript
+interface ConfirmOrderRequest {
+  id: number; // 订单id（必填，int64）
+}
+```
+
+- **响应**: `ApiResponse<object>`
+
+### 5.6 查询订单详情
+
+- **Path**: `GET /admin/order/details/{id}`
+- **路径参数**:
+  - `id`: 订单id（必填）
+- **响应**: `ApiResponse<OrderDetail>`
+
+```typescript
+interface OrderDetail {
+  id?: number;
+  number?: string; // 订单号
+  status?: number; // 订单状态
+  userId?: number;
+  addressBookId?: number;
+  address?: string;
+  consignee?: string; // 收货人
+  phone?: string;
+  amount?: number; // 订单金额
+  remark?: string; // 备注
+  orderTime?: string; // date-time
+  checkoutTime?: string | null; // date-time，可为空
+  payMethod?: number; // 支付方式
+  payStatus?: number; // 支付状态
+  cancelReason?: string; // 取消原因
+  rejectionReason?: string; // 拒单原因
+  cancelTime?: string; // date-time
+  estimatedDeliveryTime?: string; // date-time
+  deliveryStatus?: number; // 派送状态
+  deliveryTime?: string; // date-time
+  packAmount?: number; // 打包费
+  tablewareNumber?: number; // 餐具数量
+  tablewareStatus?: number; // 餐具状态
+  userName?: string; // 用户名
+  orderDishes?: string; // 订单包含的菜品（字符串）
+  orderDetailList?: OrderDetailItem[]; // 订单明细
+}
+
+interface OrderDetailItem {
+  id?: number;
+  name?: string; // 菜品名称
+  image?: string; // 菜品图片
+  orderId?: number;
+  dishId?: number;
+  setmealId?: number;
+  dishFlavor?: string; // 口味
+  number?: number; // 数量（int32）
+  amount?: number; // 金额
+}
+```
+
+### 5.7 派送订单
+
+- **Path**: `PUT /admin/order/delivery/{id}`
+- **路径参数**:
+  - `id`: 订单id（必填）
+- **响应**: `ApiResponse<object>`
+
+### 5.8 订单搜索
+
+- **Path**: `GET /admin/order/conditionSearch`
+- **查询参数**:
+
+```typescript
+interface OrderSearchQuery {
+  page: number; // 页码（必填）
+  pageSize: number; // 每页记录数（必填）
+  number?: string; // 订单号（可选）
+  phone?: string; // 手机号（可选）
+  status?: number; // 订单状态（可选）
+  beginTime?: string; // 开始时间（可选）
+  endTime?: string; // 结束时间（可选）
+}
+```
+
+- **响应**: `ApiResponse<PageResult<OrderVO>>`
+
+```typescript
+interface OrderVO {
+  id: number;
+  number: string; // 订单号
+  status: number;
+  userId: number;
+  addressBookId: number;
+  orderTime: string;
+  checkoutTime: string | null; // 可为空
+  payMethod: number;
+  payStatus: number;
+  amount: number;
+  remark: string;
+  userName: string;
+  phone: string;
+  address: string;
+  consignee: string;
+  cancelReason: string;
+  rejectionReason: string;
+  cancelTime: string;
+  estimatedDeliveryTime: string;
+  deliveryStatus: number;
+  deliveryTime: string;
+  packAmount: number;
+  tablewareNumber: number;
+  tablewareStatus: number;
+  orderDishes: string; // 订单包含的菜品，以字符串形式展示
+}
+```
+
+## 6. 工作台 (Workspace)
+
+### 6.1 查询今日运营数据
+
+- **Path**: `GET /admin/workspace/businessData`
+- **响应**: `ApiResponse<BusinessData>`
+
+```typescript
+interface BusinessData {
+  newUsers: number; // 新增用户数（int32）
+  turnover: number; // 营业额（double）
+  validOrderCount: number; // 有效订单数（int32）
+  orderCompletionRate: number; // 订单完成率（double）
+  unitPrice: number; // 平均客单价（double）
+}
+```
+
+### 6.2 查询套餐总览
+
+- **Path**: `GET /admin/workspace/overviewSetmeals`
+- **响应**: `ApiResponse<SetmealOverview>`
+
+```typescript
+interface SetmealOverview {
+  sold: number; // 已启售套餐数量（int32）
+  discontinued: number; // 已停售套餐数量（int32）
+}
+```
+
+### 6.3 查询菜品总览
+
+- **Path**: `GET /admin/workspace/overviewDishes`
+- **响应**: `ApiResponse<DishOverview>`
+
+```typescript
+interface DishOverview {
+  sold: number; // 已启售菜品数量（int32）
+  discontinued: number; // 已停售菜品数量（int32）
+}
+```
+
+### 6.4 查询订单管理数据
+
+- **Path**: `GET /admin/workspace/overviewOrders`
+- **响应**: `ApiResponse<OrderOverview>`
+
+```typescript
+interface OrderOverview {
+  waitingOrders: number; // 待接单数量（int32）
+  deliveredOrders: number; // 待派送数量（int32）
+  allOrders: number; // 全部订单（int32）
+  completedOrders: number; // 已完成数量（int32）
+  cancelledOrders: number; // 已取消数量（int32）
+}
+```
+
+---
+
+## 7. 店铺操作 (Shop)
+
+### 7.1 获取营业状态
+
+- **Path**: `GET /admin/shop/status`
+- **响应**: `ApiResponse<number>`
+  - 返回值为店铺营业状态：`1`=营业，`0`=打烊
+
+### 7.2 设置营业状态
+
+- **Path**: `PUT /admin/shop/{status}`
+- **路径参数**:
+  - `status`: 1=营业，0=打烊
+- **响应**: `ApiResponse<string>`
+
+---
+
+## 8. 数据统计 (Report)
+
+### 8.1 导出Excel报表
+
+- **Path**: `GET /admin/report/export`
+- **响应**: 返回 Excel 文件流（非 JSON 格式）
+
+### 8.2 查询销量排名top10
+
+- **Path**: `GET /admin/report/top10`
+- **查询参数**:
+
+```typescript
+interface Top10Query {
+  begin: string; // 开始日期（必填，格式：YYYY-MM-DD）
+  end: string; // 结束日期（必填，格式：YYYY-MM-DD）
+}
+```
+
+- **响应**: `ApiResponse<Top10Data>`
+
+```typescript
+interface Top10Data {
+  nameList: string; // 商品名称列表，以逗号分隔
+  numberList: string; // 销量列表，以逗号分隔
+}
+```
+
+### 8.3 用户统计
+
+- **Path**: `GET /admin/report/userStatistics`
+- **查询参数**:
+
+```typescript
+interface UserStatisticsQuery {
+  begin: string; // 开始日期（必填，格式：YYYY-MM-DD）
+  end: string; // 结束日期（必填，格式：YYYY-MM-DD）
+}
+```
+
+- **响应**: `ApiResponse<UserStatisticsData>`
+
+```typescript
+interface UserStatisticsData {
+  dateList: string; // 日期列表，以逗号分隔
+  newUserList: string; // 新增用户数列表，以逗号分隔
+  totalUserList: string; // 总用户量列表，以逗号分隔
+}
+```
+
+### 8.4 营业额统计
+
+- **Path**: `GET /admin/report/turnoverStatistics`
+- **查询参数**:
+
+```typescript
+interface TurnoverStatisticsQuery {
+  begin: string; // 开始日期（必填，格式：YYYY-MM-DD）
+  end: string; // 结束日期（必填，格式：YYYY-MM-DD）
+}
+```
+
+- **响应**: `ApiResponse<TurnoverStatisticsData>`
+
+```typescript
+interface TurnoverStatisticsData {
+  dateList: string; // 日期列表，以逗号分隔
+  turnoverList: string; // 营业额列表，以逗号分隔
+}
+```
+
+### 8.5 订单统计
+
+- **Path**: `GET /admin/report/ordersStatistics`
+- **查询参数**:
+
+```typescript
+interface OrdersStatisticsQuery {
+  begin: string; // 开始日期（必填，格式：YYYY-MM-DD）
+  end: string; // 结束日期（必填，格式：YYYY-MM-DD）
+}
+```
+
+- **响应**: `ApiResponse<OrdersStatisticsData>`
+
+```typescript
+interface OrdersStatisticsData {
+  dateList: string; // 日期列表，以逗号分隔
+  orderCountList: string; // 订单数列表，以逗号分隔
+  validOrderCountList: string; // 有效订单数列表，以逗号分隔
+  totalOrderCount: number; // 订单总数（int32）
+  validOrderCount: number; // 有效订单数（int32）
+  orderCompletionRate: number; // 订单完成率（double）
+}
+```
+
+---
+
+## 9. 通用接口 (Common)
+
+### 9.1 文件上传
+
+- **Path**: `POST /admin/common/upload`
+- **Content-Type**: `multipart/form-data`
+- **请求体**:
+
+```typescript
+interface UploadRequest {
+  file: File; // 文件（必填）
+}
+```
+
+- **响应**: `ApiResponse<string>`
+  - `data` 字段返回文件上传路径
+
+---
+
+## 类型定义汇总
+
+### 通用类型
+
+```typescript
+// 统一响应
+interface ApiResponse<T> {
+  code: number; // 1=成功，0=失败
+  data: T; // 响应数据
+  msg?: string; // 提示信息
+}
+
+// 分页结果
+interface PageResult<T> {
+  total: number; // 总记录数
+  records: T[]; // 当前页数据
+}
+
+// 分页查询参数
+interface PageQuery {
+  page: number; // 页码
+  pageSize: number; // 每页记录数
+}
+```
+
+### 枚举
+
+```typescript
+// 分类类型
+enum CategoryType {
+  DISH = 1, // 菜品分类
+  SETMEAL = 2, // 套餐分类
+}
+
+// 状态
+enum Status {
+  DISABLED = 0, // 禁用/停售/打烊
+  ENABLED = 1, // 启用/起售/营业
+}
+
+// 订单状态（待确认具体值）
+enum OrderStatus {
+  // 具体状态值待补充
+}
+```
+
+---
+
+## 注意事项
+
+1. **日期格式**：所有日期参数均为 `YYYY-MM-DD` 格式（如 `2022-05-01`）
+2. **日期时间格式**：响应中的日期为 ISO 8601 格式（`date-time`）
+3. **逗号分隔**：统计接口返回的列表数据以逗号分隔的字符串形式返回，前端需自行拆分
+4. **文件上传**：使用 `multipart/form-data` 格式，返回值为文件路径字符串
+5. **导出报表**：`/admin/report/export` 返回 Excel 文件流，非 JSON 格式
+6. **订单状态**：具体状态值需参考后端代码或接口文档进一步确认
