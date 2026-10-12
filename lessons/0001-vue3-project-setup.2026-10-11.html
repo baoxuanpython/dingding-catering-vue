@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>0001 - 从零搭建 Vue 3 项目</title>
+  <link rel="stylesheet" href="../assets/lesson-styles.css">
+</head>
+<body>
+  <div class="lesson-container">
+    <header class="lesson-header">
+      <h1>从零搭建 Vue 3 + TypeScript 项目</h1>
+      <div class="lesson-meta">
+        <span>📅 2026-10-11</span>
+        <span>🏷️ #Vue3 #TypeScript #Vite #项目搭建</span>
+        <span>⏱️ 预计 15 分钟</span>
+      </div>
+    </header>
+
+    <section class="lesson-section">
+      <h2>🎯 本课目标</h2>
+      <p>完成叮叮餐饮后台管理系统的项目初始化，理解现代前端项目的工具链和目录结构。</p>
+      <div class="tip-box success">
+        <div class="tip-box-title">完成后你将获得：</div>
+        <ul>
+          <li>一个可运行的 Vue 3 + TypeScript 项目</li>
+          <li>理解 package.json、vite.config.ts 等核心配置文件的作用</li>
+          <li>知道前端项目与后端项目的结构差异</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📚 前置知识：前端工具链扫盲</h2>
+      
+      <h3>后端 vs 前端项目对比</h3>
+      <table>
+        <tr>
+          <th>概念</th>
+          <th>后端（你熟悉的）</th>
+          <th>前端（要学的）</th>
+        </tr>
+        <tr>
+          <td>依赖管理</td>
+          <td>Maven / Gradle (pom.xml)</td>
+          <td>npm / yarn / pnpm (package.json)</td>
+        </tr>
+        <tr>
+          <td>构建工具</td>
+          <td>Maven 编译打包</td>
+          <td>Vite / Webpack</td>
+        </tr>
+        <tr>
+          <td>开发服务器</td>
+          <td>Spring Boot 内嵌 Tomcat</td>
+          <td>Vite Dev Server (热更新)</td>
+        </tr>
+        <tr>
+          <td>项目入口</td>
+          <td>main() 方法</td>
+          <td>index.html → main.ts</td>
+        </tr>
+        <tr>
+          <td>运行环境</td>
+          <td>JVM</td>
+          <td>浏览器</td>
+        </tr>
+      </table>
+
+      <div class="analogy-box">
+        <div class="title">💡 后端开发者类比</div>
+        <p><strong>package.json</strong> 就像你的 <code>pom.xml</code>，记录项目依赖和脚本命令。</p>
+        <p><strong>Vite</strong> 就像 Spring Boot 的开发模式，改代码自动刷新，但速度快 10 倍。</p>
+        <p><strong>node_modules</strong> 就像 Maven 的本地仓库，但放在项目目录下。</p>
+      </div>
+
+      <h3>核心概念解释</h3>
+      <ul>
+        <li><span class="inline-code">npm</span>：Node.js 的包管理器，类似 Maven</li>
+        <li><span class="inline-code">Vite</span>：下一代前端构建工具，极速启动</li>
+        <li><span class="inline-code">TypeScript</span>：JavaScript 的超集，加了类型系统</li>
+        <li><span class="inline-code">Vue 3</span>：渐进式 JavaScript 框架</li>
+      </ul>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🚀 实战：创建项目</h2>
+      
+      <h3>第一步：检查环境</h3>
+      <div class="code-block">
+# 检查 Node.js 版本（需要 18+）<br>
+node -v<br><br>
+# 检查 npm 版本<br>
+npm -v
+      </div>
+
+      <div class="tip-box warning">
+        <div class="tip-box-title">⚠️ 如果没安装 Node.js</div>
+        <p>去 <a href="https://nodejs.org/" target="_blank">nodejs.org</a> 下载 LTS 版本（长期支持版），推荐 v20+。</p>
+      </div>
+
+      <h3>第二步：用 create-vue 脚手架创建项目</h3>
+      <div class="code-block">
+<span class="comment"># 在项目根目录执行</span><br>
+npm create vite@latest . -- --template vue-ts
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-box-title">📝 命令解析</div>
+        <ul>
+          <li><span class="inline-code">npm create</span>：使用 npm 的创建项目功能</li>
+          <li><span class="inline-code">vite@latest</span>：使用最新版的 Vite 脚手架</li>
+          <li><span class="inline-code">.</span>：在当前目录创建（不创建子文件夹）</li>
+          <li><span class="inline-code">--template vue-ts</span>：使用 Vue + TypeScript 模板</li>
+        </ul>
+      </div>
+
+      <h3>第三步：安装依赖</h3>
+      <div class="code-block">
+npm install
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-box-title">📦 这步做了什么？</div>
+        <p>类似 <code>mvn install</code>，会下载 package.json 里声明的所有依赖到 node_modules 目录。</p>
+      </div>
+
+      <h3>第四步：启动开发服务器</h3>
+      <div class="code-block">
+npm run dev
+      </div>
+
+      <div class="tip-box success">
+        <div class="tip-box-title">✅ 成功标志</div>
+        <p>终端会显示类似这样的信息：</p>
+        <div class="code-block">
+  VITE v5.0.0  ready in 200 ms<br><br>
+  ➜  Local:   http://localhost:5173/<br>
+  ➜  Network: use --host to expose
+        </div>
+        <p>在浏览器打开 <a href="http://localhost:5173" target="_blank">http://localhost:5173</a> 就能看到 Vue 的欢迎页面！</p>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📁 项目结构解析</h2>
+      
+      <p>创建完成后，你的项目目录长这样：</p>
+
+      <div class="file-tree">
+<span class="folder">dingding-catering-vue/</span><br>
+├── <span class="file">node_modules/</span>        <span class="comment"># 依赖包（类似 Maven 仓库，不用管）</span><br>
+├── <span class="file">public/</span>              <span class="comment"># 静态资源（图片、favicon 等）</span><br>
+│   └── <span class="file">vite.svg</span><br>
+├── <span class="file">src/</span>                 <span class="comment"># 源代码目录（你主要工作的地方）</span><br>
+│   ├── <span class="file">assets/</span>          <span class="comment"># 组件级别的静态资源</span><br>
+│   │   └── <span class="file">vue.svg</span><br>
+│   ├── <span class="file">components/</span>      <span class="comment"># Vue 组件（类似后端的 Service/Controller）</span><br>
+│   │   └── <span class="file">HelloWorld.vue</span><br>
+│   ├── <span class="file">App.vue</span>          <span class="comment"># 根组件（类似 Spring 的主配置类）</span><br>
+│   ├── <span class="file">main.ts</span>          <span class="comment"># 入口文件（类似 main() 方法）</span><br>
+│   └── <span class="file">style.css</span>        <span class="comment"># 全局样式</span><br>
+├── <span class="file">index.html</span>           <span class="comment"># HTML 入口（类似后端的 index.jsp）</span><br>
+├── <span class="file">package.json</span>         <span class="comment"># 项目配置（类似 pom.xml）</span><br>
+├── <span class="file">tsconfig.json</span>        <span class="comment"># TypeScript 配置</span><br>
+├── <span class="file">vite.config.ts</span>       <span class="comment"># Vite 构建配置</span><br>
+└── <span class="file">package-lock.json</span>    <span class="comment"># 依赖锁定文件（类似 pom.xml 的锁定版本）</span>
+      </div>
+
+      <div class="analogy-box">
+        <div class="title">💡 核心文件类比</div>
+        <p><strong>main.ts</strong> = 你的 <code>Application.java</code>，程序入口</p>
+        <p><strong>App.vue</strong> = 你的主配置类，所有组件的根</p>
+        <p><strong>components/</strong> = 你的 Service/Controller 层，每个组件是一个功能模块</p>
+        <p><strong>vite.config.ts</strong> = 你的 application.yml，构建和开发服务器配置</p>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🔍 核心文件解读</h2>
+
+      <h3>package.json</h3>
+      <div class="code-block">
+{<br>
+&nbsp;&nbsp;<span class="string">"name"</span>: <span class="string">"dingding-catering-vue"</span>,<br>
+&nbsp;&nbsp;<span class="string">"version"</span>: <span class="string">"0.0.0"</span>,<br>
+&nbsp;&nbsp;<span class="string">"type"</span>: <span class="string">"module"</span>,<br>
+&nbsp;&nbsp;<span class="string">"scripts"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"dev"</span>: <span class="string">"vite"</span>,              <span class="comment"># 开发服务器（开发时用这个）</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"build"</span>: <span class="string">"vue-tsc -b && vite build"</span>,  <span class="comment"># 生产构建</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"preview"</span>: <span class="string">"vite preview"</span>   <span class="comment"># 预览构建结果</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="string">"dependencies"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"vue"</span>: <span class="string">"^3.5.0"</span>           <span class="comment"># 运行时依赖（类似 pom.xml 的 dependencies）</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="string">"devDependencies"</span>: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"typescript"</span>: <span class="string">"~5.6.0"</span>,   <span class="comment"># 开发时依赖（类似 pom.xml 的 test scope）</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"vite"</span>: <span class="string">"^5.4.0"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"@vitejs/plugin-vue"</span>: <span class="string">"^5.1.0"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"vue-tsc"</span>: <span class="string">"^2.1.0"</span><br>
+&nbsp;&nbsp;}<br>
+}
+      </div>
+
+      <h3>main.ts - 入口文件</h3>
+      <div class="code-block">
+<span class="keyword">import</span> { createApp } <span class="keyword">from</span> <span class="string">'vue'</span><br>
+<span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">'./App.vue'</span><br>
+<span class="keyword">import</span> <span class="string">'./style.css'</span><br><br>
+<span class="comment">// 创建 Vue 应用实例，挂载到 #app 元素上</span><br>
+<span class="function">createApp</span>(App).mount(<span class="string">'#app'</span>)
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-box-title">📝 类比理解</div>
+        <p>这就像 Spring Boot 的：</p>
+        <div class="code-block">
+<span class="keyword">@SpringBootApplication</span><br>
+<span class="keyword">public class</span> <span class="function">Application</span> {<br>
+&nbsp;&nbsp;<span class="keyword">public static void</span> <span class="function">main</span>(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SpringApplication.run(Application.<span class="keyword">class</span>, args);<br>
+&nbsp;&nbsp;}<br>
+}
+        </div>
+        <p>都是"启动框架，加载配置，开始监听"的作用。</p>
+      </div>
+
+      <h3>App.vue - 根组件</h3>
+      <div class="code-block">
+<span class="comment">&lt;!-- Vue 组件是 .vue 文件，包含三部分 --&gt;</span><br><br>
+<span class="comment">&lt;!-- 1. 模板：HTML 结构 --&gt;</span><br>
+&lt;template&gt;<br>
+&nbsp;&nbsp;&lt;div&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;{{ message }}&lt;/h1&gt;<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+&lt;/template&gt;<br><br>
+<span class="comment">&lt;!-- 2. 脚本：逻辑代码 --&gt;</span><br>
+&lt;script setup lang="ts"&gt;<br>
+<span class="keyword">import</span> { ref } <span class="keyword">from</span> <span class="string">'vue'</span><br>
+<span class="keyword">const</span> message = ref(<span class="string">'Hello Vue 3!'</span>)<br>
+&lt;/script&gt;<br><br>
+<span class="comment">&lt;!-- 3. 样式：CSS --&gt;</span><br>
+&lt;style scoped&gt;<br>
+h1 {<br>
+&nbsp;&nbsp;color: #409EFF;<br>
+}<br>
+&lt;/style&gt;
+      </div>
+
+      <div class="tip-box warning">
+        <div class="tip-box-title">⚠️ Vue 组件的三要素</div>
+        <p>每个 <code>.vue</code> 文件都包含三个部分：</p>
+        <ul>
+          <li><strong>&lt;template&gt;</strong>：视图层（类似 JSP/Thymeleaf 的 HTML 部分）</li>
+          <li><strong>&lt;script&gt;</strong>：逻辑层（类似 Controller + Service）</li>
+          <li><strong>&lt;style&gt;</strong>：样式层（CSS，后端没有对应概念）</li>
+        </ul>
+        <p><code>scoped</code> 关键字表示样式只在这个组件内生效（类似 CSS Modules）。</p>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🎓 小测验</h2>
+      <p>测试一下你的理解（先自己想，再看答案）：</p>
+
+      <ol>
+        <li>
+          <strong>Q1: <code>npm install</code> 的作用是什么？</strong><br>
+          <details>
+            <summary>点击查看答案</summary>
+            <p>下载 package.json 中声明的所有依赖到 node_modules 目录，类似 <code>mvn install</code>。</p>
+          </details>
+        </li>
+        <li>
+          <strong>Q2: Vue 组件文件的扩展名是什么？</strong><br>
+          <details>
+            <summary>点击查看答案</summary>
+            <p><code>.vue</code>，包含 template、script、style 三个部分。</p>
+          </details>
+        </li>
+        <li>
+          <strong>Q3: 开发时运行哪个命令？</strong><br>
+          <details>
+            <summary>点击查看答案</summary>
+            <p><code>npm run dev</code>，启动 Vite 开发服务器，支持热更新。</p>
+          </details>
+        </li>
+      </ol>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📖 推荐资源</h2>
+      <ul>
+        <li><a href="https://cn.vuejs.org/guide/quick-start.html" target="_blank">Vue 3 官方文档 - 快速上手</a>（最权威）</li>
+        <li><a href="https://vitejs.dev/guide/" target="_blank">Vite 官方指南</a>（了解构建工具）</li>
+        <li><a href="https://www.typescriptlang.org/zh/docs/" target="_blank">TypeScript 中文文档</a>（类型系统入门）</li>
+      </ul>
+    </section>
+
+    <section class="lesson-section">
+      <h2>✅ 下一步</h2>
+      <div class="tip-box success">
+        <div class="tip-box-title">动手实践</div>
+        <ol class="step-list">
+          <li>在终端执行 <code>npm create vite@latest . -- --template vue-ts</code></li>
+          <li>执行 <code>npm install</code></li>
+          <li>执行 <code>npm run dev</code></li>
+          <li>打开浏览器访问 http://localhost:5173</li>
+          <li>修改 <code>src/App.vue</code> 的内容，看浏览器自动刷新</li>
+        </ol>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-box-title">🤔 思考题</div>
+        <p>对比你熟悉的 Spring Boot 项目，前端项目的 <code>src/</code> 目录和后端的 <code>src/main/java/</code> 有什么异同？</p>
+      </div>
+
+      <p style="margin-top: 30px;">
+        <strong>完成后告诉我</strong>，我们继续下一课：安装 Element Plus 和配置项目基础架构！
+      </p>
+
+      <p style="margin-top: 20px; color: var(--text-secondary); font-size: 14px;">
+        💬 有任何不清楚的地方，随时问我！我可以解释任何概念、帮你排查错误、或者调整教学节奏。
+      </p>
+    </section>
+
+    <footer class="lesson-footer">
+      <p>叮叮餐饮前端课程 | 第 0001 课 | 2026-10-11</p>
+      <div class="nav-links">
+        <span></span>
+        <a href="#">下一课：安装 Element Plus →</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

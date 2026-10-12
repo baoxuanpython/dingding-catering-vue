@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>0004 - 叮叮餐饮后台设计规范</title>
+  <link rel="stylesheet" href="../assets/lesson-styles.css">
+  <style>
+    .color-palette {
+      display: flex;
+      gap: 12px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .color-swatch {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+      font-size: 12px;
+      font-family: monospace;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+    .spec-table th {
+      width: 30%;
+    }
+    .layout-preview {
+      background: #f5f7fa;
+      border: 1px solid #dcdfe6;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .layout-box {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      grid-template-rows: 60px 1fr;
+      gap: 8px;
+      min-height: 300px;
+    }
+    .layout-header {
+      grid-column: 1 / -1;
+      background: #fff;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      font-size: 14px;
+      color: #606266;
+    }
+    .layout-sidebar {
+      background: #fff;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      padding: 16px;
+    }
+    .layout-main {
+      background: #fff;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      padding: 16px;
+      color: #909399;
+    }
+    .menu-item {
+      padding: 8px 12px;
+      margin: 4px 0;
+      background: #f5f7fa;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #606266;
+    }
+    .menu-item.active {
+      background: #e8f5e9;
+      color: #409EFF;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="lesson-container">
+    <header class="lesson-header">
+      <h1>叮叮餐饮后台设计规范</h1>
+      <div class="lesson-meta">
+        <span>📅 2026-10-11</span>
+        <span>🏷️ #设计规范 #主题切换 #UI规范</span>
+        <span>⏱️ 参考文档</span>
+      </div>
+    </header>
+
+    <section class="lesson-section">
+      <h2>🎨 视觉风格</h2>
+      <table class="spec-table">
+        <tr>
+          <th>项目</th>
+          <th>规范</th>
+        </tr>
+        <tr>
+          <td>整体风格</td>
+          <td>餐饮行业定制风，贴近业务场景，参考美团商家后台</td>
+        </tr>
+        <tr>
+          <td>品牌色</td>
+          <td>绿色系（健康、新鲜、自然）</td>
+        </tr>
+        <tr>
+          <td>卡片风格</td>
+          <td>白色卡片 + 轻微阴影（现代感）</td>
+        </tr>
+        <tr>
+          <td>圆角</td>
+          <td>4px（保守但现代）</td>
+        </tr>
+        <tr>
+          <td>阴影</td>
+          <td>0 2px 12px 0 rgba(0, 0, 0, 0.1)</td>
+        </tr>
+      </table>
+
+      <h3>品牌色板</h3>
+      <div class="color-palette">
+        <div class="color-swatch" style="background: #67c23a;">主色<br>#67c23a</div>
+        <div class="color-swatch" style="background: #85ce61;">浅主色<br>#85ce61</div>
+        <div class="color-swatch" style="background: #529b2e;">深主色<br>#529b2e</div>
+        <div class="color-swatch" style="background: #f0f9eb; color: #67c23a;">背景色<br>#f0f9eb</div>
+        <div class="color-swatch" style="background: #303133;">文字色<br>#303133</div>
+        <div class="color-swatch" style="background: #909399;">次要文字<br>#909399</div>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🌗 主题切换规范</h2>
+      <table class="spec-table">
+        <tr>
+          <th>项目</th>
+          <th>规范</th>
+        </tr>
+        <tr>
+          <td>切换入口</td>
+          <td>顶部导航栏右侧</td>
+        </tr>
+        <tr>
+          <td>主题选项</td>
+          <td>浅色 / 深色 / 跟随系统</td>
+        </tr>
+        <tr>
+          <td>持久化</td>
+          <td>localStorage 记住用户选择</td>
+        </tr>
+        <tr>
+          <td>深色主题背景</td>
+          <td>#1a1a2e（深灰蓝，柔和不刺眼）</td>
+        </tr>
+        <tr>
+          <td>深色主题卡片</td>
+          <td>#16213e（比背景稍深）</td>
+        </tr>
+        <tr>
+          <td>深色主题强调色</td>
+          <td>#85ce61（降低饱和度，避免刺眼）</td>
+        </tr>
+      </table>
+
+      <h3>主题变量对照</h3>
+      <table>
+        <tr>
+          <th>CSS 变量</th>
+          <th>浅色主题</th>
+          <th>深色主题</th>
+        </tr>
+        <tr>
+          <td>--bg-primary</td>
+          <td>#f5f7fa</td>
+          <td>#1a1a2e</td>
+        </tr>
+        <tr>
+          <td>--bg-card</td>
+          <td>#ffffff</td>
+          <td>#16213e</td>
+        </tr>
+        <tr>
+          <td>--text-primary</td>
+          <td>#303133</td>
+          <td>#e0e0e0</td>
+        </tr>
+        <tr>
+          <td>--text-secondary</td>
+          <td>#909399</td>
+          <td>#a0a0a0</td>
+        </tr>
+        <tr>
+          <td>--border-color</td>
+          <td>#dcdfe6</td>
+          <td>#2a2a4a</td>
+        </tr>
+        <tr>
+          <td>--primary</td>
+          <td>#67c23a</td>
+          <td>#85ce61</td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📐 布局规范</h2>
+      
+      <h3>整体布局</h3>
+      <div class="layout-preview">
+        <div class="layout-box">
+          <div class="layout-header">
+            顶部导航栏（60px）：Logo | 面包屑 | 通知 | 主题切换 | 用户头像
+          </div>
+          <div class="layout-sidebar">
+            <div class="menu-item">📊 工作台</div>
+            <div class="menu-item active">📦 订单管理</div>
+            <div class="menu-item">🍱 套餐管理</div>
+            <div class="menu-item">🍜 菜品管理</div>
+            <div class="menu-item">📂 分类管理</div>
+            <div class="menu-item">👥 员工管理</div>
+            <div class="menu-item">📈 数据统计</div>
+          </div>
+          <div class="layout-main">
+            内容区（自适应）
+          </div>
+        </div>
+      </div>
+
+      <table class="spec-table">
+        <tr>
+          <th>项目</th>
+          <th>规范</th>
+        </tr>
+        <tr>
+          <td>侧边栏</td>
+          <td>可折叠，展开宽度 200px，收起宽度 64px</td>
+        </tr>
+        <tr>
+          <td>顶部导航栏</td>
+          <td>固定高度 60px</td>
+        </tr>
+        <tr>
+          <td>内容区</td>
+          <td>自适应，padding 20px</td>
+        </tr>
+        <tr>
+          <td>菜单层级</td>
+          <td>最多两级（一级分类 + 二级菜单）</td>
+        </tr>
+      </table>
+
+      <h3>菜单结构</h3>
+      <div class="file-tree">
+<span class="folder">菜单项：</span><br>
+├── 📊 工作台<br>
+├── 📦 订单管理<br>
+├── 🍱 套餐管理<br>
+├── 🍜 菜品管理<br>
+├── 📂 分类管理<br>
+├── 👥 员工管理<br>
+└── 📈 数据统计
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🎯 顶部导航栏元素</h2>
+      <table class="spec-table">
+        <tr>
+          <th>元素</th>
+          <th>位置</th>
+          <th>说明</th>
+        </tr>
+        <tr>
+          <td>面包屑导航</td>
+          <td>左侧</td>
+          <td>显示当前页面路径，如：首页 / 订单管理 / 订单列表</td>
+        </tr>
+        <tr>
+          <td>通知/消息图标</td>
+          <td>右侧</td>
+          <td>新订单提醒、系统通知，带红点提示</td>
+        </tr>
+        <tr>
+          <td>主题切换按钮</td>
+          <td>右侧</td>
+          <td>下拉选择：浅色 / 深色 / 跟随系统</td>
+        </tr>
+        <tr>
+          <td>用户头像 + 下拉菜单</td>
+          <td>右侧</td>
+          <td>个人信息、修改密码、退出登录</td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📝 实现要点</h2>
+      <ol class="step-list">
+        <li>
+          <strong>CSS 变量实现主题</strong><br>
+          使用 CSS 自定义属性（变量）定义颜色，切换主题时只需修改根元素的变量值。
+        </li>
+        <li>
+          <strong>localStorage 持久化</strong><br>
+          用户选择主题后存入 localStorage，页面加载时读取。
+        </li>
+        <li>
+          <strong>系统主题检测</strong><br>
+          使用 <code>window.matchMedia('(prefers-color-scheme: dark)')</code> 检测系统主题。
+        </li>
+        <li>
+          <strong>Element Plus 主题适配</strong><br>
+          Element Plus 支持 CSS 变量主题，需要覆盖默认变量。
+        </li>
+        <li>
+          <strong>侧边栏折叠状态管理</strong><br>
+          使用 Pinia 存储侧边栏折叠状态，避免组件重新渲染时丢失。
+        </li>
+      </ol>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📖 参考资源</h2>
+      <ul>
+        <li><a href="https://element-plus.org/zh-CN/guide/dark-mode.html" target="_blank">Element Plus 深色模式指南</a></li>
+        <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Using_CSS_custom_properties" target="_blank">CSS 自定义属性（变量）</a></li>
+        <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/matchMedia" target="_blank">matchMedia API 检测系统主题</a></li>
+      </ul>
+    </section>
+
+    <footer class="lesson-footer">
+      <p>叮叮餐饮前端课程 | 设计规范文档 | 2026-10-11</p>
+      <div class="nav-links">
+        <a href="#">← 上一课：安装依赖</a>
+        <a href="#">下一课：搭建主布局 →</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>0002 - 跨会话记忆传递指南</title>
+  <link rel="stylesheet" href="../assets/lesson-styles.css">
+  <style>
+    .session-flow {
+      background: #f6f8fa;
+      border: 1px solid #dcdfe6;
+      border-radius: 8px;
+      padding: 24px;
+      margin: 20px 0;
+    }
+    .session-flow .step {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .session-flow .step-num {
+      background: #409EFF;
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .file-checklist {
+      list-style: none;
+    }
+    .file-checklist li {
+      padding: 8px 12px;
+      margin: 4px 0;
+      background: #f0f9eb;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .file-checklist li::before {
+      content: "✅ ";
+    }
+    .prompt-template {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    .prompt-template .highlight {
+      color: #569cd6;
+    }
+    .prompt-template .string {
+      color: #ce9178;
+    }
+    .prompt-template .comment {
+      color: #6a9955;
+    }
+  </style>
+</head>
+<body>
+  <div class="lesson-container">
+    <header class="lesson-header">
+      <h1>跨会话记忆传递指南</h1>
+      <div class="lesson-meta">
+        <span>📅 2026-10-11</span>
+        <span>🏷️ #TRAE #会话管理 #上下文传递</span>
+        <span>⏱️ 预计 5 分钟</span>
+      </div>
+    </header>
+
+    <section class="lesson-section">
+      <h2>🎯 问题本质</h2>
+      <p>作为免费用户，每次对话都有上下文长度限制。当对话达到上限时，AI 会"忘记"之前的所有内容。但我们的项目才刚开始，如何让 AI 在新会话中"记住"：</p>
+      <ul>
+        <li>你是谁（后端转全栈，前端新手）</li>
+        <li>你要做什么（叮叮餐饮后台管理系统）</li>
+        <li>你用的技术栈（Vue 3 + TypeScript + Vite + Element Plus）</li>
+        <li>你已经学到了哪里（当前进度）</li>
+        <li>你的学习偏好（混合模式、后端类比）</li>
+      </ul>
+    </section>
+
+    <section class="lesson-section">
+      <h2>💡 解决方案：文件系统即记忆</h2>
+      <p>我们已经创建了一套完整的"记忆文件"系统。AI 在每次新会话开始时，可以读取这些文件来恢复上下文。</p>
+
+      <div class="session-flow">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <strong>当前会话中</strong>：AI 持续更新记忆文件（学习记录、进度等）
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <strong>会话快结束时</strong>：AI 生成一份"会话摘要"保存到文件
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <strong>新会话开始时</strong>：你告诉 AI "读取记忆文件"，AI 就能恢复上下文
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📁 记忆文件清单</h2>
+      <p>以下是已经创建的记忆文件，它们共同构成了 AI 的"长期记忆"：</p>
+
+      <ul class="file-checklist">
+        <li>USER-PROFILE.md - 你的用户画像和教学规则</li>
+        <li>MISSION.md - 项目目标和学习使命</li>
+        <li>RESOURCES.md - 学习资源列表（待完善）</li>
+        <li>learning-records/*.md - 学习记录（每次课的总结）</li>
+        <li>lessons/*.html - 课程文件（学习进度标记）</li>
+        <li>NOTES.md - 教学笔记（AI 的工作笔记）</li>
+      </ul>
+
+      <div class="tip-box">
+        <div class="tip-box-title">📝 各文件的作用</div>
+        <table>
+          <tr>
+            <th>文件</th>
+            <th>类比后端</th>
+            <th>作用</th>
+          </tr>
+          <tr>
+            <td>USER-PROFILE.md</td>
+            <td>application.yml</td>
+            <td>全局配置（你是谁、怎么教你）</td>
+          </tr>
+          <tr>
+            <td>MISSION.md</td>
+            <td>项目需求文档</td>
+            <td>目标（你要做什么）</td>
+          </tr>
+          <tr>
+            <td>learning-records/</td>
+            <td>数据库审计日志</td>
+            <td>历史记录（你学了什么）</td>
+          </tr>
+          <tr>
+            <td>NOTES.md</td>
+            <td>开发者笔记</td>
+            <td>AI 的临时工作笔记</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🚀 新会话启动流程</h2>
+
+      <h3>方法一：简单启动（推荐）</h3>
+      <p>在新会话中直接发送：</p>
+      <div class="prompt-template">
+<span class="comment">// 复制这段话发给 AI</span><br><br>
+<span class="highlight">请读取以下文件，恢复教学上下文：</span><br>
+<span class="string">1. USER-PROFILE.md</span><br>
+<span class="string">2. MISSION.md</span><br>
+<span class="string">3. learning-records/ 目录下所有文件</span><br>
+<span class="string">4. NOTES.md（如果存在）</span><br><br>
+<span class="highlight">读取后告诉我当前进度，然后继续教学。</span>
+      </div>
+
+      <h3>方法二：完整启动（更精确）</h3>
+      <div class="prompt-template">
+<span class="comment">// 复制这段话发给 AI</span><br><br>
+<span class="highlight">我是一名后端开发者，正在学习前端开发。</span><br>
+<span class="highlight">这是叮叮餐饮后台管理系统项目。</span><br><br>
+<span class="string">请先读取 USER-PROFILE.md 了解我的背景和学习偏好，</span><br>
+<span class="string">再读取 MISSION.md 了解项目目标，</span><br>
+<span class="string">然后读取 learning-records/ 了解当前进度。</span><br><br>
+<span class="highlight">恢复上下文后，告诉我：</span><br>
+<span class="string">1. 我已经学了什么</span><br>
+<span class="string">2. 下一步该学什么</span><br>
+<span class="string">3. 当前项目状态（代码进度）</span>
+      </div>
+
+      <div class="tip-box success">
+        <div class="tip-box-title">✅ 为什么有效？</div>
+        <p>这些文件都是 <strong>Markdown 格式</strong>，结构清晰，AI 可以快速解析并恢复上下文。相比在聊天中重新描述，这种方式：</p>
+        <ul>
+          <li>节省 token（不浪费对话额度）</li>
+          <li>信息更完整（不会遗漏细节）</li>
+          <li>可追溯（历史记录都在文件里）</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📋 会话结束前的检查清单</h2>
+      <p>每次会话快结束时，确保 AI 已完成以下操作：</p>
+
+      <ol class="step-list">
+        <li>
+          <strong>更新学习记录</strong><br>
+          在 <code>learning-records/</code> 下创建新的记录文件，记录本次会话的学习内容。
+        </li>
+        <li>
+          <strong>更新 NOTES.md</strong><br>
+          记录当前进度、待办事项、需要注意的问题。
+        </li>
+        <li>
+          <strong>确认代码已保存</strong><br>
+          确保所有修改的代码都已写入文件（不是只在聊天中展示）。
+        </li>
+        <li>
+          <strong>生成会话摘要</strong><br>
+          在 NOTES.md 末尾添加本次会话的简要总结。
+        </li>
+      </ol>
+    </section>
+
+    <section class="lesson-section">
+      <h2>⚠️ 注意事项</h2>
+
+      <div class="tip-box warning">
+        <div class="tip-box-title">⚠️ 重要提醒</div>
+        <ul>
+          <li><strong>文件是唯一的记忆</strong>：聊天内容会消失，但文件会保留。确保重要信息都写入文件。</li>
+          <li><strong>定期更新</strong>：每次会话结束前，让 AI 更新学习记录。</li>
+          <li><strong>保持简洁</strong>：记忆文件不要写得太长，AI 读取时也会消耗 token。</li>
+          <li><strong>代码不写入记忆文件</strong>：代码应该在实际的项目文件中，记忆文件只记录进度和决策。</li>
+        </ul>
+      </div>
+
+      <h3>Token 节省技巧</h3>
+      <table>
+        <tr>
+          <th>做法</th>
+          <th>Token 消耗</th>
+          <th>建议</th>
+        </tr>
+        <tr>
+          <td>在聊天中重新描述背景</td>
+          <td>高（~500+ tokens）</td>
+          <td>❌ 避免</td>
+        </tr>
+        <tr>
+          <td>让 AI 读取记忆文件</td>
+          <td>中（~300 tokens）</td>
+          <td>✅ 推荐</td>
+        </tr>
+        <tr>
+          <td>只说"继续上次的课"</td>
+          <td>低（~50 tokens）</td>
+          <td>⚠️ 需要 AI 主动读取文件</td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🎯 最佳实践总结</h2>
+
+      <div class="analogy-box">
+        <div class="title">💡 一句话总结</div>
+        <p><strong>文件系统 = AI 的长期记忆</strong>，聊天内容 = AI 的短期记忆（会消失）。</p>
+        <p>把重要信息写入文件，新会话时让 AI 读取文件，就能无缝衔接。</p>
+      </div>
+
+      <h3>每次会话的标准流程</h3>
+      <div class="session-flow">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div><strong>开始</strong>：发送"请读取 USER-PROFILE.md 和 MISSION.md，恢复上下文"</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div><strong>学习</strong>：正常进行教学和实践</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div><strong>结束前</strong>：让 AI 更新 learning-records/ 和 NOTES.md</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div><strong>下次</strong>：重复步骤 1</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📖 下一步</h2>
+      <p>现在你已经知道如何跨会话保持记忆了。我们可以继续下一课：</p>
+      <ul>
+        <li><strong>下一课预告</strong>：安装 Element Plus + Vue Router + Pinia，搭建后台管理系统骨架</li>
+        <li><strong>实战内容</strong>：创建登录页面、主布局（侧边栏 + 顶部导航 + 内容区）</li>
+      </ul>
+
+      <p style="margin-top: 20px;">
+        <strong>准备好了吗？</strong>告诉我，我们继续搭建项目！
+      </p>
+    </section>
+
+    <footer class="lesson-footer">
+      <p>叮叮餐饮前端课程 | 第 0002 课 | 2026-10-11</p>
+      <div class="nav-links">
+        <a href="#">← 上一课：项目搭建</a>
+        <a href="#">下一课：安装 UI 框架 →</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

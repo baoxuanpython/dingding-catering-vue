@@ -1,0 +1,243 @@
+/* 叮叮餐饮前端课程 - 共享样式表 */
+:root {
+  --primary: #409EFF;
+  --primary-light: #ecf5ff;
+  --text: #303133;
+  --text-secondary: #606266;
+  --border: #dcdfe6;
+  --bg: #f5f7fa;
+  --code-bg: #f6f8fa;
+  --success: #67c23a;
+  --warning: #e6a23c;
+  --danger: #f56c6c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text);
+  background: #fff;
+}
+
+.lesson-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.lesson-header {
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+}
+
+.lesson-header h1 {
+  font-size: 32px;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.lesson-meta {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.lesson-meta span {
+  margin-right: 20px;
+}
+
+.lesson-section {
+  margin-bottom: 40px;
+}
+
+.lesson-section h2 {
+  font-size: 24px;
+  color: var(--primary);
+  margin-bottom: 20px;
+  padding-left: 12px;
+  border-left: 4px solid var(--primary);
+}
+
+.lesson-section h3 {
+  font-size: 18px;
+  margin: 20px 0 10px;
+  color: var(--text);
+}
+
+p {
+  margin-bottom: 16px;
+}
+
+.code-block {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px;
+  margin: 16px 0;
+  overflow-x: auto;
+  font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.code-block .comment {
+  color: #6a737d;
+}
+
+.code-block .keyword {
+  color: #d73a49;
+}
+
+.code-block .string {
+  color: #032f62;
+}
+
+.code-block .function {
+  color: #6f42c1;
+}
+
+.inline-code {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+  font-size: 14px;
+  color: var(--danger);
+}
+
+.tip-box {
+  background: var(--primary-light);
+  border-left: 4px solid var(--primary);
+  padding: 16px 20px;
+  margin: 20px 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.tip-box.warning {
+  background: #fdf6ec;
+  border-left-color: var(--warning);
+}
+
+.tip-box.success {
+  background: #f0f9eb;
+  border-left-color: var(--success);
+}
+
+.tip-box-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.analogy-box {
+  background: #f0f9eb;
+  border: 1px solid var(--success);
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+
+.analogy-box .title {
+  color: var(--success);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.step-list {
+  counter-reset: step;
+  list-style: none;
+}
+
+.step-list li {
+  counter-increment: step;
+  margin-bottom: 20px;
+  padding-left: 50px;
+  position: relative;
+}
+
+.step-list li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.file-tree {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px;
+  font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.file-tree .folder {
+  color: var(--primary);
+}
+
+.file-tree .file {
+  color: var(--text);
+}
+
+.lesson-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  margin-top: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.nav-links a {
+  color: var(--primary);
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid var(--primary);
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.nav-links a:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background: var(--bg);
+  font-weight: 600;
+}

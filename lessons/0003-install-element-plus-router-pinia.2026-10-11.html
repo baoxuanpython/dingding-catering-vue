@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>0003 - 安装 Element Plus + Vue Router + Pinia</title>
+  <link rel="stylesheet" href="../assets/lesson-styles.css">
+  <style>
+    .install-cmd {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px 20px;
+      border-radius: 6px;
+      font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+      font-size: 14px;
+      margin: 12px 0;
+    }
+    .install-cmd .prompt {
+      color: #6a9955;
+    }
+    .install-cmd .cmd {
+      color: #dcdcaa;
+    }
+    .dependency-table th:nth-child(3) {
+      width: 40%;
+    }
+    .arch-diagram {
+      background: #f6f8fa;
+      border: 1px solid #dcdfe6;
+      border-radius: 8px;
+      padding: 24px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .arch-diagram .box {
+      display: inline-block;
+      padding: 12px 24px;
+      margin: 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .box-vue { background: #42b883; color: #fff; }
+    .box-router { background: #409EFF; color: #fff; }
+    .box-pinia { background: #fcd549; color: #333; }
+    .box-element { background: #409EFF; color: #fff; }
+    .box-axios { background: #67c23a; color: #fff; }
+    .arrow {
+      font-size: 24px;
+      color: #909399;
+      margin: 0 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="lesson-container">
+    <header class="lesson-header">
+      <h1>安装 Element Plus + Vue Router + Pinia</h1>
+      <div class="lesson-meta">
+        <span>📅 2026-10-11</span>
+        <span>🏷️ #ElementPlus #VueRouter #Pinia #Axios</span>
+        <span>⏱️ 预计 20 分钟</span>
+      </div>
+    </header>
+
+    <section class="lesson-section">
+      <h2>🎯 本课目标</h2>
+      <p>为项目安装所有核心依赖，理解每个库的作用，并完成基础配置。</p>
+      <div class="tip-box success">
+        <div class="tip-box-title">完成后你将获得：</div>
+        <ul>
+          <li>Element Plus UI 组件库（后台管理页面的"零件库"）</li>
+          <li>Vue Router 路由系统（页面导航）</li>
+          <li>Pinia 状态管理（全局数据管理）</li>
+          <li>Axios HTTP 客户端（前后端通信）</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📚 依赖清单：它们是什么？</h2>
+
+      <table class="dependency-table">
+        <tr>
+          <th>库</th>
+          <th>后端类比</th>
+          <th>作用</th>
+        </tr>
+        <tr>
+          <td><strong>Element Plus</strong></td>
+          <td>Bootstrap / Ant Design</td>
+          <td>现成的 UI 组件（按钮、表格、表单、弹窗等）</td>
+        </tr>
+        <tr>
+          <td><strong>Vue Router</strong></td>
+          <td>Spring MVC 的 @RequestMapping</td>
+          <td>URL 路径与页面的映射关系</td>
+        </tr>
+        <tr>
+          <td><strong>Pinia</strong></td>
+          <td>Spring 的 @Service + 内存缓存</td>
+          <td>全局状态管理（用户信息、菜单权限等）</td>
+        </tr>
+        <tr>
+          <td><strong>Axios</strong></td>
+          <td>RestTemplate / HttpClient</td>
+          <td>发送 HTTP 请求调用后端 API</td>
+        </tr>
+      </table>
+
+      <div class="analogy-box">
+        <div class="title">💡 整体架构类比</div>
+        <p>想象你在开发一个 Spring Boot 项目：</p>
+        <ul>
+          <li><strong>Element Plus</strong> = Thymeleaf 模板 + Bootstrap 样式（视图层）</li>
+          <li><strong>Vue Router</strong> = @Controller + @RequestMapping（路由层）</li>
+          <li><strong>Pinia</strong> = @Service + @Component（业务逻辑层）</li>
+          <li><strong>Axios</strong> = RestTemplate（HTTP 客户端）</li>
+        </ul>
+        <p>只不过这些在前端都是<strong>独立的库</strong>，需要手动安装和配置。</p>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🚀 实战：安装依赖</h2>
+
+      <h3>第一步：安装 Element Plus</h3>
+      <div class="install-cmd">
+        <span class="prompt">$</span> <span class="cmd">npm install element-plus @element-plus/icons-vue</span>
+      </div>
+      <div class="tip-box">
+        <div class="tip-box-title">📦 说明</div>
+        <ul>
+          <li><code>element-plus</code>：UI 组件库本体</li>
+          <li><code>@element-plus/icons-vue</code>：图标库（后台管理需要大量图标）</li>
+        </ul>
+      </div>
+
+      <h3>第二步：安装 Vue Router</h3>
+      <div class="install-cmd">
+        <span class="prompt">$</span> <span class="cmd">npm install vue-router@4</span>
+      </div>
+      <div class="tip-box">
+        <div class="tip-box-title">📦 说明</div>
+        <p><code>@4</code> 表示安装 Vue Router 4.x 版本，这是配合 Vue 3 的版本。</p>
+      </div>
+
+      <h3>第三步：安装 Pinia</h3>
+      <div class="install-cmd">
+        <span class="prompt">$</span> <span class="cmd">npm install pinia</span>
+      </div>
+
+      <h3>第四步：安装 Axios</h3>
+      <div class="install-cmd">
+        <span class="prompt">$</span> <span class="cmd">npm install axios</span>
+      </div>
+
+      <div class="tip-box success">
+        <div class="tip-box-title">✅ 验证安装</div>
+        <p>安装完成后，打开 <code>package.json</code>，你应该能看到这些依赖：</p>
+        <div class="install-cmd">
+{<br>
+&nbsp;&nbsp;"dependencies": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"vue": "^3.5.0",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #67c23a;">"element-plus": "^2.9.0",</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #67c23a;">"@element-plus/icons-vue": "^2.3.0",</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #67c23a;">"vue-router": "^4.5.0",</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #67c23a;">"pinia": "^2.3.0",</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #67c23a;">"axios": "^1.7.0"</span><br>
+&nbsp;&nbsp;}<br>
+}
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>⚙️ 配置：让它们协同工作</h2>
+
+      <h3>第一步：在 main.ts 中注册所有插件</h3>
+      <p>打开 <code>src/main.ts</code>，修改为：</p>
+
+      <div class="code-block">
+<span class="keyword">import</span> { createApp } <span class="keyword">from</span> <span class="string">'vue'</span><br>
+<span class="keyword">import</span> { createPinia } <span class="keyword">from</span> <span class="string">'pinia'</span><br>
+<span class="keyword">import</span> ElementPlus <span class="keyword">from</span> <span class="string">'element-plus'</span><br>
+<span class="keyword">import</span> * <span class="keyword">as</span> ElementPlusIconsVue <span class="keyword">from</span> <span class="string">'@element-plus/icons-vue'</span><br>
+<span class="keyword">import</span> <span class="string">'element-plus/dist/index.css'</span><br>
+<span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">'./App.vue'</span><br>
+<span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">'./router'</span><br><br>
+<span class="comment">// 创建 Vue 应用实例</span><br>
+<span class="keyword">const</span> app = <span class="function">createApp</span>(App)<br><br>
+<span class="comment">// 注册 Pinia（全局状态管理）</span><br>
+app.<span class="function">use</span>(<span class="function">createPinia</span>())<br><br>
+<span class="comment">// 注册 Vue Router（路由系统）</span><br>
+app.<span class="function">use</span>(router)<br><br>
+<span class="comment">// 注册 Element Plus（UI 组件库）</span><br>
+app.<span class="function">use</span>(ElementPlus)<br><br>
+<span class="comment">// 注册所有 Element Plus 图标</span><br>
+<span class="keyword">for</span> (<span class="keyword">const</span> [key, component] <span class="keyword">of</span> Object.<span class="function">entries</span>(ElementPlusIconsVue)) {<br>
+&nbsp;&nbsp;app.<span class="function">component</span>(key, component)<br>
+}<br><br>
+<span class="comment">// 挂载应用到 #app 元素</span><br>
+app.<span class="function">mount</span>(<span class="string">'#app'</span>)
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-box-title">📝 类比理解</div>
+        <p>这就像 Spring Boot 的 <code>@Configuration</code> 类，把所有 Bean 注册到容器中：</p>
+        <div class="code-block">
+<span class="keyword">@Configuration</span><br>
+<span class="keyword">public class</span> <span class="function">AppConfig</span> {<br>
+&nbsp;&nbsp;<span class="keyword">@Bean</span><br>
+&nbsp;&nbsp;<span class="keyword">public</span> Pinia <span class="function">pinia</span>() { <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Pinia</span>(); }<br>
+<br>
+&nbsp;&nbsp;<span class="keyword">@Bean</span><br>
+&nbsp;&nbsp;<span class="keyword">public</span> Router <span class="function">router</span>() { <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Router</span>(); }<br>
+<br>
+&nbsp;&nbsp;<span class="keyword">@Bean</span><br>
+&nbsp;&nbsp;<span class="keyword">public</span> ElementPlus <span class="function">elementPlus</span>() { <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">ElementPlus</span>(); }<br>
+}
+        </div>
+        <p>只不过前端是用 <code>app.use()</code> 来注册插件。</p>
+      </div>
+
+      <h3>第二步：创建路由配置</h3>
+      <p>创建 <code>src/router/index.ts</code>：</p>
+
+      <div class="code-block">
+<span class="keyword">import</span> { createRouter, createWebHistory } <span class="keyword">from</span> <span class="string">'vue-router'</span><br><br>
+<span class="keyword">const</span> routes = [<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path: <span class="string">'/'</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;redirect: <span class="string">'/login'</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path: <span class="string">'/login'</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">'Login'</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;component: () <span class="keyword">=></span> <span class="function">import</span>(<span class="string">'../views/Login.vue'</span>)<br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path: <span class="string">'/dashboard'</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">'Dashboard'</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;component: () <span class="keyword">=></span> <span class="function">import</span>(<span class="string">'../views/Dashboard.vue'</span>)<br>
+&nbsp;&nbsp;}<br>
+]<br><br>
+<span class="keyword">const</span> router = <span class="function">createRouter</span>({<br>
+&nbsp;&nbsp;history: <span class="function">createWebHistory</span>(),<br>
+&nbsp;&nbsp;routes<br>
+})<br><br>
+<span class="keyword">export default</span> router
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-box-title">📝 路由配置类比</div>
+        <p>这就像 Spring MVC 的路由配置：</p>
+        <div class="code-block">
+<span class="keyword">@Controller</span><br>
+<span class="keyword">public class</span> <span class="function">PageController</span> {<br>
+<br>
+&nbsp;&nbsp;<span class="keyword">@GetMapping</span>(<span class="string">"/"</span>)<br>
+&nbsp;&nbsp;<span class="keyword">public</span> String <span class="function">index</span>() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">"redirect:/login"</span>;<br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;<span class="keyword">@GetMapping</span>(<span class="string">"/login"</span>)<br>
+&nbsp;&nbsp;<span class="keyword">public</span> String <span class="function">login</span>() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">"login"</span>; <span class="comment">// 返回 login 页面</span><br>
+&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;<span class="keyword">@GetMapping</span>(<span class="string">"/dashboard"</span>)<br>
+&nbsp;&nbsp;<span class="keyword">public</span> String <span class="function">dashboard</span>() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">"dashboard"</span>; <span class="comment">// 返回 dashboard 页面</span><br>
+&nbsp;&nbsp;}<br>
+}
+        </div>
+        <p>前端的 <code>component: () => import(...)</code> 是<strong>懒加载</strong>，只有访问该路由时才加载对应组件，类似后端的按需加载。</p>
+      </div>
+
+      <h3>第三步：创建页面组件</h3>
+      <p>创建 <code>src/views/</code> 目录，然后创建两个页面：</p>
+
+      <p><strong>登录页面</strong> <code>src/views/Login.vue</code>：</p>
+      <div class="code-block">
+&lt;template&gt;<br>
+&nbsp;&nbsp;&lt;div <span class="keyword">class</span>="login-container"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-card <span class="keyword">class</span>="login-card"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;叮叮餐饮后台管理系统&lt;/h2&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-form <span class="keyword">:model</span>="loginForm"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-form-item&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-input <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-model="loginForm.username" <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder="请输入用户名"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prefix-icon="User"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-form-item&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-form-item&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-input <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-model="loginForm.password" <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type="password"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder="请输入密码"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prefix-icon="Lock"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-form-item&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-form-item&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-button <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type="primary" <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@click="handleLogin"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;style="width: 100%"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;登录<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-button&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-form-item&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-form&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-card&gt;<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+&lt;/template&gt;<br><br>
+&lt;script setup lang="ts"&gt;<br>
+<span class="keyword">import</span> { ref } <span class="keyword">from</span> <span class="string">'vue'</span><br>
+<span class="keyword">import</span> { useRouter } <span class="keyword">from</span> <span class="string">'vue-router'</span><br><br>
+<span class="keyword">const</span> router = <span class="function">useRouter</span>()<br>
+<span class="keyword">const</span> loginForm = <span class="function">ref</span>({<br>
+&nbsp;&nbsp;username: <span class="string">''</span>,<br>
+&nbsp;&nbsp;password: <span class="string">''</span><br>
+})<br><br>
+<span class="keyword">const</span> <span class="function">handleLogin</span> = () <span class="keyword">=></span> {<br>
+&nbsp;&nbsp;<span class="comment">// TODO: 调用登录接口</span><br>
+&nbsp;&nbsp;router.<span class="function">push</span>(<span class="string">'/dashboard'</span>)<br>
+}<br>
+&lt;/script&gt;<br><br>
+&lt;style scoped&gt;<br>
+.login-container {<br>
+&nbsp;&nbsp;display: flex;<br>
+&nbsp;&nbsp;justify-content: center;<br>
+&nbsp;&nbsp;align-items: center;<br>
+&nbsp;&nbsp;height: 100vh;<br>
+&nbsp;&nbsp;background: #f5f7fa;<br>
+}<br>
+.login-card {<br>
+&nbsp;&nbsp;width: 400px;<br>
+&nbsp;&nbsp;text-align: center;<br>
+}<br>
+h2 {<br>
+&nbsp;&nbsp;margin-bottom: 24px;<br>
+&nbsp;&nbsp;color: #409EFF;<br>
+}<br>
+&lt;/style&gt;
+      </div>
+
+      <p><strong>仪表盘页面</strong> <code>src/views/Dashboard.vue</code>：</p>
+      <div class="code-block">
+&lt;template&gt;<br>
+&nbsp;&nbsp;&lt;div <span class="keyword">class</span>="dashboard"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;欢迎使用叮叮餐饮后台管理系统&lt;/h1&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-row <span class="keyword">:gutter</span>="20"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-col <span class="keyword">:span</span>="6"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-card&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;template #header&gt;今日订单&lt;/template&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;100&lt;/h2&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-card&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-col&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-col <span class="keyword">:span</span>="6"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-card&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;template #header&gt;今日营业额&lt;/template&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;¥5,000&lt;/h2&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-card&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-col&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-col <span class="keyword">:span</span>="6"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-card&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;template #header&gt;菜品总数&lt;/template&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;50&lt;/h2&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-card&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-col&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-col <span class="keyword">:span</span>="6"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;el-card&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;template #header&gt;用户总数&lt;/template&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;200&lt;/h2&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-card&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-col&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/el-row&gt;<br>
+&nbsp;&nbsp;&lt;/div&gt;<br>
+&lt;/template&gt;<br><br>
+&lt;script setup lang="ts"&gt;<br>
+<span class="comment">// TODO: 调用接口获取统计数据</span><br>
+&lt;/script&gt;<br><br>
+&lt;style scoped&gt;<br>
+.dashboard {<br>
+&nbsp;&nbsp;padding: 20px;<br>
+}<br>
+h1 {<br>
+&nbsp;&nbsp;margin-bottom: 24px;<br>
+}<br>
+&lt;/style&gt;
+      </div>
+
+      <h3>第四步：修改 App.vue</h3>
+      <p>修改 <code>src/App.vue</code> 为路由出口：</p>
+      <div class="code-block">
+&lt;template&gt;<br>
+&nbsp;&nbsp;&lt;router-view /&gt;<br>
+&lt;/template&gt;<br><br>
+&lt;script setup lang="ts"&gt;<br>
+<span class="comment">// App.vue 现在只是一个路由出口</span><br>
+<span class="comment">// 实际页面由 router 决定渲染哪个组件</span><br>
+&lt;/script&gt;
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-box-title">📝 router-view 是什么？</div>
+        <p><code>&lt;router-view /&gt;</code> 是一个<strong>占位符</strong>，Vue Router 会根据当前 URL 自动渲染对应的组件。</p>
+        <p>类比后端的 <code>ViewResolver</code>：根据 Controller 返回的视图名，找到对应的模板文件渲染。</p>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🏗️ 当前项目结构</h2>
+      <div class="file-tree">
+<span class="folder">dingding-catering-vue/</span><br>
+├── <span class="folder">src/</span><br>
+│   ├── <span class="folder">router/</span>              <span class="comment"># 路由配置（新增）</span><br>
+│   │   └── <span class="file">index.ts</span><br>
+│   ├── <span class="folder">views/</span>               <span class="comment"># 页面组件（新增）</span><br>
+│   │   ├── <span class="file">Login.vue</span>        <span class="comment"># 登录页</span><br>
+│   │   └── <span class="file">Dashboard.vue</span>    <span class="comment"># 仪表盘</span><br>
+│   ├── <span class="folder">components/</span>          <span class="comment"># 可复用组件</span><br>
+│   ├── <span class="file">App.vue</span>              <span class="comment"># 根组件（已修改）</span><br>
+│   └── <span class="file">main.ts</span>              <span class="comment"># 入口文件（已修改）</span><br>
+├── <span class="file">package.json</span><br>
+└── <span class="file">index.html</span>
+      </div>
+
+      <div class="tip-box warning">
+        <div class="tip-box-title">⚠️ 目录规范说明</div>
+        <ul>
+          <li><code>views/</code>：页面级组件（与路由对应），通常是一个完整的页面</li>
+          <li><code>components/</code>：可复用组件（如表格、表单组件），可在多个页面中使用</li>
+        </ul>
+        <p>类比后端：<code>views/</code> 像 Controller 返回的完整页面，<code>components/</code> 像 Thymeleaf 的 fragment。</p>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🎓 小测验</h2>
+      <ol>
+        <li>
+          <strong>Q1: <code>app.use()</code> 的作用是什么？</strong><br>
+          <details>
+            <summary>点击查看答案</summary>
+            <p>注册 Vue 插件（如 Element Plus、Vue Router、Pinia），类似 Spring 的 Bean 注册。</p>
+          </details>
+        </li>
+        <li>
+          <strong>Q2: 路由配置中的 <code>() => import(...)</code> 是什么？</strong><br>
+          <details>
+            <summary>点击查看答案</summary>
+            <p>动态导入（懒加载），只有访问该路由时才加载对应组件，减少首屏加载时间。</p>
+          </details>
+        </li>
+        <li>
+          <strong>Q3: <code>&lt;router-view /&gt;</code> 的作用是什么？</strong><br>
+          <details>
+            <summary>点击查看答案</summary>
+            <p>路由出口，Vue Router 会根据当前 URL 自动渲染对应的组件。</p>
+          </details>
+        </li>
+      </ol>
+    </section>
+
+    <section class="lesson-section">
+      <h2>✅ 动手实践</h2>
+      <ol class="step-list">
+        <li>在终端执行四个 <code>npm install</code> 命令安装依赖</li>
+        <li>创建 <code>src/router/index.ts</code> 并粘贴路由配置</li>
+        <li>创建 <code>src/views/Login.vue</code> 和 <code>src/views/Dashboard.vue</code></li>
+        <li>修改 <code>src/main.ts</code> 和 <code>src/App.vue</code></li>
+        <li>运行 <code>npm run dev</code>，访问 http://localhost:5173</li>
+        <li>你应该能看到登录页面，点击登录后跳转到仪表盘</li>
+      </ol>
+
+      <div class="tip-box success">
+        <div class="tip-box-title">🎉 预期效果</div>
+        <ul>
+          <li>访问 <code>/</code> 或 <code>/login</code> → 显示登录页面</li>
+          <li>点击登录按钮 → 跳转到 <code>/dashboard</code></li>
+          <li>仪表盘显示四个统计卡片（数据是假的，后续会对接真实 API）</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>📖 推荐资源</h2>
+      <ul>
+        <li><a href="https://element-plus.org/zh-CN/" target="_blank">Element Plus 官方文档</a>（组件库使用指南）</li>
+        <li><a href="https://router.vuejs.org/zh/" target="_blank">Vue Router 官方文档</a>（路由系统详解）</li>
+        <li><a href="https://pinia.vuejs.org/zh/" target="_blank">Pinia 官方文档</a>（状态管理指南）</li>
+        <li><a href="https://axios-http.com/zh/" target="_blank">Axios 中文文档</a>（HTTP 客户端）</li>
+      </ul>
+    </section>
+
+    <section class="lesson-section">
+      <h2>🔜 下一课预告</h2>
+      <p>下一课我们将：</p>
+      <ul>
+        <li>搭建后台管理系统的主布局（侧边栏 + 顶部导航 + 内容区）</li>
+        <li>配置 Axios 拦截器（统一处理请求和响应）</li>
+        <li>创建 Pinia Store 管理用户登录状态</li>
+        <li>实现真实的登录功能（对接后端 API）</li>
+      </ul>
+
+      <p style="margin-top: 20px;">
+        <strong>完成后告诉我</strong>，我们继续搭建后台管理系统的主布局！
+      </p>
+
+      <p style="margin-top: 20px; color: var(--text-secondary); font-size: 14px;">
+        💬 遇到任何问题都可以问我：安装报错、代码不工作、概念不理解...
+      </p>
+    </section>
+
+    <footer class="lesson-footer">
+      <p>叮叮餐饮前端课程 | 第 0003 课 | 2026-10-11</p>
+      <div class="nav-links">
+        <a href="#">← 上一课：跨会话记忆</a>
+        <a href="#">下一课：搭建主布局 →</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
