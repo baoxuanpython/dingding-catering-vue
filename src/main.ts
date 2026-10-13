@@ -7,6 +7,7 @@ import zhCn from "element-plus/es/locale/lang/zh-cn";
 import App from "./App.vue";
 import router from "./router";
 import { useThemeStore } from "./stores/theme";
+import { registerGlobalErrorHandlers } from "./utils/errorHandler";
 import "./styles/theme.css";
 import "./styles/common-page.scss";
 
@@ -33,6 +34,9 @@ app.use(ElementPlus, {
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
+
+// 注册全局异常处理体系
+registerGlobalErrorHandlers(app);
 
 // 挂载应用到 #app 元素
 app.mount("#app");

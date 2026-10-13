@@ -68,9 +68,12 @@ const router = createRouter({
 // 路由守卫：校验 token
 router.beforeEach((to, _from, next) => {
   const token = localStorage.getItem("token");
-
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!token) {
+      // 保存当前路径用于登录后重定向（排除 /login 本身）
+      if (to.path !== "/login") {
+        sessionStorage.setItem("redirectPath", to.fullPath);
+      }
       next("/login");
     } else {
       next();

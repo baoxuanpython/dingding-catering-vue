@@ -4,7 +4,7 @@ import request from "@/utils/request";
  * 订单搜索（分页查询）
  */
 export function searchOrders(params: OrderSearchQuery) {
-  return request.get("/order/conditionSearch", { params });
+  return request.get<OrderPageResult>("/order/conditionSearch", { params });
 }
 
 /**
@@ -57,6 +57,11 @@ export function getOrderStatistics() {
 }
 
 // ==================== 类型定义 ====================
+
+export interface OrderPageResult {
+  total: number;
+  records: OrderVO[];
+}
 
 export interface OrderSearchQuery {
   page: number;

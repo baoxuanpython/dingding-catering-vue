@@ -390,8 +390,13 @@
       </el-form>
 
       <template #footer>
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleSubmit" :loading="submitLoading"
+        <el-button class="cancel-btn" @click="dialogVisible = false"
+          >取消</el-button
+        >
+        <el-button
+          class="submit-btn"
+          @click="handleSubmit"
+          :loading="submitLoading"
           >确定</el-button
         >
       </template>
@@ -498,7 +503,7 @@ function formatTime(time?: string): string {
 async function fetchDishStatistics() {
   try {
     const res = await getDishOverview();
-    Object.assign(dishStatistics, res.data);
+    Object.assign(dishStatistics, res);
     totalDishes.value = dishStatistics.sold + dishStatistics.discontinued;
     displayCount.value = totalDishes.value; // 同步更新显示数量
   } catch (error) {
@@ -517,8 +522,8 @@ async function fetchDishes() {
       status: searchForm.status,
     };
     const res = await getDishPage(params);
-    dishList.value = res.data.records || [];
-    pagination.total = res.data.total || 0;
+    dishList.value = res.records || [];
+    pagination.total = res.total || 0;
 
     // 如果是自定义查询，更新"全部菜品"卡片显示的数量为本次查询结果数
     if (isCustomQuery.value) {
@@ -531,7 +536,7 @@ async function fetchDishes() {
       searchForm.categoryId !== undefined ||
       searchForm.status !== undefined;
     if (!hasFilter && pagination.page === 1) {
-      totalDishes.value = res.data.total || 0;
+      totalDishes.value = res.total || 0;
       displayCount.value = totalDishes.value; // 同步更新显示数量
     }
   } catch (error) {
@@ -544,7 +549,7 @@ async function fetchDishes() {
 async function fetchCategories() {
   try {
     const res = await getCategoryList();
-    categoryList.value = res.data || [];
+    categoryList.value = res || [];
   } catch (error) {
     console.error("获取分类列表失败:", error);
   }
@@ -642,7 +647,7 @@ async function handleEdit(row: DishVO) {
     resetForm();
     isEdit.value = true;
     const res = await getDishDetail(row.id);
-    const data = res.data;
+    const data = res;
     Object.assign(formData, {
       id: data.id,
       name: data.name,

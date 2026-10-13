@@ -7,9 +7,9 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   id: number;
-  name: string;
   token: string;
-  userName: string;
+  username: string;
+  role: "admin" | "user";
 }
 
 /**

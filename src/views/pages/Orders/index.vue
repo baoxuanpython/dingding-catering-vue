@@ -148,7 +148,7 @@
             <el-icon><Search /></el-icon>
             搜索
           </el-button>
-          <el-button @click="handleReset" class="search-btn reset-btn">
+          <el-button @click="handleReset" class="reset-btn">
             <el-icon><Refresh /></el-icon>
             重置
           </el-button>
@@ -209,11 +209,7 @@
 
         <el-table-column label="订单状态" width="100" resizable>
           <template #default="{ row }">
-            <el-tag
-              :type="getStatusType(row.status)"
-              effect="light"
-              class="status-tag"
-            >
+            <el-tag :type="getStatusType(row.status)" class="status-tag">
               {{ getStatusText(row.status) }}
             </el-tag>
           </template>
@@ -427,8 +423,13 @@
         show-word-limit
       />
       <template #footer>
-        <el-button @click="rejectVisible = false">取消</el-button>
-        <el-button type="danger" @click="submitReject" :loading="rejectLoading"
+        <el-button class="cancel-btn" @click="rejectVisible = false"
+          >取消</el-button
+        >
+        <el-button
+          class="confirm-btn"
+          @click="submitReject"
+          :loading="rejectLoading"
           >确定拒单</el-button
         >
       </template>
@@ -450,8 +451,13 @@
         show-word-limit
       />
       <template #footer>
-        <el-button @click="cancelVisible = false">取消</el-button>
-        <el-button type="warning" @click="submitCancel" :loading="cancelLoading"
+        <el-button class="cancel-btn" @click="cancelVisible = false"
+          >取消</el-button
+        >
+        <el-button
+          class="confirm-btn"
+          @click="submitCancel"
+          :loading="cancelLoading"
           >确定取消</el-button
         >
       </template>
@@ -559,8 +565,8 @@ async function fetchOrders() {
     }
 
     const res = await searchOrders(params);
-    orderList.value = res.data.records || [];
-    pagination.total = res.data.total || 0;
+    orderList.value = res.records || [];
+    pagination.total = res.total || 0;
 
     // 如果是自定义查询，更新"全部订单"卡片显示的数量为本次查询结果数
     if (isCustomQuery.value) {
@@ -574,7 +580,7 @@ async function fetchOrders() {
       searchForm.status !== undefined ||
       dateRange.value;
     if (!hasFilter && pagination.page === 1) {
-      allOrdersCount.value = res.data.total || 0;
+      allOrdersCount.value = res.total || 0;
       displayCount.value = allOrdersCount.value; // 同步更新显示数量
     }
   } catch {
@@ -587,7 +593,7 @@ async function fetchOrders() {
 async function fetchStatistics() {
   try {
     const res = await getOrderStatistics();
-    Object.assign(statistics, res.data);
+    Object.assign(statistics, res);
     // 初始化"全部订单"卡片的显示数量
     allOrdersCount.value =
       (statistics.toBeConfirmed || 0) +
@@ -779,7 +785,7 @@ async function handleComplete(row: OrderVO) {
 async function handleViewDetail(row: OrderVO) {
   try {
     const res = await getOrderDetail(row.id);
-    orderDetail.value = res.data;
+    orderDetail.value = res;
     detailVisible.value = true;
   } catch {
     // 错误已在拦截器处理

@@ -18,9 +18,9 @@
           </div>
           <h1 class="brand-name">叮叮餐饮</h1>
           <p class="brand-en">DingDing Catering Management</p>
-          
+
           <div class="brand-divider"></div>
-          
+
           <div class="feature-grid">
             <div class="feature-card">
               <el-icon :size="28"><List /></el-icon>
@@ -50,10 +50,10 @@
             <p>登录您的管理账号</p>
           </div>
 
-          <el-form 
-            :model="loginForm" 
-            :rules="rules" 
-            ref="formRef" 
+          <el-form
+            :model="loginForm"
+            :rules="rules"
+            ref="formRef"
             class="login-form"
             @submit.prevent="handleLogin"
           >
@@ -113,7 +113,15 @@ import { useUserStore } from "@/stores/user";
 import { useThemeStore } from "@/stores/theme";
 import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
-import { Food, User, Lock, List, Dish, DataAnalysis, Timer } from "@element-plus/icons-vue";
+import {
+  Food,
+  User,
+  Lock,
+  List,
+  Dish,
+  DataAnalysis,
+  Timer,
+} from "@element-plus/icons-vue";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -143,7 +151,11 @@ const handleLogin = async () => {
   try {
     await userStore.login(loginForm.username, loginForm.password);
     ElMessage.success("登录成功");
-    router.push("/dashboard");
+
+    // 检查是否有重定向路径（从 401 拦截器保存的）
+    const redirectPath = sessionStorage.getItem("redirectPath") || "/dashboard";
+    sessionStorage.removeItem("redirectPath"); // 清除已使用的路径
+    router.push(redirectPath);
   } catch (error) {
     // 错误已在响应拦截器中处理
   } finally {
@@ -243,18 +255,33 @@ const handleLogin = async () => {
 }
 
 @keyframes float1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-50px, 50px) scale(1.1); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-50px, 50px) scale(1.1);
+  }
 }
 
 @keyframes float2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(30px, -40px) scale(0.9); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -40px) scale(0.9);
+  }
 }
 
 @keyframes float3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(40px, 30px) scale(1.05); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, 30px) scale(1.05);
+  }
 }
 
 /* 主内容区 */
@@ -280,46 +307,71 @@ const handleLogin = async () => {
 }
 
 @keyframes breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.005); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.005);
+  }
 }
 
 .brand-panel::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: clamp(16px, 3vw, 40px);
   border-radius: clamp(16px, 2vw, 24px);
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
   box-shadow: 0 8px 32px rgba(103, 194, 58, 0.25);
-  transition: inset 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              border-radius 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    inset 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-radius 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   transform: scale(1);
   animation: panelGlow 3s ease-in-out infinite;
 }
 
 @keyframes panelGlow {
-  0%, 100% { box-shadow: 0 8px 32px rgba(103, 194, 58, 0.25); }
-  50% { box-shadow: 0 12px 40px rgba(103, 194, 58, 0.35); }
+  0%,
+  100% {
+    box-shadow: 0 8px 32px rgba(103, 194, 58, 0.25);
+  }
+  50% {
+    box-shadow: 0 12px 40px rgba(103, 194, 58, 0.35);
+  }
 }
 
 .brand-panel::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: clamp(16px, 3vw, 40px);
   border-radius: clamp(16px, 2vw, 24px);
-  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
-  transition: inset 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              border-radius 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 0.6s ease;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 60%
+  );
+  transition:
+    inset 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-radius 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.6s ease;
   pointer-events: none;
   animation: shimmer 5s ease-in-out infinite;
 }
 
 @keyframes shimmer {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.8; }
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 .brand-inner {
@@ -327,33 +379,47 @@ const handleLogin = async () => {
   z-index: 1;
   text-align: center;
   color: #fff;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .brand-icon-wrapper {
   position: relative;
   display: inline-block;
   margin-bottom: clamp(20px, 3vw, 32px);
-  transition: margin 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    margin 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .icon-glow {
   position: absolute;
   inset: clamp(-12px, -1.5vw, -20px);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2) 0%,
+    transparent 70%
+  );
   animation: glowPulse 3s ease-in-out infinite;
 }
 
 @keyframes glowPulse {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.2); opacity: 0.8; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
 }
 
 .brand-icon {
   position: relative;
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
 }
 
 .brand-name {
@@ -361,12 +427,13 @@ const handleLogin = async () => {
   font-weight: 800;
   margin-bottom: 8px;
   letter-spacing: 4px;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-              max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-              margin-bottom 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-              text-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition:
+    opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    margin-bottom 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    text-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   max-height: 100px;
   overflow: hidden;
   will-change: opacity, transform, text-shadow;
@@ -374,13 +441,14 @@ const handleLogin = async () => {
 }
 
 @keyframes brandNameFloat {
-  0%, 100% { 
+  0%,
+  100% {
     transform: translateY(0);
-    text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
-  50% { 
+  50% {
     transform: translateY(-4px);
-    text-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    text-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -389,7 +457,10 @@ const handleLogin = async () => {
   opacity: 0.9;
   letter-spacing: clamp(1px, 0.3vw, 3px);
   margin-bottom: clamp(24px, 4vw, 48px);
-  transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    max-height 0.4s ease;
   max-height: 50px;
   overflow: hidden;
 }
@@ -397,10 +468,13 @@ const handleLogin = async () => {
 .brand-divider {
   width: clamp(40px, 6vw, 60px);
   height: 2px;
-  background: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.5);
   margin: 0 auto clamp(24px, 4vw, 48px);
   border-radius: 1px;
-  transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    max-height 0.4s ease;
   opacity: 1;
   max-height: 10px;
   overflow: hidden;
@@ -412,7 +486,10 @@ const handleLogin = async () => {
   gap: clamp(12px, 2vw, 20px);
   max-width: clamp(240px, 28vw, 320px);
   margin: 0 auto;
-  transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    max-height 0.4s ease;
   opacity: 1;
   max-height: 300px;
   overflow: hidden;
@@ -424,16 +501,16 @@ const handleLogin = async () => {
   align-items: center;
   gap: 8px;
   padding: clamp(12px, 1.5vw, 20px) clamp(10px, 1.2vw, 16px);
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: clamp(12px, 1.5vw, 16px);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s;
   font-size: clamp(11px, 1vw, 13px);
   will-change: auto;
 }
 
 .feature-card:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   transform: translateY(-4px);
 }
 
@@ -445,8 +522,9 @@ const handleLogin = async () => {
   justify-content: center;
   padding: clamp(20px, 3vw, 40px);
   min-width: 0;
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .login-card {
@@ -455,17 +533,18 @@ const handleLogin = async () => {
   background: var(--bg-card);
   border-radius: clamp(16px, 2vw, 24px);
   padding: clamp(28px, 4vw, 48px) clamp(24px, 3.5vw, 40px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   border: 1px solid var(--border-color);
   will-change: auto;
-  transition: border-radius 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    border-radius 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .login-card:hover {
-  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
   transform: translateY(-2px);
 }
 
@@ -515,13 +594,18 @@ const handleLogin = async () => {
 }
 
 .input-wrapper::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(103, 194, 58, 0.08), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(103, 194, 58, 0.08),
+    transparent
+  );
   transition: left 0.6s ease;
 }
 
@@ -532,22 +616,33 @@ const handleLogin = async () => {
 .input-wrapper:focus-within {
   border-color: var(--primary);
   background: var(--bg-card);
-  box-shadow: 0 4px 20px rgba(103, 194, 58, 0.15),
-              0 0 0 4px rgba(103, 194, 58, 0.08);
+  box-shadow:
+    0 4px 20px rgba(103, 194, 58, 0.15),
+    0 0 0 4px rgba(103, 194, 58, 0.08);
   animation: inputPulse 2s ease-in-out infinite;
 }
 
 @keyframes inputPulse {
-  0%, 100% { box-shadow: 0 4px 20px rgba(103, 194, 58, 0.15), 0 0 0 4px rgba(103, 194, 58, 0.08); }
-  50% { box-shadow: 0 4px 24px rgba(103, 194, 58, 0.25), 0 0 0 6px rgba(103, 194, 58, 0.12); }
+  0%,
+  100% {
+    box-shadow:
+      0 4px 20px rgba(103, 194, 58, 0.15),
+      0 0 0 4px rgba(103, 194, 58, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 4px 24px rgba(103, 194, 58, 0.25),
+      0 0 0 6px rgba(103, 194, 58, 0.12);
+  }
 }
 
 .input-icon {
   color: var(--text-secondary);
   margin-right: 12px;
   flex-shrink: 0;
-  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .input-wrapper:focus-within .input-icon {
@@ -567,7 +662,11 @@ const handleLogin = async () => {
   font-size: clamp(14px, 1.5vw, 16px);
   font-weight: 600;
   letter-spacing: clamp(4px, 0.6vw, 6px);
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
   border: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -575,10 +674,15 @@ const handleLogin = async () => {
 }
 
 .login-button::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
   transform: translateX(-100%);
   transition: transform 0.6s;
 }
@@ -606,23 +710,27 @@ const handleLogin = async () => {
 
 /* 浅色主题（默认） */
 .login-container:not(.is-dark) .brand-panel::before {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
   box-shadow: 0 8px 32px rgba(103, 194, 58, 0.25);
 }
 
 .login-container:not(.is-dark) .login-card {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   border: 1px solid var(--border-color);
 }
 
 /* 深色模式 */
 .login-container.is-dark .brand-panel::before {
   background: linear-gradient(135deg, var(--primary-dark) 0%, #1a3a1a 100%);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .login-container.is-dark .login-card {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   border-color: var(--border-color);
 }
 
@@ -644,7 +752,7 @@ const handleLogin = async () => {
     max-height: 0;
     pointer-events: none;
   }
-  
+
   .brand-panel::before {
     inset: clamp(12px, 2vw, 24px);
   }
@@ -658,15 +766,15 @@ const handleLogin = async () => {
     margin-bottom: 0;
     pointer-events: none;
   }
-  
+
   .brand-icon-wrapper {
     margin-bottom: 16px;
   }
-  
+
   .brand-icon {
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
   }
-  
+
   .brand-icon-wrapper .icon-glow {
     inset: -10px;
   }
@@ -680,20 +788,20 @@ const handleLogin = async () => {
     margin-bottom: 0;
     pointer-events: none;
   }
-  
+
   .brand-panel {
     padding: 16px;
   }
-  
+
   .brand-panel::before {
     inset: 10px;
     border-radius: 12px;
   }
-  
+
   .brand-icon-wrapper {
     margin-bottom: 0;
   }
-  
+
   .brand-icon-wrapper .el-icon {
     transform: scale(0.85);
   }
@@ -703,24 +811,24 @@ const handleLogin = async () => {
   .brand-panel {
     padding: 40px;
   }
-  
+
   .brand-panel::before {
     inset: 24px;
   }
-  
+
   .brand-name {
     font-size: 44px;
   }
-  
+
   .feature-grid {
     max-width: 280px;
   }
-  
+
   .login-panel {
     width: 40vw;
     padding: 30px;
   }
-  
+
   .login-card {
     padding: 36px 32px;
   }
@@ -730,12 +838,12 @@ const handleLogin = async () => {
   .brand-panel {
     display: none;
   }
-  
+
   .login-panel {
     width: 100%;
     padding: 40px;
   }
-  
+
   .login-card {
     max-width: 440px;
   }
@@ -745,16 +853,16 @@ const handleLogin = async () => {
   .login-panel {
     padding: 24px;
   }
-  
+
   .login-card {
     padding: 32px 28px;
     border-radius: 20px;
   }
-  
+
   .login-header h2 {
     font-size: 26px;
   }
-  
+
   .login-button {
     height: 48px;
   }
@@ -764,24 +872,24 @@ const handleLogin = async () => {
   .login-panel {
     padding: 16px;
   }
-  
+
   .login-card {
     padding: 28px 20px;
     border-radius: 16px;
   }
-  
+
   .login-header h2 {
     font-size: 24px;
   }
-  
+
   .login-header p {
     font-size: 12px;
   }
-  
+
   .input-wrapper {
     padding: 10px 14px;
   }
-  
+
   .login-button {
     height: 44px;
     font-size: 14px;

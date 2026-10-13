@@ -16,7 +16,7 @@ export function useShopStatus() {
   async function fetchShopStatus() {
     try {
       const res = await getShopStatus();
-      shopStatus.value = res.data as 0 | 1;
+      shopStatus.value = res as 0 | 1;
     } catch (error) {
       console.error("获取店铺状态失败:", error);
       // 默认营业状态

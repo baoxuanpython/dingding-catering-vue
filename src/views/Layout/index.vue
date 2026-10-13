@@ -53,17 +53,21 @@
         </el-menu-item>
       </el-menu>
       <div class="sidebar-footer">
-        <div 
-          class="status-indicator" 
+        <div
+          class="status-indicator"
           :class="{ 'is-closed': shopStatus === 0, 'is-loading': loading }"
           @click="toggleShopStatus"
         >
           <div class="status-dot-wrapper">
             <span class="status-dot"></span>
-            <el-icon v-if="loading" class="status-loading" :size="12"><Loading /></el-icon>
+            <el-icon v-if="loading" class="status-loading" :size="12"
+              ><Loading
+            /></el-icon>
           </div>
           <div v-if="!isCollapse" class="status-text-group">
-            <span class="status-text">{{ shopStatus === 1 ? '营业中' : '已打烊' }}</span>
+            <span class="status-text">{{
+              shopStatus === 1 ? "营业中" : "已打烊"
+            }}</span>
             <span class="status-hint">点击切换状态</span>
           </div>
         </div>
@@ -73,16 +77,14 @@
     <el-container class="layout-right">
       <el-header class="layout-header">
         <div class="header-left">
-          <el-icon 
-            class="collapse-btn" 
-            @click="toggleCollapse"
-            :size="20"
-          >
+          <el-icon class="collapse-btn" @click="toggleCollapse" :size="20">
             <Fold v-if="!isCollapse" />
             <Expand v-else />
           </el-icon>
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/dashboard' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/dashboard' }"
+              >首页</el-breadcrumb-item
+            >
             <el-breadcrumb-item v-for="item in breadcrumbs" :key="item.path">
               {{ item.title }}
             </el-breadcrumb-item>
@@ -95,16 +97,27 @@
           </el-badge>
 
           <el-dropdown trigger="click" @command="handleThemeChange">
-            <el-icon :size="20" class="header-icon-btn"><Sunny v-if="!isDark" /><Moon v-else /></el-icon>
+            <el-icon :size="20" class="header-icon-btn"
+              ><Sunny v-if="!isDark" /><Moon v-else
+            /></el-icon>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="light" :disabled="themeMode === 'light'">
+                <el-dropdown-item
+                  command="light"
+                  :disabled="themeMode === 'light'"
+                >
                   <el-icon><Sunny /></el-icon> 浅色模式
                 </el-dropdown-item>
-                <el-dropdown-item command="dark" :disabled="themeMode === 'dark'">
+                <el-dropdown-item
+                  command="dark"
+                  :disabled="themeMode === 'dark'"
+                >
                   <el-icon><Moon /></el-icon> 深色模式
                 </el-dropdown-item>
-                <el-dropdown-item command="auto" :disabled="themeMode === 'auto'">
+                <el-dropdown-item
+                  command="auto"
+                  :disabled="themeMode === 'auto'"
+                >
                   <el-icon><Monitor /></el-icon> 跟随系统
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -116,13 +129,17 @@
               <el-avatar :size="32" class="user-avatar">
                 <el-icon :size="18"><UserFilled /></el-icon>
               </el-avatar>
-              <span class="username">{{ userStore.userInfo?.name || '管理员' }}</span>
+              <span class="username">{{
+                userStore.userInfo?.username || "用户"
+              }}</span>
             </div>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item command="profile">个人信息</el-dropdown-item>
                 <el-dropdown-item command="password">修改密码</el-dropdown-item>
-                <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
+                <el-dropdown-item command="logout" divided
+                  >退出登录</el-dropdown-item
+                >
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -137,58 +154,71 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { useThemeStore, type ThemeMode } from '@/stores/theme'
-import { useUserStore } from '@/stores/user'
-import { useShopStore } from '@/stores/shop'
+import { computed, ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { useThemeStore, type ThemeMode } from "@/stores/theme";
+import { useUserStore } from "@/stores/user";
+import { useShopStore } from "@/stores/shop";
 import {
-  HomeFilled, List, Dish, TakeawayBox, Menu, UserFilled, DataAnalysis,
-  Fold, Expand, Bell, Sunny, Moon, Monitor, Food, Loading
-} from '@element-plus/icons-vue'
+  HomeFilled,
+  List,
+  Dish,
+  TakeawayBox,
+  Menu,
+  UserFilled,
+  DataAnalysis,
+  Fold,
+  Expand,
+  Bell,
+  Sunny,
+  Moon,
+  Monitor,
+  Food,
+  Loading,
+} from "@element-plus/icons-vue";
 
-const route = useRoute()
-const themeStore = useThemeStore()
-const userStore = useUserStore()
-const shopStore = useShopStore()
+const route = useRoute();
+const themeStore = useThemeStore();
+const userStore = useUserStore();
+const shopStore = useShopStore();
 
-const isCollapse = ref(false)
-const activeMenu = computed(() => route.path)
-const themeMode = computed(() => themeStore.themeMode)
-const isDark = computed(() => themeStore.isDark)
-const shopStatus = computed(() => shopStore.shopStatus)
-const loading = computed(() => shopStore.loading)
+const isCollapse = ref(false);
+const activeMenu = computed(() => route.path);
+const themeMode = computed(() => themeStore.themeMode);
+const isDark = computed(() => themeStore.isDark);
+const shopStatus = computed(() => shopStore.shopStatus);
+const loading = computed(() => shopStore.loading);
 
 const toggleShopStatus = () => {
-  const newStatus: 0 | 1 = shopStore.shopStatus === 1 ? 0 : 1
-  shopStore.updateShopStatus(newStatus)
-}
+  const newStatus: 0 | 1 = shopStore.shopStatus === 1 ? 0 : 1;
+  shopStore.updateShopStatus(newStatus);
+};
 
 const breadcrumbs = computed(() => {
-  const matched = route.matched.filter(item => item.meta?.title)
-  return matched.map(item => ({
+  const matched = route.matched.filter((item) => item.meta?.title);
+  return matched.map((item) => ({
     path: item.path,
-    title: item.meta.title as string
-  }))
-})
+    title: item.meta.title as string,
+  }));
+});
 
 const toggleCollapse = () => {
-  isCollapse.value = !isCollapse.value
-}
+  isCollapse.value = !isCollapse.value;
+};
 
 const handleThemeChange = (mode: ThemeMode) => {
-  themeStore.applyTheme(mode)
-}
+  themeStore.applyTheme(mode);
+};
 
 const handleUserCommand = (command: string) => {
-  if (command === 'logout') {
-    userStore.logout()
+  if (command === "logout") {
+    userStore.logout();
   }
-}
+};
 
 onMounted(() => {
-  shopStore.initShopStatus()
-})
+  shopStore.initShopStatus();
+});
 </script>
 
 <style scoped>
@@ -224,7 +254,7 @@ onMounted(() => {
 }
 
 .logo::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -50%;
   left: -50%;
@@ -236,8 +266,15 @@ onMounted(() => {
 }
 
 @keyframes logoPulse {
-  0%, 100% { transform: scale(1); opacity: 0.05; }
-  50% { transform: scale(1.1); opacity: 0.08; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.05;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.08;
+  }
 }
 
 .logo-icon-wrapper {
@@ -246,12 +283,18 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(103, 194, 58, 0.3);
   position: relative;
   z-index: 1;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .logo-icon-wrapper:hover {
@@ -280,7 +323,11 @@ onMounted(() => {
 .logo-text {
   font-size: 18px;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -311,13 +358,17 @@ onMounted(() => {
 }
 
 .sidebar-menu .el-menu-item::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
   width: 3px;
   height: 100%;
-  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
   transform: scaleY(0);
   transition: transform 0.3s;
 }
@@ -354,8 +405,13 @@ onMounted(() => {
 }
 
 @keyframes iconBounce {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }
 
 .sidebar-footer {
@@ -379,7 +435,7 @@ onMounted(() => {
 }
 
 .status-indicator::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, var(--primary-bg) 0%, transparent 100%);
@@ -440,18 +496,36 @@ onMounted(() => {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes statusPulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--primary); }
-  50% { opacity: 0.6; box-shadow: 0 0 12px var(--primary); }
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px var(--primary);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 12px var(--primary);
+  }
 }
 
 @keyframes statusPulseRed {
-  0%, 100% { opacity: 1; box-shadow: 0 0 8px #f56c6c; }
-  50% { opacity: 0.6; box-shadow: 0 0 12px #f56c6c; }
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px #f56c6c;
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 12px #f56c6c;
+  }
 }
 
 .status-text-group {

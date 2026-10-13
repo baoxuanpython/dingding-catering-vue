@@ -74,7 +74,7 @@ dingding-catering-vue/
 │   ├── App.vue                # 根组件
 │   └── main.ts                # 入口文件
 ├── lessons/                   # 学习资料（不参与构建）
-├── learning-records/          # 学习记录
+├── conversation-memory.md          # 会话记忆记录
 ├── package.json
 ├── vite.config.ts
 └── tsconfig.json

@@ -10,7 +10,7 @@ export const useShopStore = defineStore("shop", () => {
   async function fetchShopStatus() {
     try {
       const res = await getShopStatus();
-      shopStatus.value = res.data as 0 | 1;
+      shopStatus.value = res as 0 | 1;
     } catch {
       shopStatus.value = 1;
     }
@@ -21,7 +21,7 @@ export const useShopStore = defineStore("shop", () => {
       loading.value = true;
       await setShopStatus(newStatus);
       shopStatus.value = newStatus;
-      ElMessage.success(newStatus === 1 ? "已营业" : "已打烊");
+      ElMessage.success(newStatus === 1 ? "店铺开张啦~" : "店铺打烊啦~");
     } catch {
       shopStatus.value = newStatus === 1 ? 0 : 1;
     } finally {

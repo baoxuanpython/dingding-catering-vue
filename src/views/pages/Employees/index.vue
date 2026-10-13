@@ -1,18 +1,756 @@
 <template>
   <div class="page-container">
-    <h2>员工管理</h2>
-    <p>页面开发中...</p>
+    <!-- 顶部统计卡片 -->
+    <div class="stats-row">
+      <div
+        class="stat-card stat-all"
+        :class="{
+          'stat-active': activeStatus === undefined && !isCustomQuery,
+          'stat-custom': isCustomQuery,
+        }"
+        @click="handleStatusFilter(undefined)"
+      >
+        <div class="stat-icon">👥</div>
+        <div class="stat-content">
+          <span class="stat-value">{{ displayCount }}</span>
+          <span class="stat-label">{{
+            isCustomQuery ? "指定查询员工" : "全部员工"
+          }}</span>
+        </div>
+        <div class="stat-arrow"></div>
+      </div>
+      <div
+        class="stat-card stat-enabled"
+        :class="{ 'stat-active': activeStatus === 1 && !isCustomQuery }"
+        @click="handleStatusFilter(1)"
+      >
+        <div class="stat-icon">✅</div>
+        <div class="stat-content">
+          <span class="stat-value">{{ statistics.enabled }}</span>
+          <span class="stat-label">启用中</span>
+        </div>
+        <div class="stat-arrow"></div>
+      </div>
+      <div
+        class="stat-card stat-disabled"
+        :class="{ 'stat-active': activeStatus === 0 && !isCustomQuery }"
+        @click="handleStatusFilter(0)"
+      >
+        <div class="stat-icon">⛔</div>
+        <div class="stat-content">
+          <span class="stat-value">{{ statistics.disabled }}</span>
+          <span class="stat-label">已禁用</span>
+        </div>
+        <div class="stat-arrow"></div>
+      </div>
+    </div>
+
+    <!-- 搜索面板 -->
+    <div class="search-panel">
+      <el-form :model="searchForm" class="search-form" @submit.prevent>
+        <el-form-item label="员工姓名">
+          <el-input
+            v-model="searchForm.name"
+            placeholder="请输入员工姓名"
+            clearable
+            class="search-input"
+          />
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input
+            v-model="searchForm.phone"
+            placeholder="请输入手机号"
+            clearable
+            class="search-input"
+          />
+        </el-form-item>
+        <el-form-item label="账号状态">
+          <el-select
+            v-model="searchForm.status"
+            placeholder="请选择状态"
+            clearable
+            class="search-input"
+          >
+            <el-option label="启用" :value="1" />
+            <el-option label="禁用" :value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item class="action-group">
+          <el-button class="search-btn" @click="handleSearch">
+            <el-icon><Search /></el-icon>
+            搜索
+          </el-button>
+          <el-button class="reset-btn" @click="handleReset">
+            <el-icon><RefreshLeft /></el-icon>
+            重置
+          </el-button>
+          <el-button class="add-btn" @click="handleAdd">
+            <el-icon><Plus /></el-icon>
+            新增员工
+          </el-button>
+          <el-button
+            class="batch-delete-btn"
+            :disabled="selectedIds.length === 0"
+            @click="handleBatchDelete"
+          >
+            <el-icon><Delete /></el-icon>
+            批量删除
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
+    <!-- 表格面板 -->
+    <div class="table-panel">
+      <div class="table-header">
+        <span class="table-title">员工列表</span>
+        <span class="table-count">共 {{ pagination.total }} 条记录</span>
+      </div>
+      <el-table
+        v-loading="loading"
+        :data="employeeList"
+        border
+        stripe
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" width="55" />
+        <el-table-column label="姓名" min-width="80">
+          <template #default="{ row }">
+            <div class="name-cell">
+              <div
+                class="avatar-placeholder"
+                :style="{
+                  backgroundColor: getAvatarColor(row.name),
+                }"
+              >
+                {{ getSurnamePinyin(row.name).substring(0, 2) }}
+              </div>
+              <span class="name-text">{{ row.name }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="username" label="用户名" min-width="120" />
+        <el-table-column label="手机号" min-width="140">
+          <template #default="{ row }">
+            {{ maskPhone(row.phone) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="性别" width="80">
+          <template #default="{ row }">
+            <el-tag type="success" size="small">
+              {{ row.sex === "1" ? "男" : "女" }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="身份证号" min-width="180">
+          <template #default="{ row }">
+            {{ maskIdNumber(row.idNumber) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="账号状态" width="100">
+          <template #default="{ row }">
+            <el-switch
+              v-model="row.status"
+              :active-value="1"
+              :inactive-value="0"
+              @change="(val: number) => handleStatusChange(row, val)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" min-width="160">
+          <template #default="{ row }">
+            <span class="time-text">{{ row.createTime }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="320" fixed="right">
+          <template #default="{ row }">
+            <div class="action-btns">
+              <el-button link type="primary" @click="handleView(row)">
+                查看
+              </el-button>
+              <el-button link type="primary" @click="handleEdit(row)">
+                编辑
+              </el-button>
+              <el-button link type="warning" @click="handleEditPassword(row)">
+                修改密码
+              </el-button>
+              <el-button
+                link
+                type="danger"
+                :disabled="canDelete(row)"
+                @click="handleDelete(row)"
+              >
+                删除
+              </el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 分页 -->
+      <div class="pagination-wrapper">
+        <el-pagination
+          v-model:current-page="pagination.page"
+          v-model:page-size="pagination.pageSize"
+          :total="pagination.total"
+          :page-sizes="[10, 20, 50, 100]"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="fetchEmployees"
+          @current-change="fetchEmployees"
+        />
+      </div>
+    </div>
+
+    <!-- 新增/编辑员工弹窗 -->
+    <el-dialog
+      v-model="editFormVisible"
+      :title="isEdit ? '编辑员工' : '新增员工'"
+      width="600px"
+      @close="resetEditForm"
+    >
+      <el-form
+        ref="editFormRef"
+        :model="editForm"
+        :rules="editFormRules"
+        label-width="100px"
+      >
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="editForm.name" placeholder="请输入姓名" />
+        </el-form-item>
+        <el-form-item label="用户名" prop="username">
+          <el-input
+            v-model="editForm.username"
+            placeholder="请输入用户名"
+            :disabled="isEdit"
+          />
+        </el-form-item>
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="editForm.phone" placeholder="请输入手机号" />
+        </el-form-item>
+        <el-form-item label="身份证号" prop="idNumber">
+          <el-input v-model="editForm.idNumber" placeholder="请输入身份证号" />
+        </el-form-item>
+        <el-form-item label="性别" prop="sex">
+          <el-radio-group v-model="editForm.sex">
+            <el-radio value="1">男</el-radio>
+            <el-radio value="2">女</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button class="cancel-btn" @click="editFormVisible = false"
+            >取消</el-button
+          >
+          <el-button class="submit-btn" @click="handleSubmit">确定</el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 查看详情弹窗 -->
+    <el-dialog v-model="viewDialogVisible" title="员工详情" width="600px">
+      <div v-if="currentEmployee" class="detail-grid">
+        <div class="detail-item">
+          <span class="detail-label">姓名</span>
+          <span class="detail-value">{{ currentEmployee.name }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">用户名</span>
+          <span class="detail-value">{{ currentEmployee.username }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">手机号</span>
+          <span class="detail-value">{{
+            maskPhone(currentEmployee.phone)
+          }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">性别</span>
+          <span class="detail-value">{{
+            currentEmployee.sex === "1" ? "男" : "女"
+          }}</span>
+        </div>
+        <div class="detail-item full-width">
+          <span class="detail-label">身份证号</span>
+          <span class="detail-value">{{
+            maskIdNumber(currentEmployee.idNumber)
+          }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">账号状态</span>
+          <span class="detail-value">
+            <el-tag :type="currentEmployee.status === 1 ? 'success' : 'info'">
+              {{ currentEmployee.status === 1 ? "启用" : "禁用" }}
+            </el-tag>
+          </span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">创建时间</span>
+          <span class="detail-value">{{ currentEmployee.createTime }}</span>
+        </div>
+        <div class="detail-item full-width">
+          <span class="detail-label">更新时间</span>
+          <span class="detail-value">{{ currentEmployee.updateTime }}</span>
+        </div>
+      </div>
+    </el-dialog>
+
+    <!-- 修改密码弹窗 -->
+    <el-dialog
+      v-model="passwordDialogVisible"
+      title="修改密码"
+      width="500px"
+      @close="resetPasswordForm"
+    >
+      <el-form
+        ref="passwordFormRef"
+        :model="passwordForm"
+        :rules="passwordFormRules"
+        label-width="100px"
+      >
+        <el-form-item label="旧密码" prop="oldPassword">
+          <el-input
+            v-model="passwordForm.oldPassword"
+            type="password"
+            placeholder="请输入旧密码"
+            show-password
+          />
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input
+            v-model="passwordForm.newPassword"
+            type="password"
+            placeholder="请输入新密码"
+            show-password
+          />
+        </el-form-item>
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input
+            v-model="passwordForm.confirmPassword"
+            type="password"
+            placeholder="请再次输入新密码"
+            show-password
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button class="cancel-btn" @click="passwordDialogVisible = false"
+          >取消</el-button
+        >
+        <el-button class="submit-btn" @click="handlePasswordSubmit"
+          >确定</el-button
+        >
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, reactive, computed, onMounted } from "vue";
+import { Search, RefreshLeft, Plus, Delete } from "@element-plus/icons-vue";
+import {
+  ElMessage,
+  ElMessageBox,
+  type FormInstance,
+  type FormRules,
+} from "element-plus";
+import {
+  getEmployeePage,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
+  batchDeleteEmployees,
+  updateEmployeeStatus,
+  editPassword,
+} from "./api/employeeApi";
+import type {
+  EmployeeVO,
+  EmployeePageQuery,
+  EmployeeForm,
+} from "./types/employee";
+import { getSurnamePinyin, getAvatarColor } from "./utils/pinyin";
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
+
+// ==================== 统计卡片 ====================
+interface EmployeeStatistics {
+  enabled: number;
+  disabled: number;
+}
+
+const statistics = reactive<EmployeeStatistics>({
+  enabled: 0,
+  disabled: 0,
+});
+
+const activeStatus = ref<number | undefined>(undefined);
+const isCustomQuery = ref(false);
+
+const displayCount = computed(() => {
+  if (isCustomQuery.value) {
+    return pagination.total;
+  }
+  if (activeStatus.value === 1) return statistics.enabled;
+  if (activeStatus.value === 0) return statistics.disabled;
+  return statistics.enabled + statistics.disabled;
+});
+
+async function fetchStatistics() {
+  try {
+    const [enabledRes, disabledRes] = await Promise.all([
+      getEmployeePage({ page: 1, pageSize: 1, status: 1 }),
+      getEmployeePage({ page: 1, pageSize: 1, status: 0 }),
+    ]);
+    statistics.enabled = enabledRes.total || 0;
+    statistics.disabled = disabledRes.total || 0;
+  } catch (error) {
+    console.error("获取统计数据失败:", error);
+  }
+}
+
+function handleStatusFilter(status: number | undefined) {
+  activeStatus.value = status;
+  isCustomQuery.value = false;
+  searchForm.name = "";
+  searchForm.phone = "";
+  searchForm.status = undefined;
+  pagination.page = 1;
+  fetchEmployees();
+}
+
+// ==================== 搜索和分页 ====================
+const searchForm = reactive({
+  name: "",
+  phone: "",
+  status: undefined as number | undefined,
+});
+
+const pagination = reactive({
+  page: 1,
+  pageSize: 10,
+  total: 0,
+});
+
+const employeeList = ref<EmployeeVO[]>([]);
+const loading = ref(false);
+
+async function fetchEmployees() {
+  loading.value = true;
+  try {
+    const params: EmployeePageQuery = {
+      page: pagination.page,
+      pageSize: pagination.pageSize,
+      name: searchForm.name || undefined,
+      phone: searchForm.phone || undefined,
+      status: searchForm.status,
+    };
+    const res = await getEmployeePage(params);
+    employeeList.value = res.records || [];
+    pagination.total = res.total || 0;
+  } catch (error) {
+    console.error("获取员工列表失败:", error);
+  } finally {
+    loading.value = false;
+  }
+}
+
+function handleSearch() {
+  pagination.page = 1;
+
+  // 判断是否为自定义查询
+  const hasNameOrPhone = searchForm.name || searchForm.phone;
+  const hasStatusOnly = searchForm.status !== undefined && !hasNameOrPhone;
+
+  if (hasNameOrPhone || (searchForm.status !== undefined && hasNameOrPhone)) {
+    isCustomQuery.value = true;
+  } else if (hasStatusOnly) {
+    isCustomQuery.value = false;
+    activeStatus.value = searchForm.status;
+  } else {
+    isCustomQuery.value = false;
+    activeStatus.value = undefined;
+  }
+
+  fetchEmployees();
+}
+
+function handleReset() {
+  searchForm.name = "";
+  searchForm.phone = "";
+  searchForm.status = undefined;
+  isCustomQuery.value = false;
+  activeStatus.value = undefined;
+  pagination.page = 1;
+  fetchEmployees();
+}
+
+// ==================== 批量选择 ====================
+const selectedIds = ref<number[]>([]);
+
+function handleSelectionChange(selection: EmployeeVO[]) {
+  selectedIds.value = selection.map((item) => item.id);
+}
+
+// ==================== 新增/编辑 ====================
+const editFormVisible = ref(false);
+const isEdit = ref(false);
+const editFormRef = ref<FormInstance>();
+const editForm = reactive<EmployeeForm>({
+  name: "",
+  username: "",
+  phone: "",
+  sex: "1",
+  idNumber: "",
+});
+
+const editFormRules: FormRules = {
+  name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+  username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+  phone: [
+    { required: true, message: "请输入手机号", trigger: "blur" },
+    { pattern: /^1[3-9]\d{9}$/, message: "手机号格式不正确", trigger: "blur" },
+  ],
+  idNumber: [
+    { required: true, message: "请输入身份证号", trigger: "blur" },
+    {
+      pattern: /^\d{17}[\dXx]$/,
+      message: "身份证号格式不正确",
+      trigger: "blur",
+    },
+  ],
+  sex: [{ required: true, message: "请选择性别", trigger: "change" }],
+};
+
+function handleAdd() {
+  isEdit.value = false;
+  editFormVisible.value = true;
+}
+
+function handleEdit(row: EmployeeVO) {
+  isEdit.value = true;
+  Object.assign(editForm, {
+    id: row.id,
+    name: row.name,
+    username: row.username,
+    phone: row.phone,
+    sex: row.sex,
+    idNumber: row.idNumber,
+    status: row.status,
+  });
+  editFormVisible.value = true;
+}
+
+async function handleSubmit() {
+  if (!editFormRef.value) return;
+  await editFormRef.value.validate(async (valid) => {
+    if (!valid) return;
+    try {
+      if (isEdit.value) {
+        await updateEmployee(editForm);
+        ElMessage.success("编辑成功");
+      } else {
+        await createEmployee(editForm);
+        ElMessage.success("新增成功");
+      }
+      editFormVisible.value = false;
+      fetchEmployees();
+      fetchStatistics();
+    } catch (error) {
+      console.error("操作失败:", error);
+    }
+  });
+}
+
+function resetEditForm() {
+  editFormRef.value?.resetFields();
+  Object.assign(editForm, {
+    id: undefined,
+    name: "",
+    username: "",
+    phone: "",
+    sex: 1,
+    idNumber: "",
+  });
+}
+
+// ==================== 查看详情 ====================
+const viewDialogVisible = ref(false);
+const currentEmployee = ref<EmployeeVO | null>(null);
+
+function handleView(row: EmployeeVO) {
+  currentEmployee.value = row;
+  viewDialogVisible.value = true;
+}
+
+// ==================== 修改密码 ====================
+const passwordDialogVisible = ref(false);
+const passwordFormRef = ref<FormInstance>();
+const passwordForm = reactive({
+  empId: 0,
+  oldPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+});
+
+const passwordFormRules: FormRules = {
+  oldPassword: [{ required: true, message: "请输入旧密码", trigger: "blur" }],
+  newPassword: [
+    { required: true, message: "请输入新密码", trigger: "blur" },
+    { min: 6, message: "密码长度不能少于6位", trigger: "blur" },
+  ],
+  confirmPassword: [
+    { required: true, message: "请再次输入新密码", trigger: "blur" },
+    {
+      validator: (_rule, value, callback) => {
+        if (value !== passwordForm.newPassword) {
+          callback(new Error("两次输入的密码不一致"));
+        } else {
+          callback();
+        }
+      },
+      trigger: "blur",
+    },
+  ],
+};
+
+function handleEditPassword(row: EmployeeVO) {
+  passwordForm.empId = row.id;
+  passwordDialogVisible.value = true;
+}
+
+async function handlePasswordSubmit() {
+  if (!passwordFormRef.value) return;
+  await passwordFormRef.value.validate(async (valid) => {
+    if (!valid) return;
+    try {
+      await editPassword({
+        empId: passwordForm.empId,
+        oldPassword: passwordForm.oldPassword,
+        newPassword: passwordForm.newPassword,
+      });
+      ElMessage.success("密码修改成功");
+      passwordDialogVisible.value = false;
+    } catch (error) {
+      console.error("修改密码失败:", error);
+    }
+  });
+}
+
+function resetPasswordForm() {
+  passwordFormRef.value?.resetFields();
+  passwordForm.empId = 0;
+  passwordForm.oldPassword = "";
+  passwordForm.newPassword = "";
+  passwordForm.confirmPassword = "";
+}
+
+// ==================== 删除 ====================
+function canDelete(row: EmployeeVO): boolean {
+  const currentUserId = userStore.userInfo?.id;
+  const isAdmin = userStore.userInfo?.role === "admin";
+
+  // 不能删除自己
+  if (row.id === currentUserId) return true;
+  // 非管理员不能删除
+  if (!isAdmin) return true;
+  // 不能删除启用中的员工
+  if (row.status === 1) return true;
+
+  return false;
+}
+
+async function handleDelete(row: EmployeeVO) {
+  try {
+    await ElMessageBox.confirm("确定要删除该员工吗？", "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    });
+    await deleteEmployee(row.id);
+    ElMessage.success("删除成功");
+    fetchEmployees();
+    fetchStatistics();
+  } catch {
+    // 用户取消
+  }
+}
+
+async function handleBatchDelete() {
+  try {
+    await ElMessageBox.confirm(
+      `确定要删除选中的 ${selectedIds.value.length} 个员工吗？`,
+      "提示",
+      {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      },
+    );
+    await batchDeleteEmployees(selectedIds.value);
+    ElMessage.success("批量删除成功");
+    selectedIds.value = [];
+    fetchEmployees();
+    fetchStatistics();
+  } catch {
+    // 用户取消
+  }
+}
+
+// ==================== 状态切换 ====================
+async function handleStatusChange(row: EmployeeVO, val: number) {
+  try {
+    await updateEmployeeStatus(row.id, val);
+    ElMessage.success(val === 1 ? "已启用" : "已禁用");
+    fetchStatistics();
+  } catch (error) {
+    console.error("状态切换失败:", error);
+    row.status = val === 1 ? 0 : 1; // 回滚
+  }
+}
+
+// ==================== 脱敏工具 ====================
+function maskPhone(phone: string): string {
+  const isAdmin = userStore.userInfo?.role === "admin";
+  if (isAdmin || phone.length !== 11) return phone;
+  return phone.slice(0, 3) + "****" + phone.slice(7);
+}
+
+function maskIdNumber(idNumber: string): string {
+  const isAdmin = userStore.userInfo?.role === "admin";
+  if (isAdmin || idNumber.length !== 18) return idNumber;
+  return idNumber.slice(0, 4) + "**********" + idNumber.slice(14);
+}
+
+// ==================== 初始化 ====================
+onMounted(() => {
+  fetchEmployees();
+  fetchStatistics();
+});
 </script>
 
-<style scoped>
-.page-container {
-  padding: 20px;
-}
-h2 {
-  margin-bottom: 16px;
+<style scoped lang="scss">
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .name-text {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
 }
 </style>
