@@ -58,6 +58,10 @@ export function useCategories() {
       const res = await getCategoryPage(queryParams.value);
       tableData.value = res.records;
       total.value = res.total;
+      // 搜索状态下，用分页结果的 total 更新统计卡片
+      if (isSearching.value) {
+        stats.value.total = res.total;
+      }
     } catch (error) {
       // 错误已在 Axios 拦截器中处理
     } finally {
@@ -91,6 +95,10 @@ export function useCategories() {
     currentPage.value = 1;
     // 搜索后激活"分类总数"卡片
     activeStatIndex.value = 0;
+    // 空搜索时恢复全量统计数据
+    if (!name) {
+      fetchStats();
+    }
     fetchCategories();
   }
 
@@ -102,6 +110,8 @@ export function useCategories() {
     currentPage.value = 1;
     // 重置后恢复默认激活状态
     activeStatIndex.value = 0;
+    // 重置后需要重新获取全量统计数据
+    fetchStats();
     fetchCategories();
   }
 

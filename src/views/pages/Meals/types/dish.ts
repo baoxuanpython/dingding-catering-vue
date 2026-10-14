@@ -43,7 +43,7 @@ export interface DishFlavor {
   id?: number;
   dishId?: number;
   name: string;
-  value: string;
+  value: string[]; // 口味选项（多选）
 }
 
 /** 新增菜品请求 */
@@ -99,7 +99,7 @@ export interface DishOverview {
   discontinued: number; // 已停售菜品数量
 }
 
-/** 菜品表单（用于新增/编辑弹窗） */
+/** 菜品表单（用于新增/编辑） */
 export interface DishForm {
   id?: number;
   name: string;

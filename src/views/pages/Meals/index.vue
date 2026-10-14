@@ -57,9 +57,6 @@
             @keyup.enter="handleSearch"
             :teleported="false"
           >
-            <template #prefix>
-              <el-icon><Search /></el-icon>
-            </template>
           </el-input>
         </el-form-item>
         <el-form-item label="菜品分类">
@@ -270,151 +267,22 @@
     </div>
 
     <!-- 新增/编辑弹窗 -->
-    <el-dialog
+    <DishFormDialog
       v-model="dialogVisible"
-      :title="isEdit ? '编辑菜品' : '新增菜品'"
-      width="650px"
-      destroy-on-close
-      class="form-dialog"
-    >
-      <el-form
-        ref="formRef"
-        :model="formData"
-        :rules="formRules"
-        label-width="100px"
-        class="dish-form"
-      >
-        <el-form-item label="菜品名称" prop="name">
-          <el-input
-            v-model="formData.name"
-            placeholder="请输入菜品名称"
-            maxlength="32"
-            show-word-limit
-          />
-        </el-form-item>
-
-        <el-form-item label="菜品分类" prop="categoryId">
-          <el-select
-            v-model="formData.categoryId"
-            placeholder="请选择分类"
-            style="width: 100%"
-          >
-            <el-option
-              v-for="cat in categoryList"
-              :key="cat.id"
-              :label="cat.name"
-              :value="cat.id"
-            />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="售价" prop="price">
-          <el-input-number
-            v-model="formData.price"
-            :min="0"
-            :precision="2"
-            :step="0.5"
-            controls-position="right"
-            style="width: 100%"
-          />
-        </el-form-item>
-
-        <el-form-item label="菜品图片" prop="image">
-          <el-upload
-            class="avatar-uploader"
-            action="/api/common/upload"
-            :show-file-list="false"
-            :on-success="handleUploadSuccess"
-            :before-upload="beforeUpload"
-            accept=".jpg,.jpeg,.png,.webp"
-          >
-            <img v-if="formData.image" :src="formData.image" class="avatar" />
-            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-          </el-upload>
-          <div class="upload-tip">支持 jpg、png、webp 格式，大小不超过 2MB</div>
-        </el-form-item>
-
-        <el-form-item label="菜品口味" prop="flavors">
-          <div class="flavor-list">
-            <div
-              v-for="(flavor, index) in formData.flavors"
-              :key="index"
-              class="flavor-item"
-            >
-              <el-input
-                v-model="flavor.name"
-                placeholder="口味名（如：辣度）"
-                style="width: 150px"
-              />
-              <el-select
-                v-model="flavor.value"
-                multiple
-                placeholder="选择选项"
-                style="flex: 1; margin-left: 8px"
-              >
-                <el-option label="微辣" value="微辣" />
-                <el-option label="中辣" value="中辣" />
-                <el-option label="重辣" value="重辣" />
-                <el-option label="不辣" value="不辣" />
-              </el-select>
-              <el-button
-                type="danger"
-                :icon="Delete"
-                circle
-                size="small"
-                @click="removeFlavor(index)"
-                style="margin-left: 8px"
-              />
-            </div>
-            <el-button
-              type="primary"
-              plain
-              @click="addFlavor"
-              style="margin-top: 8px"
-            >
-              <el-icon><Plus /></el-icon> 添加口味
-            </el-button>
-          </div>
-        </el-form-item>
-
-        <el-form-item label="菜品描述" prop="description">
-          <el-input
-            v-model="formData.description"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入菜品描述"
-            maxlength="200"
-            show-word-limit
-          />
-        </el-form-item>
-      </el-form>
-
-      <template #footer>
-        <el-button class="cancel-btn" @click="dialogVisible = false"
-          >取消</el-button
-        >
-        <el-button
-          class="submit-btn"
-          @click="handleSubmit"
-          :loading="submitLoading"
-          >确定</el-button
-        >
-      </template>
-    </el-dialog>
+      :is-edit="isEdit"
+      :submit-loading="submitLoading"
+      :form-data="formData"
+      :category-list="categoryList"
+      @submit="handleSubmit"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import {
-  Search,
-  Plus,
-  Delete,
-  RefreshLeft,
-  PictureFilled,
-} from "@element-plus/icons-vue";
-import type { FormInstance, FormRules, UploadProps } from "element-plus";
+import { Search, RefreshLeft, PictureFilled } from "@element-plus/icons-vue";
+import DishFormDialog from "./components/DishFormDialog.vue";
 import {
   getDishPage,
   getDishDetail,
@@ -440,7 +308,6 @@ const selectedIds = ref<number[]>([]);
 const dialogVisible = ref(false);
 const isEdit = ref(false);
 const submitLoading = ref(false);
-const formRef = ref<FormInstance>();
 
 const defaultImage =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23f5f7fa' width='100' height='100'/%3E%3Ctext x='50' y='55' font-family='Arial' font-size='14' fill='%23909399' text-anchor='middle'%3E暂无图片%3C/text%3E%3C/svg%3E";
@@ -483,17 +350,6 @@ const formData = reactive<DishForm>({
   status: 1,
   flavors: [],
 });
-
-const formRules: FormRules = {
-  name: [{ required: true, message: "请输入菜品名称", trigger: "blur" }],
-  categoryId: [
-    { required: true, message: "请选择菜品分类", trigger: "change" },
-  ],
-  price: [
-    { required: true, message: "请输入售价", trigger: "blur" },
-    { type: "number", min: 0, message: "售价不能为负数", trigger: "blur" },
-  ],
-};
 
 function formatTime(time?: string): string {
   if (!time) return "-";
@@ -663,12 +519,11 @@ async function handleEdit(row: DishVO) {
   }
 }
 
-async function handleSubmit() {
-  if (!formRef.value) return;
-
+async function handleSubmit(imageUrl?: string) {
   try {
-    await formRef.value.validate();
     submitLoading.value = true;
+
+    const imageData = imageUrl || formData.image;
 
     if (isEdit.value && formData.id) {
       await updateDish({
@@ -676,7 +531,7 @@ async function handleSubmit() {
         name: formData.name,
         categoryId: formData.categoryId!,
         price: formData.price,
-        image: formData.image,
+        image: imageData,
         description: formData.description,
         status: formData.status,
         flavors: formData.flavors,
@@ -687,7 +542,7 @@ async function handleSubmit() {
         name: formData.name,
         categoryId: formData.categoryId!,
         price: formData.price,
-        image: formData.image,
+        image: imageData,
         description: formData.description,
         status: formData.status,
         flavors: formData.flavors,
@@ -781,38 +636,6 @@ async function handleStatusToggle(row: DishVO) {
   }
 }
 
-const handleUploadSuccess: UploadProps["onSuccess"] = (response) => {
-  if (response.code === 1) {
-    formData.image = response.data;
-    ElMessage.success("上传成功");
-  } else {
-    ElMessage.error(response.msg || "上传失败");
-  }
-};
-
-const beforeUpload: UploadProps["beforeUpload"] = (file) => {
-  const isImage = ["image/jpeg", "image/png", "image/webp"].includes(file.type);
-  const isLt2M = file.size / 1024 / 1024 < 2;
-
-  if (!isImage) {
-    ElMessage.error("只能上传 JPG、PNG、WebP 格式的图片！");
-    return false;
-  }
-  if (!isLt2M) {
-    ElMessage.error("图片大小不能超过 2MB！");
-    return false;
-  }
-  return true;
-};
-
-function addFlavor() {
-  formData.flavors.push({ name: "", value: "" });
-}
-
-function removeFlavor(index: number) {
-  formData.flavors.splice(index, 1);
-}
-
 onMounted(() => {
   fetchDishStatistics();
   fetchDishes();
@@ -893,73 +716,5 @@ onMounted(() => {
       background: rgba(103, 194, 58, 0.04);
     }
   }
-}
-
-/* ==================== 弹窗表单特有样式 ==================== */
-.form-dialog {
-  :deep(.el-dialog__body) {
-    padding: 30px 20px;
-  }
-}
-
-.dish-form {
-  .el-textarea__inner {
-    resize: vertical;
-  }
-}
-
-/* 图片上传 */
-.avatar-uploader {
-  :deep(.el-upload) {
-    border: 2px dashed var(--border-color);
-    border-radius: 10px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s;
-    width: 148px;
-    height: 148px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-      border-color: var(--primary);
-    }
-  }
-}
-
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: var(--text-secondary);
-  width: 148px;
-  height: 148px;
-  text-align: center;
-  line-height: 148px;
-}
-
-.avatar {
-  width: 148px;
-  height: 148px;
-  object-fit: cover;
-  display: block;
-}
-
-.upload-tip {
-  margin-top: 6px;
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-/* 口味列表 */
-.flavor-list {
-  width: 100%;
-}
-
-.flavor-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
 }
 </style>

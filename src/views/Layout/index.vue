@@ -130,7 +130,9 @@
                 <el-icon :size="18"><UserFilled /></el-icon>
               </el-avatar>
               <span class="username">{{
-                userStore.userInfo?.username || "用户"
+                userStore.userInfo?.userName ||
+                userStore.userInfo?.username ||
+                "用户"
               }}</span>
             </div>
             <template #dropdown>

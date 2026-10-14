@@ -202,158 +202,36 @@
     </div>
 
     <!-- 新增/编辑员工弹窗 -->
-    <el-dialog
+    <EmployeeFormDialog
       v-model="editFormVisible"
-      :title="isEdit ? '编辑员工' : '新增员工'"
-      width="600px"
-      @close="resetEditForm"
-    >
-      <el-form
-        ref="editFormRef"
-        :model="editForm"
-        :rules="editFormRules"
-        label-width="100px"
-      >
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="editForm.name" placeholder="请输入姓名" />
-        </el-form-item>
-        <el-form-item label="用户名" prop="username">
-          <el-input
-            v-model="editForm.username"
-            placeholder="请输入用户名"
-            :disabled="isEdit"
-          />
-        </el-form-item>
-        <el-form-item label="手机号" prop="phone">
-          <el-input v-model="editForm.phone" placeholder="请输入手机号" />
-        </el-form-item>
-        <el-form-item label="身份证号" prop="idNumber">
-          <el-input v-model="editForm.idNumber" placeholder="请输入身份证号" />
-        </el-form-item>
-        <el-form-item label="性别" prop="sex">
-          <el-radio-group v-model="editForm.sex">
-            <el-radio value="1">男</el-radio>
-            <el-radio value="2">女</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button class="cancel-btn" @click="editFormVisible = false"
-            >取消</el-button
-          >
-          <el-button class="submit-btn" @click="handleSubmit">确定</el-button>
-        </div>
-      </template>
-    </el-dialog>
+      :is-edit="isEdit"
+      :form-data="editForm"
+      @submit="handleSubmit"
+      @reset="resetEditForm"
+    />
 
     <!-- 查看详情弹窗 -->
-    <el-dialog v-model="viewDialogVisible" title="员工详情" width="600px">
-      <div v-if="currentEmployee" class="detail-grid">
-        <div class="detail-item">
-          <span class="detail-label">姓名</span>
-          <span class="detail-value">{{ currentEmployee.name }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">用户名</span>
-          <span class="detail-value">{{ currentEmployee.username }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">手机号</span>
-          <span class="detail-value">{{
-            maskPhone(currentEmployee.phone)
-          }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">性别</span>
-          <span class="detail-value">{{
-            currentEmployee.sex === "1" ? "男" : "女"
-          }}</span>
-        </div>
-        <div class="detail-item full-width">
-          <span class="detail-label">身份证号</span>
-          <span class="detail-value">{{
-            maskIdNumber(currentEmployee.idNumber)
-          }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">账号状态</span>
-          <span class="detail-value">
-            <el-tag :type="currentEmployee.status === 1 ? 'success' : 'info'">
-              {{ currentEmployee.status === 1 ? "启用" : "禁用" }}
-            </el-tag>
-          </span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">创建时间</span>
-          <span class="detail-value">{{ currentEmployee.createTime }}</span>
-        </div>
-        <div class="detail-item full-width">
-          <span class="detail-label">更新时间</span>
-          <span class="detail-value">{{ currentEmployee.updateTime }}</span>
-        </div>
-      </div>
-    </el-dialog>
+    <EmployeeDetailDialog
+      v-model="viewDialogVisible"
+      :employee="currentEmployee"
+    />
 
     <!-- 修改密码弹窗 -->
-    <el-dialog
+    <PasswordDialog
       v-model="passwordDialogVisible"
-      title="修改密码"
-      width="500px"
-      @close="resetPasswordForm"
-    >
-      <el-form
-        ref="passwordFormRef"
-        :model="passwordForm"
-        :rules="passwordFormRules"
-        label-width="100px"
-      >
-        <el-form-item label="旧密码" prop="oldPassword">
-          <el-input
-            v-model="passwordForm.oldPassword"
-            type="password"
-            placeholder="请输入旧密码"
-            show-password
-          />
-        </el-form-item>
-        <el-form-item label="新密码" prop="newPassword">
-          <el-input
-            v-model="passwordForm.newPassword"
-            type="password"
-            placeholder="请输入新密码"
-            show-password
-          />
-        </el-form-item>
-        <el-form-item label="确认密码" prop="confirmPassword">
-          <el-input
-            v-model="passwordForm.confirmPassword"
-            type="password"
-            placeholder="请再次输入新密码"
-            show-password
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button class="cancel-btn" @click="passwordDialogVisible = false"
-          >取消</el-button
-        >
-        <el-button class="submit-btn" @click="handlePasswordSubmit"
-          >确定</el-button
-        >
-      </template>
-    </el-dialog>
+      @submit="handlePasswordSubmit"
+      @reset="resetPasswordForm"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
 import { Search, RefreshLeft, Plus, Delete } from "@element-plus/icons-vue";
-import {
-  ElMessage,
-  ElMessageBox,
-  type FormInstance,
-  type FormRules,
-} from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
+import EmployeeFormDialog from "./components/EmployeeFormDialog.vue";
+import EmployeeDetailDialog from "./components/EmployeeDetailDialog.vue";
+import PasswordDialog from "./components/PasswordDialog.vue";
 import {
   getEmployeePage,
   createEmployee,
@@ -495,7 +373,6 @@ function handleSelectionChange(selection: EmployeeVO[]) {
 // ==================== 新增/编辑 ====================
 const editFormVisible = ref(false);
 const isEdit = ref(false);
-const editFormRef = ref<FormInstance>();
 const editForm = reactive<EmployeeForm>({
   name: "",
   username: "",
@@ -503,24 +380,6 @@ const editForm = reactive<EmployeeForm>({
   sex: "1",
   idNumber: "",
 });
-
-const editFormRules: FormRules = {
-  name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-  username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-  phone: [
-    { required: true, message: "请输入手机号", trigger: "blur" },
-    { pattern: /^1[3-9]\d{9}$/, message: "手机号格式不正确", trigger: "blur" },
-  ],
-  idNumber: [
-    { required: true, message: "请输入身份证号", trigger: "blur" },
-    {
-      pattern: /^\d{17}[\dXx]$/,
-      message: "身份证号格式不正确",
-      trigger: "blur",
-    },
-  ],
-  sex: [{ required: true, message: "请选择性别", trigger: "change" }],
-};
 
 function handleAdd() {
   isEdit.value = false;
@@ -542,34 +401,29 @@ function handleEdit(row: EmployeeVO) {
 }
 
 async function handleSubmit() {
-  if (!editFormRef.value) return;
-  await editFormRef.value.validate(async (valid) => {
-    if (!valid) return;
-    try {
-      if (isEdit.value) {
-        await updateEmployee(editForm);
-        ElMessage.success("编辑成功");
-      } else {
-        await createEmployee(editForm);
-        ElMessage.success("新增成功");
-      }
-      editFormVisible.value = false;
-      fetchEmployees();
-      fetchStatistics();
-    } catch (error) {
-      console.error("操作失败:", error);
+  try {
+    if (isEdit.value) {
+      await updateEmployee(editForm);
+      ElMessage.success("编辑成功");
+    } else {
+      await createEmployee(editForm);
+      ElMessage.success("新增成功");
     }
-  });
+    editFormVisible.value = false;
+    fetchEmployees();
+    fetchStatistics();
+  } catch (error) {
+    console.error("操作失败:", error);
+  }
 }
 
 function resetEditForm() {
-  editFormRef.value?.resetFields();
   Object.assign(editForm, {
     id: undefined,
     name: "",
     username: "",
     phone: "",
-    sex: 1,
+    sex: "1",
     idNumber: "",
   });
 }
@@ -585,64 +439,32 @@ function handleView(row: EmployeeVO) {
 
 // ==================== 修改密码 ====================
 const passwordDialogVisible = ref(false);
-const passwordFormRef = ref<FormInstance>();
-const passwordForm = reactive({
-  empId: 0,
-  oldPassword: "",
-  newPassword: "",
-  confirmPassword: "",
-});
-
-const passwordFormRules: FormRules = {
-  oldPassword: [{ required: true, message: "请输入旧密码", trigger: "blur" }],
-  newPassword: [
-    { required: true, message: "请输入新密码", trigger: "blur" },
-    { min: 6, message: "密码长度不能少于6位", trigger: "blur" },
-  ],
-  confirmPassword: [
-    { required: true, message: "请再次输入新密码", trigger: "blur" },
-    {
-      validator: (_rule, value, callback) => {
-        if (value !== passwordForm.newPassword) {
-          callback(new Error("两次输入的密码不一致"));
-        } else {
-          callback();
-        }
-      },
-      trigger: "blur",
-    },
-  ],
-};
+const currentPasswordEmpId = ref(0);
 
 function handleEditPassword(row: EmployeeVO) {
-  passwordForm.empId = row.id;
+  currentPasswordEmpId.value = row.id;
   passwordDialogVisible.value = true;
 }
 
-async function handlePasswordSubmit() {
-  if (!passwordFormRef.value) return;
-  await passwordFormRef.value.validate(async (valid) => {
-    if (!valid) return;
-    try {
-      await editPassword({
-        empId: passwordForm.empId,
-        oldPassword: passwordForm.oldPassword,
-        newPassword: passwordForm.newPassword,
-      });
-      ElMessage.success("密码修改成功");
-      passwordDialogVisible.value = false;
-    } catch (error) {
-      console.error("修改密码失败:", error);
-    }
-  });
+async function handlePasswordSubmit(data: {
+  oldPassword: string;
+  newPassword: string;
+}) {
+  try {
+    await editPassword({
+      empId: currentPasswordEmpId.value,
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword,
+    });
+    ElMessage.success("密码修改成功");
+    passwordDialogVisible.value = false;
+  } catch (error) {
+    console.error("修改密码失败:", error);
+  }
 }
 
 function resetPasswordForm() {
-  passwordFormRef.value?.resetFields();
-  passwordForm.empId = 0;
-  passwordForm.oldPassword = "";
-  passwordForm.newPassword = "";
-  passwordForm.confirmPassword = "";
+  currentPasswordEmpId.value = 0;
 }
 
 // ==================== 删除 ====================

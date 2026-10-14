@@ -6,10 +6,12 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  id: number;
-  token: string;
-  username: string;
-  role: "admin" | "user";
+  id?: number; // 员工 ID
+  name?: string; // 姓名
+  token?: string; // JWT 令牌
+  userName?: string; // 用户名（后端返回 userName 驼峰）
+  username?: string; // 兼容字段
+  role?: "admin" | "user"; // 角色
 }
 
 /**

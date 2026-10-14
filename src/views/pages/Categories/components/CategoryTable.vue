@@ -50,7 +50,6 @@
 <script setup lang="ts">
 import { Plus } from "@element-plus/icons-vue";
 import type { Category } from "../types/category";
-import { CategoryType } from "../types/category";
 
 interface Props {
   data: Category[];

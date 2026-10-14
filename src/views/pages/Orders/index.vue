@@ -315,153 +315,21 @@
     </div>
 
     <!-- 订单详情弹窗 -->
-    <el-dialog
-      v-model="detailVisible"
-      title="订单详情"
-      width="700px"
-      class="detail-dialog"
-    >
-      <div v-if="orderDetail" class="detail-content">
-        <!-- 基本信息 -->
-        <div class="detail-section">
-          <h4 class="dialog-section-title">基本信息</h4>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <span class="detail-label">订单号</span>
-              <span class="detail-value">{{ orderDetail.number }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">订单状态</span>
-              <el-tag :type="getStatusType(orderDetail.status!)" effect="light">
-                {{ getStatusText(orderDetail.status!) }}
-              </el-tag>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">下单人</span>
-              <span class="detail-value">{{ orderDetail.userName }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">联系电话</span>
-              <span class="detail-value">{{ orderDetail.phone }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">下单时间</span>
-              <span class="detail-value">{{
-                formatTime(orderDetail.orderTime)
-              }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">订单金额</span>
-              <span class="detail-value amount-highlight"
-                >¥{{ orderDetail.amount?.toFixed(2) }}</span
-              >
-            </div>
-          </div>
-        </div>
-
-        <!-- 收货信息 -->
-        <div class="detail-section">
-          <h4 class="dialog-section-title">收货信息</h4>
-          <div class="detail-grid">
-            <div class="detail-item full-width">
-              <span class="detail-label">收货人</span>
-              <span class="detail-value"
-                >{{ orderDetail.consignee }} {{ orderDetail.phone }}</span
-              >
-            </div>
-            <div class="detail-item full-width">
-              <span class="detail-label">收货地址</span>
-              <span class="detail-value">{{ orderDetail.address }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 订单菜品 -->
-        <div class="detail-section" v-if="orderDetail.orderDetailList?.length">
-          <h4 class="dialog-section-title">订单菜品</h4>
-          <div class="dish-list">
-            <div
-              v-for="(item, index) in orderDetail.orderDetailList"
-              :key="index"
-              class="dish-item"
-            >
-              <div class="dish-info">
-                <span class="dish-name">{{ item.name }}</span>
-                <span v-if="item.dishFlavor" class="dish-flavor">{{
-                  item.dishFlavor
-                }}</span>
-              </div>
-              <div class="dish-meta">
-                <span class="dish-price">¥{{ item.amount?.toFixed(2) }}</span>
-                <span class="dish-quantity">×{{ item.number }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 备注 -->
-        <div class="detail-section" v-if="orderDetail.remark">
-          <h4 class="dialog-section-title">备注</h4>
-          <p class="remark-text">{{ orderDetail.remark }}</p>
-        </div>
-      </div>
-    </el-dialog>
+    <OrderDetailDialog v-model="detailVisible" :order-detail="orderDetail" />
 
     <!-- 拒单原因弹窗 -->
-    <el-dialog
+    <RejectDialog
       v-model="rejectVisible"
-      title="拒单原因"
-      width="450px"
-      class="reject-dialog"
-    >
-      <el-input
-        v-model="rejectReason"
-        type="textarea"
-        :rows="4"
-        placeholder="请输入拒单原因"
-        maxlength="200"
-        show-word-limit
-      />
-      <template #footer>
-        <el-button class="cancel-btn" @click="rejectVisible = false"
-          >取消</el-button
-        >
-        <el-button
-          class="confirm-btn"
-          @click="submitReject"
-          :loading="rejectLoading"
-          >确定拒单</el-button
-        >
-      </template>
-    </el-dialog>
+      :loading="rejectLoading"
+      @confirm="submitReject"
+    />
 
     <!-- 取消原因弹窗 -->
-    <el-dialog
+    <CancelDialog
       v-model="cancelVisible"
-      title="取消订单"
-      width="450px"
-      class="cancel-dialog"
-    >
-      <el-input
-        v-model="cancelReason"
-        type="textarea"
-        :rows="4"
-        placeholder="请输入取消原因"
-        maxlength="200"
-        show-word-limit
-      />
-      <template #footer>
-        <el-button class="cancel-btn" @click="cancelVisible = false"
-          >取消</el-button
-        >
-        <el-button
-          class="confirm-btn"
-          @click="submitCancel"
-          :loading="cancelLoading"
-          >确定取消</el-button
-        >
-      </template>
-    </el-dialog>
+      :loading="cancelLoading"
+      @confirm="submitCancel"
+    />
   </div>
 </template>
 
@@ -469,6 +337,9 @@
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Search, Refresh, User } from "@element-plus/icons-vue";
+import OrderDetailDialog from "./components/OrderDetailDialog.vue";
+import RejectDialog from "./components/RejectDialog.vue";
+import CancelDialog from "./components/CancelDialog.vue";
 import {
   searchOrders,
   getOrderDetail,
@@ -492,10 +363,8 @@ const orderList = ref<OrderVO[]>([]);
 const detailVisible = ref(false);
 const orderDetail = ref<OrderDetail | null>(null);
 const rejectVisible = ref(false);
-const rejectReason = ref("");
 const rejectLoading = ref(false);
 const cancelVisible = ref(false);
-const cancelReason = ref("");
 const cancelLoading = ref(false);
 const currentOrderId = ref(0);
 
@@ -696,12 +565,11 @@ async function handleConfirm(row: OrderVO) {
 
 async function handleReject(row: OrderVO) {
   currentOrderId.value = row.id;
-  rejectReason.value = "";
   rejectVisible.value = true;
 }
 
-async function submitReject() {
-  if (!rejectReason.value.trim()) {
+async function submitReject(reason: string) {
+  if (!reason.trim()) {
     ElMessage.warning("请输入拒单原因");
     return;
   }
@@ -709,7 +577,7 @@ async function submitReject() {
   try {
     await rejectOrder({
       id: currentOrderId.value,
-      rejectionReason: rejectReason.value,
+      rejectionReason: reason,
     });
     ElMessage.success("拒单成功");
     rejectVisible.value = false;
@@ -724,12 +592,11 @@ async function submitReject() {
 
 async function handleCancel(row: OrderVO) {
   currentOrderId.value = row.id;
-  cancelReason.value = "";
   cancelVisible.value = true;
 }
 
-async function submitCancel() {
-  if (!cancelReason.value.trim()) {
+async function submitCancel(reason: string) {
+  if (!reason.trim()) {
     ElMessage.warning("请输入取消原因");
     return;
   }
@@ -737,7 +604,7 @@ async function submitCancel() {
   try {
     await cancelOrder({
       id: currentOrderId.value,
-      cancelReason: cancelReason.value,
+      cancelReason: reason,
     });
     ElMessage.success("取消成功");
     cancelVisible.value = false;
@@ -835,100 +702,6 @@ onMounted(() => {
     &:hover {
       background: rgba(103, 194, 58, 0.04);
     }
-  }
-}
-
-/* ==================== 订单详情弹窗特有样式 ==================== */
-.detail-dialog {
-  :deep(.el-dialog__body) {
-    padding: 24px;
-  }
-}
-
-.detail-content {
-  max-height: 60vh;
-  overflow-y: auto;
-}
-
-.detail-section {
-  margin-bottom: 24px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-/* 菜品列表 */
-.dish-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.dish-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.02);
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-}
-
-.dish-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.dish-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.dish-flavor {
-  font-size: 12px;
-  color: var(--text-secondary);
-  background: var(--primary-bg);
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.dish-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.dish-price {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--primary);
-}
-
-.dish-quantity {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-/* 备注文本 */
-.remark-text {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 0;
-  padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.02);
-  border-radius: 8px;
-  border-left: 3px solid var(--primary);
-}
-
-/* 拒单/取消弹窗 */
-.reject-dialog,
-.cancel-dialog {
-  :deep(.el-dialog__body) {
-    padding: 24px;
   }
 }
 </style>

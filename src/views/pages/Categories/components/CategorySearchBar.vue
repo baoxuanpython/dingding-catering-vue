@@ -1,6 +1,6 @@
 <template>
   <div class="search-panel">
-    <el-form :model="form" inline class="search-form">
+    <el-form :model="form" inline class="search-form" @submit.prevent>
       <el-form-item label="分类名称">
         <el-input
           v-model="form.name"
