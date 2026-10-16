@@ -1,0 +1,5010 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>叮叮餐饮管理端 API 文档 - 分类与员工</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css"
+      id="hljs-light"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+      id="hljs-dark"
+      disabled
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+      /* ============================================================
+         主题变量系统 - 从 theme.css 提取并适配文档场景
+         ============================================================ */
+
+      /* 浅色主题（默认）- 清新薄荷风 */
+      :root {
+        --bg-primary: #f0f7f4;
+        --bg-card: #ffffff;
+        --bg-card-hover: #f8fdf9;
+        --text-primary: #1a3a2a;
+        --text-secondary: #6b8f71;
+        --text-disabled: #bdbdbd;
+        --text-inverse: #ffffff;
+        --border-color: #c8e6c9;
+        --border-light: #e8f5e9;
+        --border-dark: #a5d6a7;
+        --primary: #4caf50;
+        --primary-light: #81c784;
+        --primary-lighter: #a5d6a7;
+        --primary-dark: #388e3c;
+        --primary-bg: #e8f5e9;
+        --danger: #f44336;
+        --danger-light: #ef5350;
+        --danger-dark: #d32f2f;
+        --danger-bg: #ffebee;
+        --warning: #ff9800;
+        --warning-light: #ffa726;
+        --warning-dark: #f57c00;
+        --warning-bg: #fff3e0;
+        --info: #2196f3;
+        --info-light: #42a5f5;
+        --info-dark: #1976d2;
+        --info-bg: #e3f2fd;
+        --success: #4caf50;
+        --success-light: #66bb6a;
+        --success-dark: #388e3c;
+        --success-bg: #e8f5e9;
+        --accent-lime: #cddc39;
+        --accent-mint: #00bcd4;
+        --accent-moss: #8bc34a;
+        --accent-teal: #26a69a;
+        --neutral-100: #f5f5f5;
+        --neutral-200: #eeeeee;
+        --neutral-300: #e0e0e0;
+        --neutral-400: #bdbdbd;
+        --neutral-500: #9e9e9e;
+        --neutral-600: #757575;
+        --neutral-700: #616161;
+        --neutral-800: #424242;
+        --neutral-900: #212121;
+        --shadow: 0 4px 20px 0 rgba(76, 175, 80, 0.15);
+        --shadow-light: 0 2px 12px 0 rgba(76, 175, 80, 0.08);
+        --shadow-heavy: 0 8px 32px 0 rgba(76, 175, 80, 0.2);
+        --shadow-glow: 0 0 20px rgba(76, 175, 80, 0.3);
+        --gradient-primary: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
+        --gradient-light: linear-gradient(135deg, #e8f5e9 0%, #f0f7f4 100%);
+        --gradient-card: linear-gradient(135deg, #ffffff 0%, #f8fdf9 100%);
+
+        /* 文档专用变量 */
+        --doc-sidebar-bg: #ffffff;
+        --doc-sidebar-border: #c8e6c9;
+        --doc-sidebar-hover: #e8f5e9;
+        --doc-sidebar-active: #4caf50;
+        --doc-sidebar-active-text: #ffffff;
+        --doc-content-bg: #f0f7f4;
+        --doc-header-bg: #ffffff;
+        --doc-glass-bg: rgba(255, 255, 255, 0.75);
+        --doc-glass-bg-content: rgba(255, 255, 255, 0.85);
+        --doc-module-bg: #f8fdf9;
+        --doc-code-bg: #1e1e1e;
+        --doc-code-border: #333;
+        --doc-table-header-bg: #4caf50;
+        --doc-table-header-text: #ffffff;
+        --doc-table-row-bg: #ffffff;
+        --doc-table-row-alt-bg: #f8fdf9;
+        --doc-table-row-hover: #e8f5e9;
+        --doc-table-border: #c8e6c9;
+        --doc-badge-get: #4caf50;
+        --doc-badge-post: #2196f3;
+        --doc-badge-put: #ff9800;
+        --doc-badge-delete: #f44336;
+        --doc-search-bg: #f0f7f4;
+        --doc-search-border: #c8e6c9;
+        --doc-search-focus-border: #4caf50;
+        --doc-btn-expand-bg: #e8f5e9;
+        --doc-btn-expand-text: #388e3c;
+        --doc-btn-expand-border: #a5d6a7;
+        --doc-btn-collapse-bg: #fff3e0;
+        --doc-btn-collapse-text: #f57c00;
+        --doc-btn-collapse-border: #ffcc80;
+        --doc-print-border: #333;
+      }
+
+      /* 深色主题 - 深邃夜空 */
+      html.dark {
+        --bg-primary: #1a1a2e;
+        --bg-card: #16213e;
+        --bg-card-hover: #1e2a4a;
+        --text-primary: #e0e0e0;
+        --text-secondary: #a0a0a0;
+        --text-disabled: #616161;
+        --text-inverse: #ffffff;
+        --border-color: #2a2a4a;
+        --border-light: #3a3a5a;
+        --border-dark: #1a1a3a;
+        --primary: #85ce61;
+        --primary-light: #a8e063;
+        --primary-lighter: #c8e6c9;
+        --primary-dark: #67c23a;
+        --primary-darker: #529b2e;
+        --primary-bg: #1e3a1e;
+        --danger: #f56c6c;
+        --danger-light: #f78989;
+        --danger-dark: #e04040;
+        --danger-bg: #3d1f1f;
+        --warning: #e6a23c;
+        --warning-light: #ebb563;
+        --warning-dark: #cf9236;
+        --warning-bg: #3d2e1f;
+        --info: #409eff;
+        --info-light: #79bbff;
+        --info-dark: #337ecc;
+        --info-bg: #1e3a4a;
+        --success: #67c23a;
+        --success-light: #85ce61;
+        --success-dark: #529b2e;
+        --success-bg: #1e3a1e;
+        --accent-lime: #cddc39;
+        --accent-mint: #00bcd4;
+        --accent-moss: #8bc34a;
+        --accent-teal: #26a69a;
+        --neutral-100: #212121;
+        --neutral-200: #424242;
+        --neutral-300: #616161;
+        --neutral-400: #757575;
+        --neutral-500: #9e9e9e;
+        --neutral-600: #bdbdbd;
+        --neutral-700: #e0e0e0;
+        --neutral-800: #eeeeee;
+        --neutral-900: #f5f5f5;
+        --shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
+        --shadow-light: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+        --shadow-heavy: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        --shadow-glow: 0 0 20px rgba(133, 206, 97, 0.15);
+        --gradient-primary: linear-gradient(135deg, #67c23a 0%, #85ce61 100%);
+        --gradient-light: linear-gradient(135deg, #1e3a1e 0%, #1a1a2e 100%);
+        --gradient-card: linear-gradient(135deg, #16213e 0%, #1e2a4a 100%);
+
+        /* 文档专用变量 - 深色 */
+        --doc-sidebar-bg: #16213e;
+        --doc-sidebar-border: #2a2a4a;
+        --doc-sidebar-hover: #1e2a4a;
+        --doc-sidebar-active: #67c23a;
+        --doc-sidebar-active-text: #ffffff;
+        --doc-content-bg: #1a1a2e;
+        --doc-header-bg: #16213e;
+        --doc-glass-bg: rgba(22, 33, 62, 0.75);
+        --doc-glass-bg-content: rgba(22, 33, 62, 0.85);
+        --doc-module-bg: #1a1a2e;
+        --doc-code-bg: #0d1117;
+        --doc-code-border: #2a2a4a;
+        --doc-table-header-bg: #67c23a;
+        --doc-table-header-text: #ffffff;
+        --doc-table-row-bg: #16213e;
+        --doc-table-row-alt-bg: #1a1a2e;
+        --doc-table-row-hover: #1e3a1e;
+        --doc-table-border: #2a2a4a;
+        --doc-badge-get: #67c23a;
+        --doc-badge-post: #409eff;
+        --doc-badge-put: #e6a23c;
+        --doc-badge-delete: #f56c6c;
+        --doc-search-bg: #1a1a2e;
+        --doc-search-border: #2a2a4a;
+        --doc-search-focus-border: #85ce61;
+        --doc-btn-expand-bg: #1e3a1e;
+        --doc-btn-expand-text: #85ce61;
+        --doc-btn-expand-border: #38a169;
+        --doc-btn-collapse-bg: #3d2e1f;
+        --doc-btn-collapse-text: #ebb563;
+        --doc-btn-collapse-border: #8b6914;
+        --doc-print-border: #555;
+      }
+
+      /* ============================================================
+         全局基础样式
+         ============================================================ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-size: 14px;
+        color: var(--text-primary);
+        background: var(--bg-primary);
+        transition:
+          background 0.3s,
+          color 0.3s;
+        line-height: 1.6;
+      }
+
+      /* 滚动条样式 */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 3px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      /* ============================================================
+         背景动画
+         ============================================================ */
+      .bg-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        opacity: 1;
+        transition: opacity 0.8s ease-in-out;
+      }
+
+      .bg-canvas.fade-out {
+        opacity: 0;
+      }
+
+      /* ============================================================
+         布局
+         ============================================================ */
+      .app-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* 顶部导航栏 */
+      .top-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 56px;
+        padding: 0 24px;
+        background: var(--doc-glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: var(--shadow-light);
+        z-index: 100;
+        flex-shrink: 0;
+        margin: 8px 8px 0 8px;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .header-logo {
+        width: 32px;
+        height: 32px;
+        background: var(--gradient-primary);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .header-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .header-subtitle {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-left: 8px;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      /* 主题切换按钮 */
+      .theme-toggle {
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background: var(--bg-card);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: all 0.3s;
+        color: var(--text-primary);
+      }
+
+      .theme-toggle:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-glow);
+      }
+
+      /* 顶栏图标按钮（PDF导出等） */
+      .header-icon-btn {
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background: var(--bg-card);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: all 0.3s;
+        color: var(--text-primary);
+      }
+
+      .header-icon-btn:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-glow);
+      }
+
+      .header-icon-btn.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+        box-shadow: var(--shadow-glow);
+      }
+
+      /* 主体区域 */
+      .main-body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      /* 侧边栏 */
+      .sidebar {
+        width: 280px;
+        background: var(--doc-glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--doc-sidebar-border);
+        border-radius: 12px;
+        margin: 8px;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        overflow: hidden;
+      }
+
+      .sidebar-header {
+        padding: 16px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      /* 搜索框 */
+      .search-box {
+        position: relative;
+        margin-bottom: 12px;
+      }
+
+      .search-box input {
+        width: 100%;
+        height: 36px;
+        padding: 0 12px 0 36px;
+        border: 1px solid var(--doc-search-border);
+        border-radius: 8px;
+        background: var(--doc-search-bg);
+        color: var(--text-primary);
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+
+      .search-box input:focus {
+        border-color: var(--doc-search-focus-border);
+      }
+
+      .search-box input::placeholder {
+        color: var(--text-secondary);
+      }
+
+      .search-box .search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+        font-size: 14px;
+        pointer-events: none;
+      }
+
+      /* 首页节点（侧边栏内） */
+      .sidebar-home-node {
+        display: flex;
+        align-items: center;
+        padding: 10px 16px;
+        margin: 0 8px 8px 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-primary);
+        background: var(--primary-bg);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        transition: all 0.2s;
+        user-select: none;
+      }
+
+      .sidebar-home-node:hover {
+        background: var(--primary-lighter);
+        border-color: var(--primary);
+      }
+
+      .sidebar-home-node.active {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+
+      .home-node-icon {
+        margin-right: 8px;
+        font-size: 16px;
+      }
+
+      .home-node-text {
+        flex: 1;
+      }
+
+      /* 展开/折叠按钮 */
+      .sidebar-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .sidebar-actions button {
+        flex: 1;
+        height: 30px;
+        border: 1px solid;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 500;
+      }
+
+      .btn-expand-all {
+        background: var(--doc-btn-expand-bg);
+        color: var(--doc-btn-expand-text);
+        border-color: var(--doc-btn-expand-border);
+      }
+
+      .btn-expand-all:hover {
+        filter: brightness(0.95);
+      }
+
+      .btn-collapse-all {
+        background: var(--doc-btn-collapse-bg);
+        color: var(--doc-btn-collapse-text);
+        border-color: var(--doc-btn-collapse-border);
+      }
+
+      .btn-collapse-all:hover {
+        filter: brightness(0.95);
+      }
+
+      /* 侧边栏内容 */
+      .sidebar-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px 0;
+      }
+
+      /* 模块分组 */
+      .module-group {
+        margin: 4px 8px;
+        background: var(--doc-module-bg);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+      }
+
+      .module-header {
+        display: flex;
+        align-items: center;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--text-primary);
+        transition: background 0.2s;
+        user-select: none;
+      }
+
+      .module-header:hover {
+        background: var(--doc-sidebar-hover);
+      }
+
+      .module-header .arrow {
+        margin-right: 8px;
+        transition: transform 0.2s;
+        font-size: 10px;
+        color: var(--text-secondary);
+      }
+
+      .module-header.collapsed .arrow {
+        transform: rotate(-90deg);
+      }
+
+      .module-header .module-icon {
+        margin-right: 8px;
+        font-size: 14px;
+      }
+
+      .module-children {
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .module-children.collapsed {
+        max-height: 0 !important;
+      }
+
+      /* 接口节点 */
+      .api-node {
+        display: flex;
+        align-items: center;
+        padding: 6px 16px 6px 40px;
+        cursor: pointer;
+        font-size: 13px;
+        color: var(--text-secondary);
+        transition: all 0.2s;
+        border-left: 3px solid transparent;
+      }
+
+      .api-node:hover {
+        background: var(--doc-sidebar-hover);
+        color: var(--text-primary);
+      }
+
+      .api-node.active {
+        background: var(--primary-bg);
+        color: var(--primary-dark);
+        border-left-color: var(--primary);
+        font-weight: 500;
+      }
+
+      .api-node .method-badge {
+        display: inline-block;
+        width: 36px;
+        height: 18px;
+        line-height: 18px;
+        text-align: center;
+        border-radius: 3px;
+        font-size: 10px;
+        font-weight: 700;
+        color: #fff;
+        margin-right: 8px;
+        flex-shrink: 0;
+      }
+
+      .method-badge.get {
+        background: var(--doc-badge-get);
+      }
+
+      .method-badge.post {
+        background: var(--doc-badge-post);
+      }
+
+      .method-badge.put {
+        background: var(--doc-badge-put);
+      }
+
+      .method-badge.delete {
+        background: var(--doc-badge-delete);
+      }
+
+      .method-badge.err {
+        background: var(--neutral-500);
+      }
+
+      .api-node .node-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* 内容区 */
+      .content-area {
+        flex: 1;
+        overflow-y: auto;
+        background: var(--doc-glass-bg-content);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 32px 40px;
+      }
+
+      .content-inner {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      /* 欢迎页 */
+      .welcome-page {
+        text-align: center;
+        padding: 80px 20px;
+      }
+
+      .welcome-page h1 {
+        font-size: 32px;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 16px;
+      }
+
+      .welcome-page p {
+        color: var(--text-secondary);
+        font-size: 16px;
+        margin-bottom: 8px;
+      }
+
+      .welcome-page .modules-preview {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 32px;
+        flex-wrap: wrap;
+      }
+
+      .welcome-page .module-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 20px 24px;
+        box-shadow: var(--shadow-light);
+        min-width: 180px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .welcome-page .module-card:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-glow);
+        transform: translateY(-2px);
+      }
+
+      .welcome-page .module-card h3 {
+        font-size: 16px;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+      }
+
+      .welcome-page .module-card p {
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
+      /* 错误码速查表 */
+      .error-code-quick-ref {
+        margin-top: 40px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: var(--shadow-light);
+      }
+
+      .error-code-quick-ref h2 {
+        font-size: 18px;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+      }
+
+      .error-code-quick-ref .error-code-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .error-code-quick-ref .error-code-table th {
+        background: var(--neutral-100);
+        padding: 10px 16px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--text-secondary);
+        border-bottom: 2px solid var(--border-color);
+      }
+
+      .error-code-quick-ref .error-code-table td {
+        padding: 8px 16px;
+        font-size: 13px;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
+      }
+
+      .error-code-quick-ref .error-code-table td code {
+        background: var(--neutral-100);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+      }
+
+      /* 接口详情 */
+      @keyframes slideOutUp {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .api-detail {
+        display: none;
+      }
+
+      .api-detail.active {
+        display: block;
+        animation: slideInUp 0.3s ease-out;
+      }
+
+      .api-detail.exiting {
+        display: block;
+        animation: slideOutUp 0.2s ease-in forwards;
+      }
+
+      .api-detail-header {
+        margin-bottom: 32px;
+      }
+
+      .api-detail-header h1 {
+        font-size: 24px;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+      }
+
+      .api-detail-header .api-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .api-detail-header .api-path {
+        font-family: "Fira Code", "Cascadia Code", "Consolas", monospace;
+        font-size: 14px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 6px 12px;
+        color: var(--text-primary);
+      }
+
+      .api-detail-header .api-method-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .api-detail-header .api-method-badge.get {
+        background: var(--doc-badge-get);
+      }
+
+      .api-detail-header .api-method-badge.post {
+        background: var(--doc-badge-post);
+      }
+
+      .api-detail-header .api-method-badge.put {
+        background: var(--doc-badge-put);
+      }
+
+      .api-detail-header .api-method-badge.delete {
+        background: var(--doc-badge-delete);
+      }
+
+      .api-detail-header .api-method-badge.err {
+        background: var(--neutral-500);
+      }
+
+      .api-detail-header .api-content-type {
+        font-size: 12px;
+        color: var(--text-secondary);
+        background: var(--neutral-100);
+        padding: 4px 8px;
+        border-radius: 4px;
+      }
+
+      /* 区块 */
+      .detail-section {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 20px 24px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow-light);
+      }
+
+      .detail-section h2 {
+        font-size: 16px;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      /* 表格 */
+      .param-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .param-table th {
+        background: var(--doc-table-header-bg);
+        color: var(--doc-table-header-text);
+        padding: 10px 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .param-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--doc-table-border);
+        color: var(--text-primary);
+      }
+
+      .param-table tr:nth-child(even) {
+        background: var(--doc-table-row-alt-bg);
+      }
+
+      .param-table tr:hover {
+        background: var(--doc-table-row-hover);
+      }
+
+      .param-table code {
+        font-family: "Fira Code", "Cascadia Code", "Consolas", monospace;
+        background: var(--neutral-100);
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 12px;
+        color: var(--primary-dark);
+      }
+
+      /* 代码块 */
+      .code-block {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--doc-code-border);
+        margin: 12px 0;
+      }
+
+      .code-block pre {
+        margin: 0;
+        padding: 16px;
+        background: var(--doc-code-bg);
+        overflow-x: auto;
+      }
+
+      .code-block code {
+        font-family: "Fira Code", "Cascadia Code", "Consolas", monospace;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .code-block .code-label {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        font-size: 11px;
+        color: #888;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 2px 8px;
+        border-radius: 4px;
+      }
+
+      /* 说明文本 */
+      .note-text {
+        font-size: 13px;
+        color: var(--text-secondary);
+        line-height: 1.8;
+        margin-top: 8px;
+      }
+
+      .note-text strong {
+        color: var(--text-primary);
+      }
+
+      .note-text ul {
+        margin: 8px 0 8px 20px;
+      }
+
+      .note-text li {
+        margin-bottom: 4px;
+      }
+
+      /* 错误码表 */
+      .error-code-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .error-code-table th {
+        background: var(--danger-bg);
+        color: var(--danger-dark);
+        padding: 10px 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .error-code-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--doc-table-border);
+        color: var(--text-primary);
+      }
+
+      .error-code-table code {
+        font-family: "Fira Code", "Cascadia Code", "Consolas", monospace;
+        background: var(--danger-bg);
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 12px;
+        color: var(--danger-dark);
+      }
+
+      /* 响应式 */
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          left: -280px;
+          top: 56px;
+          bottom: 0;
+          z-index: 200;
+          transition: left 0.3s;
+        }
+
+        .sidebar.mobile-open {
+          left: 0;
+        }
+
+        .content-area {
+          padding: 20px 16px;
+        }
+
+        .mobile-menu-btn {
+          display: flex !important;
+        }
+      }
+
+      .mobile-menu-btn {
+        display: none;
+        width: 36px;
+        height: 36px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--bg-card);
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: var(--text-primary);
+      }
+
+      /* 打印样式 */
+      @media print {
+        .sidebar,
+        .top-header,
+        .search-box,
+        .sidebar-actions,
+        .mobile-menu-btn {
+          display: none !important;
+        }
+
+        .main-body {
+          display: block;
+        }
+
+        .content-area {
+          padding: 0;
+          overflow: visible;
+        }
+
+        .content-inner {
+          max-width: 100%;
+        }
+
+        .detail-section {
+          break-inside: avoid;
+          border: 1px solid var(--doc-print-border);
+          box-shadow: none;
+        }
+
+        .code-block {
+          border: 1px solid var(--doc-print-border);
+        }
+
+        a[href^="http"]::after {
+          content: " (" attr(href) ")";
+          font-size: 11px;
+          color: #666;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 背景动画层 -->
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="app-container">
+      <!-- 顶部导航栏 -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">
+            &#9776;
+          </button>
+          <div class="header-logo">API</div>
+          <span class="header-title">叮叮餐饮管理端 API 文档</span>
+        </div>
+        <div class="header-right">
+          <button
+            class="header-icon-btn"
+            onclick="toggleBgAnimation()"
+            title="切换背景动画"
+            id="bgAnimBtn"
+          >
+            &#10024;
+          </button>
+          <button
+            class="header-icon-btn"
+            onclick="exportPDF()"
+            title="导出 PDF"
+            id="pdfBtn"
+          >
+            &#128424;
+          </button>
+          <button
+            class="theme-toggle"
+            onclick="toggleTheme()"
+            title="切换主题"
+            id="themeBtn"
+          >
+            &#9728;
+          </button>
+        </div>
+      </header>
+
+      <div class="main-body">
+        <!-- 侧边栏 -->
+        <aside class="sidebar" id="sidebar">
+          <div class="sidebar-header">
+            <div class="search-box">
+              <span class="search-icon">&#128269;</span>
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="搜索接口..."
+                oninput="handleSearch(this.value)"
+              />
+            </div>
+            <div class="sidebar-actions">
+              <button class="btn-expand-all" onclick="expandAll()">
+                &#9660; 全部展开
+              </button>
+              <button class="btn-collapse-all" onclick="collapseAll()">
+                &#9650; 全部折叠
+              </button>
+            </div>
+          </div>
+          <div class="sidebar-content" id="sidebarContent"></div>
+        </aside>
+
+        <!-- 内容区 -->
+        <main class="content-area" id="contentArea">
+          <div class="content-inner">
+            <!-- 欢迎页 -->
+            <div class="welcome-page" id="welcomePage">
+              <h1>叮叮餐饮管理端 API 文档</h1>
+              <p>Base URL: <code>/admin</code></p>
+              <p>认证方式: JWT Token (Header: <code>token</code>)</p>
+              <div class="modules-preview">
+                <div class="module-card" onclick="showModule(0)">
+                  <h3>&#128451; 分类管理</h3>
+                  <p>6 个接口</p>
+                </div>
+                <div class="module-card" onclick="showModule(1)">
+                  <h3>&#128101; 员工管理</h3>
+                  <p>8 个接口</p>
+                </div>
+                <div class="module-card" onclick="showModule(2)">
+                  <h3>&#127859; 套餐管理</h3>
+                  <p>6 个接口</p>
+                </div>
+                <div class="module-card" onclick="showModule(3)">
+                  <h3>&#127765; 口味字典</h3>
+                  <p>6 个接口</p>
+                </div>
+                <div class="module-card" onclick="showModule(4)">
+                  <h3>&#127860; 菜品管理</h3>
+                  <p>7 个接口</p>
+                </div>
+                <div class="module-card" onclick="showModule(5)">
+                  <h3>&#128203; 订单管理</h3>
+                  <p>8 个接口</p>
+                </div>
+                <div class="module-card" onclick="showModule(6)">
+                  <h3>&#128202; 数据统计</h3>
+                  <p>5 个接口</p>
+                </div>
+                <div class="module-card" onclick="showModule(7)">
+                  <h3>&#128421; 工作台</h3>
+                  <p>4 个接口</p>
+                </div>
+                <div class="module-card" onclick="showModule(8)">
+                  <h3>&#127970; 店铺操作</h3>
+                  <p>2 个接口</p>
+                </div>
+                <div class="module-card" onclick="showModule(9)">
+                  <h3>&#128229; 通用接口</h3>
+                  <p>1 个接口</p>
+                </div>
+                <div class="module-card" onclick="showModule(10)">
+                  <h3>&#128220; 通用错误码参考</h3>
+                  <p>10 个模块</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 接口详情容器 -->
+            <div id="apiDetailContainer"></div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      // ============================================================
+      // 接口数据
+      // ============================================================
+      const apiData = {
+        modules: [
+          {
+            name: "分类管理 (Category)",
+            icon: "\uD83D\uDDC2\uFE0F",
+            apis: [
+              {
+                id: "category-create",
+                title: "新增分类",
+                method: "POST",
+                path: "/admin/category",
+                contentType: "application/json",
+                description:
+                  "新增一个分类。status 由后端默认设为 1（启用），前端无需传递。",
+                requestParams: [],
+                requestBody: {
+                  label: "CategoryDTO",
+                  code: `interface CategoryDTO {
+  name: string;   // 分类名称（必填）
+  sort: number;   // 排序权重，数值越小越靠前（必填）
+  type: number;   // 分类类型：1=菜品分类，2=套餐分类（必填）
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `interface CategoryDTO {
+  name: string;
+  sort: number;
+  type: number;
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "新增时 status 由后端默认设为 1（启用），前端无需传递。",
+                ],
+              },
+              {
+                id: "category-update",
+                title: "修改分类",
+                method: "PUT",
+                path: "/admin/category",
+                contentType: "application/json",
+                description:
+                  "修改分类信息。不允许修改 type（分类类型），前端应禁用该字段。",
+                requestParams: [],
+                requestBody: {
+                  label: "CategoryDTO",
+                  code: `interface CategoryDTO {
+  id: number;     // 分类ID（必填）
+  name: string;   // 分类名称（必填）
+  sort: number;   // 排序权重，数值越小越靠前（必填）
+  type: number;   // 分类类型：1=菜品分类，2=套餐分类（必填，不允许修改）
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `interface CategoryDTO {
+  id: number;
+  name: string;
+  sort: number;
+  type: number; // 不允许修改
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "修改时不允许修改 type（分类类型），前端应禁用该字段。",
+                  "status 需通过单独的启用/禁用接口修改。",
+                ],
+              },
+              {
+                id: "category-page",
+                title: "分类分页查询",
+                method: "GET",
+                path: "/admin/category/page",
+                contentType: null,
+                description: "分页查询分类列表，支持按名称和类型筛选。",
+                requestParams: [
+                  {
+                    name: "page",
+                    type: "number",
+                    required: "是",
+                    description: "页码",
+                  },
+                  {
+                    name: "pageSize",
+                    type: "number",
+                    required: "是",
+                    description: "每页记录数",
+                  },
+                  {
+                    name: "name",
+                    type: "string",
+                    required: "否",
+                    description: "分类名称（模糊查询）",
+                  },
+                  {
+                    name: "type",
+                    type: "number",
+                    required: "否",
+                    description: "分类类型：1=菜品分类，2=套餐分类",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<PageResult<Category>>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "total": 100,
+    "records": [
+      {
+        "id": 1,
+        "type": 1,
+        "name": "热菜",
+        "sort": 1,
+        "status": 1,
+        "createTime": "2026-10-15T10:00:00",
+        "updateTime": "2026-10-15T10:00:00",
+        "createUser": 1,
+        "updateUser": 1
+      }
+    ]
+  }
+}`,
+                },
+                typescript: `interface Category {
+  id: number;
+  type: number;       // 1=菜品分类，2=套餐分类
+  name: string;
+  sort: number;
+  status: number;     // 0=禁用，1=启用
+  createTime: string; // ISO 8601
+  updateTime: string;
+  createUser: number;
+  updateUser: number;
+}
+
+interface PageResult<T> {
+  total: number;
+  records: T[];
+}`,
+                errorCodes: [],
+                businessRules: [],
+              },
+              {
+                id: "category-list",
+                title: "根据类型查询分类列表",
+                method: "GET",
+                path: "/admin/category/list",
+                contentType: null,
+                description: "根据分类类型获取所有分类列表，常用于下拉框选择。",
+                requestParams: [
+                  {
+                    name: "type",
+                    type: "number",
+                    required: "否",
+                    description: "分类类型：1=菜品分类，2=套餐分类",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<Category[]>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": [
+    {
+      "id": 1,
+      "type": 1,
+      "name": "热菜",
+      "sort": 1,
+      "status": 1,
+      "createTime": "2026-10-15T10:00:00",
+      "updateTime": "2026-10-15T10:00:00",
+      "createUser": 1,
+      "updateUser": 1
+    }
+  ]
+}`,
+                },
+                typescript: `// Category 结构同分页查询`,
+                errorCodes: [],
+                businessRules: [],
+              },
+              {
+                id: "category-status",
+                title: "启用/禁用分类",
+                method: "POST",
+                path: "/admin/category/status/{status}",
+                contentType: null,
+                description: "启用或禁用指定分类。",
+                requestParams: [
+                  {
+                    name: "status",
+                    type: "number",
+                    required: "是",
+                    description: "路径参数：1=启用，0=禁用",
+                    location: "path",
+                  },
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "查询参数：分类ID",
+                    location: "query",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [],
+                businessRules: ["status 为路径参数，id 为查询参数。"],
+              },
+              {
+                id: "category-delete",
+                title: "根据ID删除分类",
+                method: "DELETE",
+                path: "/admin/category",
+                contentType: null,
+                description:
+                  "根据 ID 删除分类。如果分类关联了套餐或菜品，则不允许删除。",
+                requestParams: [
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "分类ID",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [
+                  {
+                    code: "3001",
+                    description: "当前分类关联了套餐，不能删除",
+                    httpStatus: 409,
+                  },
+                  {
+                    code: "3002",
+                    description: "当前分类关联了菜品，不能删除",
+                    httpStatus: 409,
+                  },
+                ],
+                businessRules: [
+                  "如果分类关联了套餐，返回错误码 3001。",
+                  "如果分类关联了菜品，返回错误码 3002。",
+                ],
+              },
+            ],
+          },
+          {
+            name: "员工管理 (Employee)",
+            icon: "\uD83D\uDC65",
+            apis: [
+              {
+                id: "employee-login",
+                title: "员工登录",
+                method: "POST",
+                path: "/admin/employee/login",
+                contentType: "application/json",
+                description: "员工登录，返回 JWT Token。",
+                requestParams: [],
+                requestBody: {
+                  label: "EmployeeLoginDTO",
+                  code: `interface EmployeeLoginDTO {
+  username: string;  // 用户名（必填）
+  password: string;  // 密码（必填）
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<EmployeeLoginVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "id": 1,
+    "userName": "admin",
+    "name": "管理员",
+    "token": "eyJhbGciOiJIUzI1NiJ9..."
+  }
+}`,
+                },
+                typescript: `interface EmployeeLoginDTO {
+  username: string;
+  password: string;
+}
+
+interface EmployeeLoginVO {
+  id: number;
+  userName: string;
+  name: string;
+  token: string; // JWT令牌
+}`,
+                errorCodes: [
+                  { code: "1001", description: "令牌已过期", httpStatus: 401 },
+                  { code: "1004", description: "账号不存在", httpStatus: 401 },
+                  {
+                    code: "1005",
+                    description: "账号已被锁定",
+                    httpStatus: 401,
+                  },
+                  { code: "1006", description: "密码错误", httpStatus: 401 },
+                  { code: "1007", description: "登录失败", httpStatus: 401 },
+                ],
+                businessRules: [
+                  "登录成功后，前端需将 token 存储在 localStorage 或 cookie 中。",
+                  "后续请求需在 Header 中携带 token（Header 名称：token）。",
+                ],
+              },
+              {
+                id: "employee-logout",
+                title: "退出登录",
+                method: "POST",
+                path: "/admin/employee/logout",
+                contentType: "application/json",
+                description: "退出登录，清除服务端会话。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [],
+                businessRules: [
+                  "退出后前端需清除本地存储的 token 并跳转登录页。",
+                ],
+              },
+              {
+                id: "employee-create",
+                title: "新增员工",
+                method: "POST",
+                path: "/admin/employee",
+                contentType: "application/json",
+                description: "新增一个员工账号，初始密码由后端默认生成。",
+                requestParams: [],
+                requestBody: {
+                  label: "EmployeeDTO",
+                  code: `interface EmployeeDTO {
+  username: string;  // 登录用户名（必填）
+  name: string;      // 员工姓名（必填）
+  phone: string;     // 手机号（必填，格式为中国大陆手机号）
+  sex: string;       // 性别（必填，"1"=男，"2"=女）
+  idNumber: string;  // 身份证号（必填，格式为中国大陆身份证号）
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<object>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {}
+}`,
+                },
+                typescript: `interface EmployeeDTO {
+  username: string;
+  name: string;
+  phone: string;
+  sex: string;       // "1"=男，"2"=女
+  idNumber: string;
+}`,
+                errorCodes: [
+                  {
+                    code: "9001",
+                    description: "参数校验失败",
+                    httpStatus: 400,
+                  },
+                  {
+                    code: "9002",
+                    description: "数据已存在（用户名重复）",
+                    httpStatus: 409,
+                  },
+                ],
+                businessRules: [
+                  "phone：必填，格式为中国大陆手机号（11位，1开头）。",
+                  "idNumber：必填，格式为中国大陆身份证号（18位）。",
+                  "username：必填，全局唯一。",
+                  "初始密码由后端默认生成（如 123456）。",
+                ],
+              },
+              {
+                id: "employee-update",
+                title: "修改员工信息",
+                method: "PUT",
+                path: "/admin/employee",
+                contentType: "application/json",
+                description: "修改员工信息，校验规则同新增。",
+                requestParams: [],
+                requestBody: {
+                  label: "EmployeeDTO",
+                  code: `interface EmployeeDTO {
+  id: number;        // 员工ID（必填）
+  username: string;  // 登录用户名（必填）
+  name: string;      // 员工姓名（必填）
+  phone: string;     // 手机号（必填，格式为中国大陆手机号）
+  sex: string;       // 性别（必填，"1"=男，"2"=女）
+  idNumber: string;  // 身份证号（必填，格式为中国大陆身份证号）
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `interface EmployeeDTO {
+  id: number;
+  username: string;
+  name: string;
+  phone: string;
+  sex: string;
+  idNumber: string;
+}`,
+                errorCodes: [
+                  {
+                    code: "9001",
+                    description: "参数校验失败",
+                    httpStatus: 400,
+                  },
+                  { code: "9002", description: "数据已存在", httpStatus: 409 },
+                ],
+                businessRules: ["校验规则同新增员工。"],
+              },
+              {
+                id: "employee-password",
+                title: "修改密码",
+                method: "PUT",
+                path: "/admin/employee/editPassword",
+                contentType: "application/json",
+                description: "修改员工密码。",
+                requestParams: [],
+                requestBody: {
+                  label: "PasswordEditDTO",
+                  code: `interface PasswordEditDTO {
+  empId: number;      // 员工ID（必填）
+  oldPassword: string; // 旧密码（必填）
+  newPassword: string; // 新密码（必填）
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `interface PasswordEditDTO {
+  empId: number;
+  oldPassword: string;
+  newPassword: string;
+}`,
+                errorCodes: [
+                  {
+                    code: "2001",
+                    description: "密码修改失败",
+                    httpStatus: 422,
+                  },
+                ],
+                businessRules: [],
+              },
+              {
+                id: "employee-page",
+                title: "员工分页查询",
+                method: "GET",
+                path: "/admin/employee/page",
+                contentType: null,
+                description: "分页查询员工列表，支持按姓名、手机号、状态筛选。",
+                requestParams: [
+                  {
+                    name: "page",
+                    type: "number",
+                    required: "是",
+                    description: "页码",
+                  },
+                  {
+                    name: "pageSize",
+                    type: "number",
+                    required: "是",
+                    description: "每页记录数",
+                  },
+                  {
+                    name: "name",
+                    type: "string",
+                    required: "否",
+                    description: "员工姓名（模糊查询）",
+                  },
+                  {
+                    name: "phone",
+                    type: "string",
+                    required: "否",
+                    description: "手机号（模糊查询）",
+                  },
+                  {
+                    name: "status",
+                    type: "number",
+                    required: "否",
+                    description: "状态：0=禁用，1=启用",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<PageResult<Employee>>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "total": 50,
+    "records": [
+      {
+        "id": 1,
+        "username": "admin",
+        "name": "管理员",
+        "phone": "13800138000",
+        "sex": "1",
+        "idNumber": "110101199001011234",
+        "status": 1,
+        "createTime": "2026-10-15T10:00:00",
+        "updateTime": "2026-10-15T10:00:00",
+        "createUser": 1,
+        "updateUser": 1
+      }
+    ]
+  }
+}`,
+                },
+                typescript: `interface Employee {
+  id: number;
+  username: string;
+  name: string;
+  phone: string;
+  sex: string;        // "1"=男，"2"=女
+  idNumber: string;
+  status: number;     // 0=禁用，1=启用
+  createTime: string;
+  updateTime: string;
+  createUser: number;
+  updateUser: number;
+}`,
+                errorCodes: [],
+                businessRules: ["响应中的 password 字段不返回。"],
+              },
+              {
+                id: "employee-getById",
+                title: "根据ID查询员工",
+                method: "GET",
+                path: "/admin/employee/{id}",
+                contentType: null,
+                description: "根据 ID 查询员工详情。",
+                requestParams: [
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "员工ID（路径参数）",
+                    location: "path",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<Employee>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "id": 1,
+    "username": "admin",
+    "name": "管理员",
+    "phone": "13800138000",
+    "sex": "1",
+    "idNumber": "110101199001011234",
+    "status": 1,
+    "createTime": "2026-10-15T10:00:00",
+    "updateTime": "2026-10-15T10:00:00",
+    "createUser": 1,
+    "updateUser": 1
+  }
+}`,
+                },
+                typescript: `// Employee 结构同分页查询`,
+                errorCodes: [],
+                businessRules: [],
+              },
+              {
+                id: "employee-status",
+                title: "启用/禁用员工账号",
+                method: "POST",
+                path: "/admin/employee/status/{status}",
+                contentType: null,
+                description: "启用或禁用指定员工账号。",
+                requestParams: [
+                  {
+                    name: "status",
+                    type: "number",
+                    required: "是",
+                    description: "路径参数：1=启用，0=禁用",
+                    location: "path",
+                  },
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "查询参数：员工ID",
+                    location: "query",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [
+                  {
+                    code: "2002",
+                    description: "无权为其他用户操作数据",
+                    httpStatus: 403,
+                  },
+                ],
+                businessRules: ["status 为路径参数，id 为查询参数。"],
+              },
+            ],
+          },
+          {
+            name: "套餐管理 (Setmeal)",
+            icon: "\uD83C\uDF71",
+            apis: [
+              {
+                id: "setmeal-create",
+                title: "新增套餐",
+                method: "POST",
+                path: "/admin/setmeal",
+                contentType: "application/json",
+                description: "新增一个套餐，需包含至少一个菜品。",
+                requestParams: [],
+                requestBody: {
+                  label: "SetMealDTO",
+                  code: `interface SetMealDTO {
+  categoryId: number;             // 分类ID（必填）
+  name: string;                   // 套餐名称（必填）
+  price: number;                  // 套餐价格（必填，单位：元，支持两位小数）
+  status?: number;                // 状态：0=停用，1=启用（可选，默认0）
+  description?: string;           // 描述信息（可选）
+  image: string;                  // 图片URL（必填）
+  setmealDishes: SetMealDish[];   // 套餐菜品列表（必填，至少1个菜品）
+}
+
+interface SetMealDish {
+  dishId: number;                 // 菜品ID（必填）
+  name: string;                   // 菜品名称（必填，冗余字段）
+  price: number;                  // 菜品单价（必填，冗余字段，单位：元）
+  copies: number;                 // 份数（必填）
+  setmealDishFlavors?: SetMealDishFlavor[]; // 套餐菜品口味列表（可选）
+}
+
+interface SetMealDishFlavor {
+  flavorId: number;               // 口味类型ID（必填，关联flavor表）
+  flavorValue: string;            // 默认口味值（必填，如"微辣"）
+  flavorName?: string;            // 口味类型名称（可选，冗余字段，如"辣度"）
+  valueList?: string;             // 口味值可选列表（可选，冗余字段，如"不辣,微辣,中辣,特辣"）
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<object>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {}
+}`,
+                },
+                typescript: `interface SetMealDTO {
+  categoryId: number;
+  name: string;
+  price: number;
+  status?: number;       // 默认0（停用）
+  description?: string;
+  image: string;
+  setmealDishes: SetMealDish[];
+}
+
+interface SetMealDish {
+  dishId: number;
+  name: string;
+  price: number;
+  copies: number;
+  setmealDishFlavors?: SetMealDishFlavor[];
+}
+
+interface SetMealDishFlavor {
+  flavorId: number;
+  flavorValue: string;
+  flavorName?: string;
+  valueList?: string;
+}`,
+                errorCodes: [
+                  {
+                    code: "9001",
+                    description: "参数校验失败",
+                    httpStatus: 400,
+                  },
+                ],
+                businessRules: [
+                  "setmealDishes 至少包含 1 个菜品。",
+                  "每个菜品的口味信息通过 setmealDishFlavors 数组传递，每种口味独立一行存入 setmeal_dish_flavor 表。",
+                  "flavorValue 是管理员为该套餐中的菜品设置的口味默认值（如套餐A里的辣椒炒肉默认'微辣'）。",
+                  "flavorName 和 valueList 为冗余字段，前端可传可不传，后端会从 flavor 表自动填充。",
+                ],
+              },
+              {
+                id: "setmeal-update",
+                title: "修改套餐",
+                method: "PUT",
+                path: "/admin/setmeal",
+                contentType: "application/json",
+                description: "修改套餐信息。setmealDishes 采用全量覆盖逻辑。",
+                requestParams: [],
+                requestBody: {
+                  label: "SetMealDTO",
+                  code: `interface SetMealDTO {
+  id: number;                     // 套餐ID（必填）
+  categoryId: number;             // 分类ID（必填）
+  name: string;                   // 套餐名称（必填）
+  price: number;                  // 套餐价格（必填，单位：元，支持两位小数）
+  status?: number;                // 状态：0=停用，1=启用（可选）
+  description?: string;           // 描述信息（可选）
+  image: string;                  // 图片URL（必填）
+  setmealDishes: SetMealDish[];   // 套餐菜品列表（必填，至少1个菜品）
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<object>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {}
+}`,
+                },
+                typescript: `interface SetMealDTO {
+  id: number;
+  categoryId: number;
+  name: string;
+  price: number;
+  status?: number;
+  description?: string;
+  image: string;
+  setmealDishes: SetMealDish[];
+}`,
+                errorCodes: [
+                  {
+                    code: "9001",
+                    description: "参数校验失败",
+                    httpStatus: 400,
+                  },
+                ],
+                businessRules: [
+                  "修改套餐时，setmealDishes 采用全量覆盖逻辑。后端先删除该套餐在 setmeal_dish 和 setmeal_dish_flavor 表中的所有记录，再重新插入。",
+                ],
+              },
+              {
+                id: "setmeal-page",
+                title: "套餐分页查询",
+                method: "GET",
+                path: "/admin/setmeal/page",
+                contentType: null,
+                description: "分页查询套餐列表，支持按名称、分类、状态筛选。",
+                requestParams: [
+                  {
+                    name: "page",
+                    type: "number",
+                    required: "是",
+                    description: "页码",
+                  },
+                  {
+                    name: "pageSize",
+                    type: "number",
+                    required: "是",
+                    description: "每页记录数",
+                  },
+                  {
+                    name: "name",
+                    type: "string",
+                    required: "否",
+                    description: "套餐名称（模糊查询）",
+                  },
+                  {
+                    name: "categoryId",
+                    type: "number",
+                    required: "否",
+                    description: "分类ID",
+                  },
+                  {
+                    name: "status",
+                    type: "number",
+                    required: "否",
+                    description: "状态：0=停用，1=启用",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<PageResult<SetMealVO>>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "total": 50,
+    "records": [
+      {
+        "id": 1,
+        "categoryId": 1,
+        "name": "超值午餐",
+        "price": 29.9,
+        "status": 1,
+        "description": "工作日午餐套餐",
+        "image": "https://example.com/image.jpg",
+        "updateTime": "2026-10-15T10:00:00",
+        "categoryName": "套餐分类",
+        "setmealDishes": [
+          {
+            "id": 1,
+            "setmealId": 1,
+            "dishId": 10,
+            "name": "鱼香肉丝",
+            "price": 18.0,
+            "copies": 1,
+            "setmealDishFlavors": [
+              {
+                "id": 1,
+                "setmealDishId": 1,
+                "flavorId": 1,
+                "flavorValue": "微辣",
+                "flavorName": "辣度",
+                "valueList": "不辣,微辣,中辣,特辣"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}`,
+                },
+                typescript: `interface SetMealVO {
+  id: number;
+  categoryId: number;
+  name: string;
+  price: number;
+  status: number;       // 0=停用，1=启用
+  description: string;
+  image: string;
+  updateTime: string;
+  categoryName: string; // 只读，后端关联查询
+  setmealDishes: SetMealDish[];
+}
+
+interface SetMealDish {
+  id: number;
+  setmealId: number;
+  dishId: number;
+  name: string;
+  price: number;
+  copies: number;
+  setmealDishFlavors: SetMealDishFlavor[];
+}
+
+interface SetMealDishFlavor {
+  id: number;
+  setmealDishId: number;
+  flavorId: number;
+  flavorValue: string;
+  flavorName: string;
+  valueList: string;
+}`,
+                errorCodes: [],
+                businessRules: [],
+              },
+              {
+                id: "setmeal-getById",
+                title: "根据ID查询套餐",
+                method: "GET",
+                path: "/admin/setmeal/{id}",
+                contentType: null,
+                description: "根据 ID 查询套餐详情，包含菜品列表和口味信息。",
+                requestParams: [
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "套餐ID（路径参数）",
+                    location: "path",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<SetMealVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "id": 1,
+    "categoryId": 1,
+    "name": "超值午餐",
+    "price": 29.9,
+    "status": 1,
+    "description": "工作日午餐套餐",
+    "image": "https://example.com/image.jpg",
+    "updateTime": "2026-10-15T10:00:00",
+    "categoryName": "套餐分类",
+    "setmealDishes": []
+  }
+}`,
+                },
+                typescript: `// SetMealVO 结构同分页查询`,
+                errorCodes: [],
+                businessRules: [],
+              },
+              {
+                id: "setmeal-status",
+                title: "启用/禁用套餐",
+                method: "POST",
+                path: "/admin/setmeal/status/{status}",
+                contentType: null,
+                description: "启用或禁用指定套餐。",
+                requestParams: [
+                  {
+                    name: "status",
+                    type: "number",
+                    required: "是",
+                    description: "路径参数：1=启用，0=禁用",
+                    location: "path",
+                  },
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "查询参数：套餐ID",
+                    location: "query",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [
+                  {
+                    code: "5002",
+                    description: "套餐内包含未启售菜品，无法启用",
+                    httpStatus: 409,
+                  },
+                ],
+                businessRules: [
+                  "启用时，如果套餐内包含未启售菜品，返回错误码 5002。",
+                ],
+              },
+              {
+                id: "setmeal-delete",
+                title: "根据ID删除套餐",
+                method: "DELETE",
+                path: "/admin/setmeal",
+                contentType: null,
+                description: "根据 ID 删除套餐。",
+                requestParams: [
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "套餐ID",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [
+                  {
+                    code: "5001",
+                    description: "起售中的套餐不能删除",
+                    httpStatus: 409,
+                  },
+                ],
+                businessRules: ["起售中的套餐不能删除，返回错误码 5001。"],
+              },
+            ],
+          },
+          {
+            name: "口味字典管理 (Flavor)",
+            icon: "\uD83C\uDF36\uFE0F",
+            apis: [
+              {
+                id: "flavor-create",
+                title: "新增口味",
+                method: "POST",
+                path: "/admin/flavor",
+                contentType: "application/json",
+                description: "新增一个口味类型，定义口味名称和可选值列表。",
+                requestParams: [],
+                requestBody: {
+                  label: "FlavorDTO",
+                  code: `interface FlavorDTO {
+  flavorName: string;  // 口味类型名称（必填，全局唯一）
+  valueList: string;   // 口味值可选列表（必填，逗号分隔，至少1个值）
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `interface FlavorDTO {
+  flavorName: string;  // 全局唯一，如"辣度"
+  valueList: string;   // 逗号分隔，如"不辣,微辣,中辣,特辣"
+}`,
+                errorCodes: [
+                  {
+                    code: "9001",
+                    description: "参数校验失败",
+                    httpStatus: 400,
+                  },
+                  {
+                    code: "9002",
+                    description: "数据已存在（口味名称重复）",
+                    httpStatus: 409,
+                  },
+                ],
+                businessRules: [
+                  "flavorName：必填，全局唯一（不能有两个'辣度'）。",
+                  "valueList：必填，逗号分隔，至少1个值（如'不辣,微辣,中辣,特辣'）。",
+                ],
+              },
+              {
+                id: "flavor-update",
+                title: "修改口味",
+                method: "PUT",
+                path: "/admin/flavor",
+                contentType: "application/json",
+                description: "修改口味类型的名称或可选值列表。",
+                requestParams: [],
+                requestBody: {
+                  label: "FlavorDTO",
+                  code: `interface FlavorDTO {
+  id: number;          // 口味类型ID（必填）
+  flavorName: string;  // 口味类型名称（必填，全局唯一）
+  valueList: string;   // 口味值可选列表（必填，逗号分隔，至少1个值）
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `interface FlavorDTO {
+  id: number;
+  flavorName: string;
+  valueList: string;
+}`,
+                errorCodes: [
+                  {
+                    code: "9001",
+                    description: "参数校验失败",
+                    httpStatus: 400,
+                  },
+                  { code: "9002", description: "数据已存在", httpStatus: 409 },
+                ],
+                businessRules: [],
+              },
+              {
+                id: "flavor-page",
+                title: "口味分页查询",
+                method: "GET",
+                path: "/admin/flavor/page",
+                contentType: null,
+                description: "分页查询口味字典列表。",
+                requestParams: [
+                  {
+                    name: "page",
+                    type: "number",
+                    required: "是",
+                    description: "页码",
+                  },
+                  {
+                    name: "pageSize",
+                    type: "number",
+                    required: "是",
+                    description: "每页记录数",
+                  },
+                  {
+                    name: "flavorName",
+                    type: "string",
+                    required: "否",
+                    description: "口味类型名称（模糊查询）",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<PageResult<Flavor>>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "total": 10,
+    "records": [
+      {
+        "id": 1,
+        "flavorName": "辣度",
+        "valueList": "不辣,微辣,中辣,特辣"
+      }
+    ]
+  }
+}`,
+                },
+                typescript: `interface Flavor {
+  id: number;
+  flavorName: string;
+  valueList: string;  // 逗号分隔
+}`,
+                errorCodes: [],
+                businessRules: [],
+              },
+              {
+                id: "flavor-getById",
+                title: "根据ID查询口味",
+                method: "GET",
+                path: "/admin/flavor/{id}",
+                contentType: null,
+                description: "根据 ID 查询口味字典详情。",
+                requestParams: [
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "口味类型ID（路径参数）",
+                    location: "path",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<Flavor>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "id": 1,
+    "flavorName": "辣度",
+    "valueList": "不辣,微辣,中辣,特辣"
+  }
+}`,
+                },
+                typescript: `// Flavor 结构同分页查询`,
+                errorCodes: [],
+                businessRules: [],
+              },
+              {
+                id: "flavor-list",
+                title: "口味列表查询",
+                method: "GET",
+                path: "/admin/flavor/list",
+                contentType: null,
+                description: "查询所有口味字典数据，用于前端下拉框选择。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<Flavor[]>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": [
+    {
+      "id": 1,
+      "flavorName": "辣度",
+      "valueList": "不辣,微辣,中辣,特辣"
+    },
+    {
+      "id": 2,
+      "flavorName": "咸度",
+      "valueList": "清淡,适中,偏咸"
+    }
+  ]
+}`,
+                },
+                typescript: `// Flavor 结构同分页查询`,
+                errorCodes: [],
+                businessRules: ["返回所有口味字典数据，用于前端下拉框选择。"],
+              },
+              {
+                id: "flavor-delete",
+                title: "根据ID删除口味",
+                method: "DELETE",
+                path: "/admin/flavor",
+                contentType: null,
+                description:
+                  "根据 ID 删除口味类型。如果该口味被菜品/套餐关联使用，不允许删除。",
+                requestParams: [
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "口味类型ID",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "success"
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [
+                  {
+                    code: "9005",
+                    description: "不允许删除（被菜品/套餐关联使用）",
+                    httpStatus: 409,
+                  },
+                ],
+                businessRules: [
+                  "如果该口味被菜品/套餐关联使用，不允许删除（返回错误码 9005）。",
+                ],
+              },
+            ],
+          },
+          {
+            name: "菜品管理 (Dish)",
+            icon: "\uD83C\uDF7D\uFE0F",
+            apis: [
+              {
+                id: "dish-page",
+                title: "菜品分页查询",
+                method: "GET",
+                path: "/admin/dish/page",
+                contentType: null,
+                description:
+                  "分页查询菜品列表，支持按名称、分类、状态筛选。返回 DishVO（含口味列表和分类名称）。",
+                requestParams: [
+                  {
+                    name: "page",
+                    type: "number",
+                    required: "是",
+                    description: "页码",
+                  },
+                  {
+                    name: "pageSize",
+                    type: "number",
+                    required: "是",
+                    description: "每页记录数",
+                  },
+                  {
+                    name: "name",
+                    type: "string",
+                    required: "否",
+                    description: "菜品名称（模糊查询）",
+                  },
+                  {
+                    name: "categoryId",
+                    type: "number",
+                    required: "否",
+                    description: "分类ID",
+                  },
+                  {
+                    name: "status",
+                    type: "number",
+                    required: "否",
+                    description: "状态：0-停售，1-起售",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<PageResult<DishVO>>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "total": 100,
+    "records": [
+      {
+        "id": 1,
+        "name": "鱼香肉丝",
+        "categoryId": 10,
+        "categoryName": "热菜",
+        "price": 28.00,
+        "image": "https://xxx.oss-cn-hangzhou.aliyuncs.com/2026/10/15/dish1.jpg",
+        "description": "经典川菜",
+        "status": 1,
+        "updateTime": "2026-10-15T10:30:00",
+        "flavors": [
+          {
+            "id": 1,
+            "flavorName": "辣度",
+            "flavorValue": "微辣",
+            "valueList": "不辣,微辣,中辣,特辣"
+          }
+        ]
+      }
+    ]
+  }
+}`,
+                },
+                typescript: `interface DishVO {
+  id: number;               // 菜品主键
+  name: string;             // 菜品名称
+  categoryId: number;       // 菜品分类ID
+  categoryName: string;     // 分类名称（后端关联查询返回）
+  price: number;            // 菜品价格（单位：元，支持两位小数）
+  image: string;            // 图片URL
+  description: string;      // 描述信息
+  status: number;           // 状态：0-停售，1-起售
+  updateTime: string;       // 更新时间（ISO 8601）
+  flavors: Flavor[];        // 口味列表（后端关联查询返回）
+}
+
+interface Flavor {
+  id: number;               // 口味类型ID
+  flavorName: string;       // 口味类型名称（如"辣度"、"口味"）
+  flavorValue: string;      // 口味值（如"不辣"、"微辣"）
+  valueList: string;        // 口味值列表（逗号分隔，如"不辣,微辣,中辣,特辣"）
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "返回 DishVO，包含口味列表和分类名称。",
+                  "支持按名称模糊查询、按分类筛选、按状态筛选。",
+                ],
+              },
+              {
+                id: "dish-create",
+                title: "新增菜品",
+                method: "POST",
+                path: "/admin/dish",
+                contentType: "application/json",
+                description:
+                  "新增菜品，需同时传入口味列表（flavors）。后端先保存菜品基本信息，再保存口味关联关系。",
+                requestParams: [],
+                requestBody: {
+                  label: "DishDTO",
+                  code: `{
+  "name": "鱼香肉丝",
+  "categoryId": 10,
+  "price": 28.00,
+  "image": "https://xxx.oss-cn-hangzhou.aliyuncs.com/2026/10/15/dish1.jpg",
+  "description": "经典川菜",
+  "status": 1,
+  "flavors": [
+    {
+      "flavorName": "辣度",
+      "valueList": "不辣,微辣,中辣,特辣"
+    }
+  ]
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<null>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": null
+}`,
+                },
+                typescript: `interface DishDTO {
+  id: number;               // 菜品主键（新增时不传，由后端生成）
+  name: string;             // 菜品名称（必填）
+  categoryId: number;       // 菜品分类ID（必填）
+  price: number;            // 菜品价格（必填，单位：元）
+  image: string;            // 图片URL（必填）
+  description: string;      // 描述信息（可选）
+  status: number;           // 状态：0-停售，1-起售（可选，默认1）
+  flavors: Flavor[];        // 口味列表（可选）
+}
+
+interface Flavor {
+  id: number;               // 口味类型ID（可选，新增时不传）
+  flavorName: string;       // 口味类型名称（必填，如"辣度"）
+  flavorValue: string;      // 口味值（可选）
+  valueList: string;        // 口味值列表（必填，逗号分隔）
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "新增菜品时，flavors 数组中的每个元素代表一种口味类型（如'辣度'、'麻度'）。",
+                  "valueList 是该口味类型的所有可选值（逗号分隔），如 '不辣,微辣,中辣,特辣'。",
+                  "后端会先保存菜品基本信息，再批量保存口味关联关系到 dish_flavor 表。",
+                ],
+              },
+              {
+                id: "dish-update",
+                title: "修改菜品",
+                method: "PUT",
+                path: "/admin/dish",
+                contentType: "application/json",
+                description:
+                  "修改菜品信息。后端会先删除该菜品的所有口味关联，再重新插入新的口味关联。",
+                requestParams: [],
+                requestBody: {
+                  label: "DishDTO",
+                  code: `{
+  "id": 1,
+  "name": "鱼香肉丝（改良版）",
+  "categoryId": 10,
+  "price": 32.00,
+  "image": "https://xxx.oss-cn-hangzhou.aliyuncs.com/2026/10/15/dish1.jpg",
+  "description": "改良版经典川菜",
+  "status": 1,
+  "flavors": [
+    {
+      "flavorName": "辣度",
+      "valueList": "不辣,微辣,中辣"
+    }
+  ]
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<null>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": null
+}`,
+                },
+                typescript: `// DishDTO 结构同新增接口，id 必填`,
+                errorCodes: [],
+                businessRules: [
+                  "修改菜品时，后端会先删除该菜品的所有口味关联，再重新插入新的口味关联。",
+                  "如果 flavors 为空数组，表示清除该菜品的所有口味配置。",
+                ],
+              },
+              {
+                id: "dish-get-by-id",
+                title: "根据ID查询菜品详情",
+                method: "GET",
+                path: "/admin/dish/{id}",
+                contentType: null,
+                description: "返回菜品基本信息及口味列表，用于编辑页面回显。",
+                requestParams: [
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "菜品主键",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<DishVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "id": 1,
+    "name": "鱼香肉丝",
+    "categoryId": 10,
+    "categoryName": "热菜",
+    "price": 28.00,
+    "image": "https://xxx.oss-cn-hangzhou.aliyuncs.com/2026/10/15/dish1.jpg",
+    "description": "经典川菜",
+    "status": 1,
+    "updateTime": "2026-10-15T10:30:00",
+    "flavors": [
+      {
+        "id": 1,
+        "flavorName": "辣度",
+        "flavorValue": "微辣",
+        "valueList": "不辣,微辣,中辣,特辣"
+      }
+    ]
+  }
+}`,
+                },
+                typescript: `// DishVO 结构同分页查询`,
+                errorCodes: [
+                  { code: "4003", description: "菜品不存在", httpStatus: 409 },
+                ],
+                businessRules: [
+                  "返回菜品基本信息及口味列表，用于编辑页面回显。",
+                ],
+              },
+              {
+                id: "dish-batch-delete",
+                title: "批量删除菜品",
+                method: "DELETE",
+                path: "/admin/dish",
+                contentType: null,
+                description:
+                  "批量删除菜品。起售中的菜品不能删除，被套餐关联的菜品不能删除。",
+                requestParams: [
+                  {
+                    name: "ids",
+                    type: "string",
+                    required: "是",
+                    description: "逗号分隔的菜品ID列表，如 '1,2,3'",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<null>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": null
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [
+                  {
+                    code: "4001",
+                    description: "起售中的菜品不能删除",
+                    httpStatus: 409,
+                  },
+                  {
+                    code: "4002",
+                    description: "当前菜品关联了套餐，不能删除",
+                    httpStatus: 409,
+                  },
+                ],
+                businessRules: [
+                  "起售中的菜品不能删除（返回错误码 4001）。",
+                  "被套餐关联的菜品不能删除（返回错误码 4002）。",
+                ],
+              },
+              {
+                id: "dish-update-status",
+                title: "更新菜品起售状态",
+                method: "POST",
+                path: "/admin/dish/status/{status}",
+                contentType: null,
+                description: "更新单个菜品的起售状态（起售/停售）。",
+                requestParams: [
+                  {
+                    name: "status",
+                    type: "number",
+                    required: "是",
+                    description: "0-停售，1-起售（路径参数）",
+                  },
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "菜品主键（查询参数）",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<null>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": null
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [],
+                businessRules: ["status 为路径参数，id 为查询参数。"],
+              },
+              {
+                id: "dish-list-by-category",
+                title: "根据分类ID查询菜品列表",
+                method: "GET",
+                path: "/admin/dish/list",
+                contentType: null,
+                description:
+                  "根据分类ID查询该分类下的所有菜品列表。返回 Dish（Entity），不包含口味列表和分类名称。",
+                requestParams: [
+                  {
+                    name: "categoryId",
+                    type: "number",
+                    required: "是",
+                    description: "分类ID",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<Dish[]>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": [
+    {
+      "id": 1,
+      "name": "鱼香肉丝",
+      "categoryId": 10,
+      "price": 28.00,
+      "image": "https://xxx.oss-cn-hangzhou.aliyuncs.com/2026/10/15/dish1.jpg",
+      "description": "经典川菜",
+      "status": 1,
+      "createTime": "2026-10-15T10:00:00",
+      "updateTime": "2026-10-15T10:30:00",
+      "createUser": 1,
+      "updateUser": 1
+    }
+  ]
+}`,
+                },
+                typescript: `interface Dish {
+  id: number;               // 菜品主键
+  name: string;             // 菜品名称
+  categoryId: number;       // 菜品分类ID
+  price: number;            // 菜品价格
+  image: string;            // 图片URL
+  description: string;      // 描述信息
+  status: number;           // 状态：0-停售，1-起售
+  createTime: string;       // 创建时间
+  updateTime: string;       // 更新时间
+  createUser: number;       // 创建人ID
+  updateUser: number;       // 更新人ID
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "该接口返回 Entity 而非 VO，不包含口味列表和分类名称。",
+                  "适用于下拉选择等简单场景。",
+                ],
+              },
+            ],
+          },
+          {
+            name: "订单管理 (Order)",
+            icon: "\uD83D\uDCCB",
+            apis: [
+              {
+                id: "order-condition-search",
+                title: "订单条件搜索（分页）",
+                method: "GET",
+                path: "/admin/order/conditionSearch",
+                contentType: null,
+                description:
+                  "分页查询订单列表，支持多条件组合搜索（订单号、手机号、状态、时间范围、用户ID）。",
+                requestParams: [
+                  {
+                    name: "page",
+                    type: "number",
+                    required: "是",
+                    description: "页码",
+                  },
+                  {
+                    name: "pageSize",
+                    type: "number",
+                    required: "是",
+                    description: "每页记录数",
+                  },
+                  {
+                    name: "number",
+                    type: "string",
+                    required: "否",
+                    description: "订单编号（模糊查询）",
+                  },
+                  {
+                    name: "phone",
+                    type: "string",
+                    required: "否",
+                    description: "手机号（模糊查询）",
+                  },
+                  {
+                    name: "status",
+                    type: "number",
+                    required: "否",
+                    description:
+                      "订单状态：1-待付款，2-待确认，3-已确认，4-派送中，5-已完成，6-已取消，7-已退款",
+                  },
+                  {
+                    name: "beginTime",
+                    type: "string",
+                    required: "否",
+                    description: "开始时间（格式：yyyy-MM-dd HH:mm:ss）",
+                  },
+                  {
+                    name: "endTime",
+                    type: "string",
+                    required: "否",
+                    description: "结束时间（格式：yyyy-MM-dd HH:mm:ss）",
+                  },
+                  {
+                    name: "userId",
+                    type: "number",
+                    required: "否",
+                    description: "下单用户ID",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<PageResult<OrderVO>>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "total": 50,
+    "records": [
+      {
+        "id": 1001,
+        "number": "DD202610150001",
+        "status": 3,
+        "userId": 100,
+        "addressBookId": 5,
+        "orderTime": "2026-10-15T12:00:00",
+        "checkoutTime": "2026-10-15T12:05:00",
+        "payMethod": 1,
+        "payStatus": 1,
+        "amount": 56.00,
+        "remark": "少放辣",
+        "userName": "张三",
+        "phone": "13800138000",
+        "address": "XX路XX号",
+        "consignee": "张三",
+        "cancelReason": null,
+        "rejectionReason": null,
+        "cancelTime": null,
+        "estimatedDeliveryTime": "2026-10-15T12:30:00",
+        "deliveryStatus": 1,
+        "deliveryTime": null,
+        "packAmount": 2,
+        "tablewareNumber": 2,
+        "tablewareStatus": 1,
+        "orderDishes": "鱼香肉丝x1,宫保鸡丁x2",
+        "orderDetailList": [
+          {
+            "id": 1,
+            "name": "鱼香肉丝",
+            "orderId": 1001,
+            "dishId": 10,
+            "setmealId": null,
+            "dishFlavor": "辣度:微辣",
+            "number": 1,
+            "amount": 28.00,
+            "image": "https://xxx.oss-cn-hangzhou.aliyuncs.com/2026/10/15/dish1.jpg"
+          }
+        ]
+      }
+    ]
+  }
+}`,
+                },
+                typescript: `interface OrderVO {
+  // === 继承自 Orders 实体 ===
+  id: number;                       // 订单主键
+  number: string;                   // 订单号
+  status: number;                   // 订单状态：1-待付款，2-待确认，3-已确认，4-派送中，5-已完成，6-已取消，7-已退款
+  userId: number;                   // 下单用户ID
+  addressBookId: number;            // 地址簿ID
+  orderTime: string;                // 下单时间
+  checkoutTime: string | null;      // 结账时间
+  payMethod: number;                // 支付方式：1-微信支付，2-支付宝支付
+  payStatus: number;                // 支付状态：0-未支付，1-已支付，2-退款
+  amount: number;                   // 实收金额（单位：元）
+  remark: string;                   // 备注信息
+  userName: string;                 // 用户名
+  phone: string;                    // 手机号
+  address: string;                  // 地址
+  consignee: string;                // 收货人
+  cancelReason: string;             // 订单取消原因
+  rejectionReason: string;          // 订单拒绝原因
+  cancelTime: string;               // 订单取消时间
+  estimatedDeliveryTime: string;    // 预计送达时间
+  deliveryStatus: number;           // 配送状态：1-立即送出，0-选择具体时间
+  deliveryTime: string;             // 送达时间
+  packAmount: number;               // 打包数量
+  tablewareNumber: number;          // 餐具数量
+  tablewareStatus: number;          // 餐具状态：1-按餐量打包，0-选择具体数量
+
+  // === OrderVO 扩展字段 ===
+  orderDishes: string;              // 订单菜品信息（字符串展示格式，如"鱼香肉丝x1,宫保鸡丁x2"）
+  orderDetailList: OrderDetail[];   // 订单明细列表
+}
+
+interface OrderDetail {
+  id: number;               // 明细主键
+  name: string;             // 商品名称
+  orderId: number;          // 订单ID
+  dishId: number;           // 菜品ID
+  setmealId: number;        // 套餐ID
+  dishFlavor: string;       // 口味信息（如"辣度:微辣"）
+  number: number;           // 数量
+  amount: number;           // 金额
+  image: string;            // 图片URL
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "支持多条件组合搜索，所有查询条件均为可选。",
+                  "返回 OrderVO，包含订单明细列表。",
+                ],
+              },
+              {
+                id: "order-details",
+                title: "查询订单详情",
+                method: "GET",
+                path: "/admin/order/details/{number}",
+                contentType: null,
+                description:
+                  "根据订单号查询订单完整信息，包含订单明细列表（菜品详情）。",
+                requestParams: [
+                  {
+                    name: "number",
+                    type: "number",
+                    required: "是",
+                    description: "订单号",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<OrderVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "id": 1001,
+    "number": "DD202610150001",
+    "status": 3,
+    "orderDishes": "鱼香肉丝x1,宫保鸡丁x2",
+    "orderDetailList": [
+      {
+        "id": 1,
+        "name": "鱼香肉丝",
+        "orderId": 1001,
+        "dishId": 10,
+        "setmealId": null,
+        "dishFlavor": "辣度:微辣",
+        "number": 1,
+        "amount": 28.00,
+        "image": "https://xxx.oss-cn-hangzhou.aliyuncs.com/2026/10/15/dish1.jpg"
+      }
+    ]
+  }
+}`,
+                },
+                typescript: `// OrderVO 结构同订单搜索接口`,
+                errorCodes: [
+                  { code: "6002", description: "订单不存在", httpStatus: 422 },
+                ],
+                businessRules: [
+                  "返回订单完整信息，包含订单明细列表（菜品详情）。",
+                ],
+              },
+              {
+                id: "order-confirm",
+                title: "接单",
+                method: "PUT",
+                path: "/admin/order/confirm",
+                contentType: "application/json",
+                description: "商家确认接单，将订单状态更新为 3（已确认）。",
+                requestParams: [],
+                requestBody: {
+                  label: "OrdersConfirmDTO",
+                  code: `{
+  "id": 1001,
+  "status": 3
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<null>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": null
+}`,
+                },
+                typescript: `interface OrdersConfirmDTO {
+  id: number;       // 订单ID（必填）
+  status: number;   // 订单状态（必填，设为3表示已确认）
+}`,
+                errorCodes: [
+                  {
+                    code: "6001",
+                    description: "订单状态错误",
+                    httpStatus: 422,
+                  },
+                ],
+                businessRules: ["仅当订单状态为 2（待确认）时可接单。"],
+              },
+              {
+                id: "order-rejection",
+                title: "拒单",
+                method: "PUT",
+                path: "/admin/order/rejection",
+                contentType: "application/json",
+                description: "商家拒绝接单，需填写拒单原因。",
+                requestParams: [],
+                requestBody: {
+                  label: "OrdersRejectionDTO",
+                  code: `{
+  "id": 1001,
+  "rejectionReason": "食材不足，无法制作"
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<null>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": null
+}`,
+                },
+                typescript: `interface OrdersRejectionDTO {
+  id: number;               // 订单ID（必填）
+  rejectionReason: string;  // 拒单原因（必填）
+}`,
+                errorCodes: [
+                  {
+                    code: "6001",
+                    description: "订单状态错误",
+                    httpStatus: 422,
+                  },
+                ],
+                businessRules: [
+                  "仅当订单状态为 2（待确认）时可拒单。",
+                  "拒单原因必填。",
+                ],
+              },
+              {
+                id: "order-cancel",
+                title: "取消订单",
+                method: "PUT",
+                path: "/admin/order/cancel",
+                contentType: "application/json",
+                description: "商家取消订单，需填写取消原因。",
+                requestParams: [],
+                requestBody: {
+                  label: "OrdersCancelDTO",
+                  code: `{
+  "id": 1001,
+  "cancelReason": "用户要求取消"
+}`,
+                },
+                responseBody: {
+                  label: "ApiResponse<null>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": null
+}`,
+                },
+                typescript: `interface OrdersCancelDTO {
+  id: number;           // 订单ID（必填）
+  cancelReason: string; // 取消原因（必填）
+}`,
+                errorCodes: [
+                  {
+                    code: "6001",
+                    description: "订单状态错误",
+                    httpStatus: 422,
+                  },
+                  {
+                    code: "6003",
+                    description: "订单业务异常",
+                    httpStatus: 422,
+                  },
+                ],
+                businessRules: [
+                  "取消原因必填。",
+                  "仅允许对特定状态的订单执行取消操作。",
+                ],
+              },
+              {
+                id: "order-delivery",
+                title: "派送订单",
+                method: "PUT",
+                path: "/admin/order/delivery/{id}",
+                contentType: null,
+                description: "商家派送订单，将订单状态更新为 4（派送中）。",
+                requestParams: [
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "订单主键",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<null>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": null
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [
+                  {
+                    code: "6001",
+                    description: "订单状态错误",
+                    httpStatus: 422,
+                  },
+                ],
+                businessRules: ["仅当订单状态为 3（已确认）时可派送。"],
+              },
+              {
+                id: "order-complete",
+                title: "完成订单",
+                method: "PUT",
+                path: "/admin/order/complete/{id}",
+                contentType: null,
+                description: "完成订单，将订单状态更新为 5（已完成）。",
+                requestParams: [
+                  {
+                    name: "id",
+                    type: "number",
+                    required: "是",
+                    description: "订单主键",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<null>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": null
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [
+                  {
+                    code: "6001",
+                    description: "订单状态错误",
+                    httpStatus: 422,
+                  },
+                ],
+                businessRules: ["仅当订单状态为 4（派送中）时可完成。"],
+              },
+              {
+                id: "order-statistics",
+                title: "订单统计",
+                method: "GET",
+                path: "/admin/order/statistics",
+                contentType: null,
+                description:
+                  "返回当前所有非终态订单的状态分布统计，常用于顶部导航栏的快捷状态筛选。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<OrderStatisticsVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "toBeConfirmed": 5,
+    "confirmed": 3,
+    "deliveryInProgress": 8,
+    "completed": 120,
+    "cancelled": 10,
+    "refunded": 2
+  }
+}`,
+                },
+                typescript: `interface OrderStatisticsVO {
+  toBeConfirmed: number;      // 待接单数（状态=2）
+  confirmed: number;          // 待派送数（状态=3）
+  deliveryInProgress: number; // 派送中数（状态=4）
+  completed: number;          // 已完成数（状态=5）
+  cancelled: number;          // 已取消数（状态=6）
+  refunded: number;           // 已退款数（状态=7）
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "该接口返回当前所有非终态订单的状态分布统计。",
+                  "常用于顶部导航栏的快捷状态筛选。",
+                ],
+              },
+            ],
+          },
+          {
+            name: "数据统计 (Report)",
+            icon: "\uD83D\uDCCA",
+            apis: [
+              {
+                id: "report-turnover",
+                title: "营业额统计",
+                method: "GET",
+                path: "/admin/report/turnoverStatistics",
+                contentType: null,
+                description: "查询指定时间范围内的营业额统计数据。",
+                requestParams: [
+                  {
+                    name: "begin",
+                    type: "string",
+                    required: "是",
+                    description: "开始日期（格式：yyyy-MM-dd）",
+                  },
+                  {
+                    name: "end",
+                    type: "string",
+                    required: "是",
+                    description: "结束日期（格式：yyyy-MM-dd）",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<TurnoverReportVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "dateList": "2026-10-01,2026-10-02,2026-10-03",
+    "turnoverList": "406.0,1520.0,75.0"
+  }
+}`,
+                },
+                typescript: `interface TurnoverReportVO {
+  dateList: string;       // 日期列表（逗号分隔）
+  turnoverList: string;   // 营业额列表（逗号分隔，单位：元）
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "前端需使用 split(',') 将字符串拆分成数组",
+                  "dateList 作为 X 轴，turnoverList 作为 Y 轴绘制折线图",
+                ],
+              },
+              {
+                id: "report-order",
+                title: "订单统计",
+                method: "GET",
+                path: "/admin/report/ordersStatistics",
+                contentType: null,
+                description: "查询指定时间范围内的订单统计数据。",
+                requestParams: [
+                  {
+                    name: "begin",
+                    type: "string",
+                    required: "是",
+                    description: "开始日期（格式：yyyy-MM-dd）",
+                  },
+                  {
+                    name: "end",
+                    type: "string",
+                    required: "是",
+                    description: "结束日期（格式：yyyy-MM-dd）",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<OrderReportVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "dateList": "2026-10-01,2026-10-02,2026-10-03",
+    "orderCountList": "50,60,70",
+    "validOrderCountList": "45,55,65",
+    "totalOrderCount": 180,
+    "validOrderCount": 165,
+    "orderCompletionRate": 0.92
+  }
+}`,
+                },
+                typescript: `interface OrderReportVO {
+  dateList: string;            // 日期列表（逗号分隔）
+  orderCountList: string;      // 每日订单数列表（逗号分隔）
+  validOrderCountList: string; // 每日有效订单数列表（逗号分隔）
+  totalOrderCount: number;     // 订单总数
+  validOrderCount: number;     // 有效订单总数
+  orderCompletionRate: number; // 订单完成率（0~1之间的小数）
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "有效订单：状态为'已完成'的订单",
+                  "订单完成率 = 有效订单总数 / 订单总数",
+                ],
+              },
+              {
+                id: "report-user",
+                title: "用户统计",
+                method: "GET",
+                path: "/admin/report/userStatistics",
+                contentType: null,
+                description: "查询指定时间范围内的用户统计数据。",
+                requestParams: [
+                  {
+                    name: "begin",
+                    type: "string",
+                    required: "是",
+                    description: "开始日期（格式：yyyy-MM-dd）",
+                  },
+                  {
+                    name: "end",
+                    type: "string",
+                    required: "是",
+                    description: "结束日期（格式：yyyy-MM-dd）",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<UserReportVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "dateList": "2026-10-01,2026-10-02,2026-10-03",
+    "totalUserList": "100,115,135",
+    "newUserList": "10,15,20"
+  }
+}`,
+                },
+                typescript: `interface UserReportVO {
+  dateList: string;       // 日期列表（逗号分隔）
+  totalUserList: string;  // 用户总量列表（逗号分隔，累计值）
+  newUserList: string;    // 新增用户列表（逗号分隔，每日新增）
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "totalUserList 适合绘制累计折线图（单调递增）",
+                  "newUserList 适合绘制柱状图（每日新增）",
+                ],
+              },
+              {
+                id: "report-top10",
+                title: "销量Top10",
+                method: "GET",
+                path: "/admin/report/top10",
+                contentType: null,
+                description: "查询指定时间范围内销量排名前10的商品。",
+                requestParams: [
+                  {
+                    name: "begin",
+                    type: "string",
+                    required: "是",
+                    description: "开始日期（格式：yyyy-MM-dd）",
+                  },
+                  {
+                    name: "end",
+                    type: "string",
+                    required: "是",
+                    description: "结束日期（格式：yyyy-MM-dd）",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<SalesTop10ReportVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "nameList": "鱼香肉丝,宫保鸡丁,水煮鱼",
+    "numberList": "260,215,200"
+  }
+}`,
+                },
+                typescript: `interface SalesTop10ReportVO {
+  nameList: string;   // 商品名称列表（逗号分隔）
+  numberList: string; // 销量列表（逗号分隔）
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "使用水平条形图展示，Y 轴为商品名称，X 轴为销量",
+                  "按销量从高到低排序",
+                ],
+              },
+              {
+                id: "report-export",
+                title: "导出运营报表",
+                method: "GET",
+                path: "/admin/report/export",
+                contentType: null,
+                description: "导出运营报表为 Excel 文件。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: {
+                  label: "Excel 文件流",
+                  code: `Content-Type: application/vnd.ms-excel
+Content-Disposition: attachment; filename="运营报表.xlsx"`,
+                },
+                typescript: `// 该接口返回 Excel 文件流，非 JSON 格式`,
+                errorCodes: [],
+                businessRules: [
+                  "前端调用方式一：使用 <a> 标签直接下载",
+                  "前端调用方式二：使用 axios 设置 responseType: 'blob'，然后创建下载链接",
+                ],
+              },
+            ],
+          },
+          {
+            name: "工作台 (Workspace)",
+            icon: "\uD83D\uDDA5\uFE0F",
+            apis: [
+              {
+                id: "workspace-business-data",
+                title: "今日运营数据",
+                method: "GET",
+                path: "/admin/workspace/businessData",
+                contentType: null,
+                description:
+                  "查询今日运营数据概览，不需要传参，后端自动取当天日期。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<BusinessDataVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "turnover": 2500.00,
+    "validOrderCount": 25,
+    "orderCompletionRate": 0.95,
+    "unitPrice": 100.00,
+    "newUsers": 5
+  }
+}`,
+                },
+                typescript: `interface BusinessDataVO {
+  turnover: number;            // 营业额（单位：元）
+  validOrderCount: number;     // 有效订单数
+  orderCompletionRate: number; // 订单完成率（0~1之间的小数）
+  unitPrice: number;           // 平均客单价（单位：元）
+  newUsers: number;            // 今日新增用户数
+}`,
+                errorCodes: [],
+                businessRules: [
+                  "营业额：今日已支付订单的实收金额总和",
+                  "有效订单：状态为'已完成'的订单",
+                  "订单完成率：有效订单数 / 总订单数",
+                  "平均客单价：营业额 / 有效订单数",
+                ],
+              },
+              {
+                id: "workspace-dishes",
+                title: "菜品总览",
+                method: "GET",
+                path: "/admin/workspace/overviewDishes",
+                contentType: null,
+                description: "查询菜品总览数据（已启售/已停售）。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<DishOverViewVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "sold": 25,
+    "discontinued": 5
+  }
+}`,
+                },
+                typescript: `interface DishOverViewVO {
+  sold: number;         // 已启售菜品数
+  discontinued: number; // 已停售菜品数
+}`,
+                errorCodes: [],
+                businessRules: [],
+              },
+              {
+                id: "workspace-setmeals",
+                title: "套餐总览",
+                method: "GET",
+                path: "/admin/workspace/overviewSetmeals",
+                contentType: null,
+                description: "查询套餐总览数据（已启售/已停售）。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<SetMealOverViewVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "sold": 10,
+    "discontinued": 2
+  }
+}`,
+                },
+                typescript: `interface SetMealOverViewVO {
+  sold: number;         // 已启售套餐数
+  discontinued: number; // 已停售套餐数
+}`,
+                errorCodes: [],
+                businessRules: [],
+              },
+              {
+                id: "workspace-orders",
+                title: "订单概览",
+                method: "GET",
+                path: "/admin/workspace/overviewOrders",
+                contentType: null,
+                description: "查询订单概览数据（各状态订单数量分布）。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<OrderOverViewVO>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": {
+    "waitingOrders": 5,
+    "deliveredOrders": 3,
+    "deliveryInProgress": 8,
+    "completedOrders": 120,
+    "cancelledOrders": 10,
+    "refunded": 2,
+    "allOrders": 148
+  }
+}`,
+                },
+                typescript: `interface OrderOverViewVO {
+  waitingOrders: number;      // 待接单数（状态=2）
+  deliveredOrders: number;    // 待派送数（状态=3）
+  deliveryInProgress: number; // 派送中数（状态=4）
+  completedOrders: number;    // 已完成数（状态=5）
+  cancelledOrders: number;    // 已取消数（状态=6）
+  refunded: number;           // 已退款数（状态=7）
+  allOrders: number;          // 全部订单数（今日所有订单）
+}`,
+                errorCodes: [],
+                businessRules: [],
+              },
+            ],
+          },
+          {
+            name: "店铺操作 (Shop)",
+            icon: "\uD83C\uDFEA",
+            apis: [
+              {
+                id: "shop-status",
+                title: "获取店铺营业状态",
+                method: "GET",
+                path: "/admin/shop/status",
+                contentType: null,
+                description: "查询当前店铺的营业状态。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<number>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": 1
+}`,
+                },
+                typescript: `// 返回值：1=营业中，0=打烊中`,
+                errorCodes: [],
+                businessRules: [],
+              },
+              {
+                id: "shop-update-status",
+                title: "设置店铺营业状态",
+                method: "PUT",
+                path: "/admin/shop/{status}",
+                contentType: null,
+                description: "设置店铺营业状态（营业/打烊）。",
+                requestParams: [
+                  {
+                    name: "status",
+                    type: "number",
+                    required: "是",
+                    description: "1=营业中，0=打烊中（路径参数）",
+                    location: "path",
+                  },
+                ],
+                requestBody: null,
+                responseBody: {
+                  label: "ApiResponse<null>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": null
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [],
+                businessRules: [
+                  "切换状态后，后端会自动清除相关缓存（菜品/套餐列表缓存）",
+                  "前端调用成功后，建议刷新页面或重新拉取菜品/套餐数据",
+                ],
+              },
+            ],
+          },
+          {
+            name: "通用接口 (Common)",
+            icon: "\uD83D\uDCE5",
+            apis: [
+              {
+                id: "common-upload",
+                title: "文件上传",
+                method: "POST",
+                path: "/admin/common/upload",
+                contentType: "multipart/form-data",
+                description: "上传图片等文件，返回文件访问路径。",
+                requestParams: [],
+                requestBody: {
+                  label: "MultipartFile",
+                  code: `// 表单字段：file（文件对象）`,
+                },
+                responseBody: {
+                  label: "ApiResponse<string>",
+                  code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "/2026/10/15/xxxxx.jpg"
+}`,
+                },
+                typescript: `// 无额外类型定义`,
+                errorCodes: [
+                  {
+                    code: "9003",
+                    description: "文件上传失败",
+                    httpStatus: 500,
+                  },
+                ],
+                businessRules: [
+                  "支持上传 jpg/png/gif 等常见图片格式",
+                  "文件最大 5MB",
+                  "返回值为文件相对路径，前端需拼接 OSS/CDN 域名获取完整 URL",
+                ],
+              },
+            ],
+          },
+          {
+            name: "通用错误码参考",
+            icon: "\uD83D\uDCDC",
+            isReference: true,
+            apis: [
+              {
+                id: "error-auth",
+                title: "认证模块（1xxx）",
+                method: "ERR",
+                path: "认证相关错误码",
+                contentType: null,
+                description: "JWT Token 相关认证错误码。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: null,
+                typescript: `// 认证模块错误码`,
+                errorCodes: [
+                  { code: "1001", description: "令牌已过期", httpStatus: 401 },
+                  { code: "1002", description: "令牌无效", httpStatus: 401 },
+                  { code: "1003", description: "用户未登录", httpStatus: 401 },
+                  { code: "1004", description: "账号不存在", httpStatus: 401 },
+                  {
+                    code: "1005",
+                    description: "账号已被锁定",
+                    httpStatus: 401,
+                  },
+                  { code: "1006", description: "密码错误", httpStatus: 401 },
+                  { code: "1007", description: "登录失败", httpStatus: 401 },
+                ],
+                businessRules: [],
+              },
+              {
+                id: "error-employee",
+                title: "员工模块（2xxx）",
+                method: "ERR",
+                path: "员工相关错误码",
+                contentType: null,
+                description: "员工操作相关错误码。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: null,
+                typescript: `// 员工模块错误码`,
+                errorCodes: [
+                  {
+                    code: "2001",
+                    description: "密码修改失败",
+                    httpStatus: 422,
+                  },
+                  {
+                    code: "2002",
+                    description: "无权为其他用户操作数据",
+                    httpStatus: 403,
+                  },
+                ],
+                businessRules: [],
+              },
+              {
+                id: "error-category",
+                title: "分类模块（3xxx）",
+                method: "ERR",
+                path: "分类相关错误码",
+                contentType: null,
+                description: "分类操作相关错误码。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: null,
+                typescript: `// 分类模块错误码`,
+                errorCodes: [
+                  {
+                    code: "3001",
+                    description: "当前分类关联了套餐，不能删除",
+                    httpStatus: 409,
+                  },
+                  {
+                    code: "3002",
+                    description: "当前分类关联了菜品，不能删除",
+                    httpStatus: 409,
+                  },
+                ],
+                businessRules: [],
+              },
+              {
+                id: "error-dish",
+                title: "菜品模块（4xxx）",
+                method: "ERR",
+                path: "菜品相关错误码",
+                contentType: null,
+                description: "菜品操作相关错误码。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: null,
+                typescript: `// 菜品模块错误码`,
+                errorCodes: [
+                  {
+                    code: "4001",
+                    description: "起售中的菜品不能删除",
+                    httpStatus: 409,
+                  },
+                  {
+                    code: "4002",
+                    description: "当前菜品关联了套餐，不能删除",
+                    httpStatus: 409,
+                  },
+                  { code: "4003", description: "菜品不存在", httpStatus: 409 },
+                ],
+                businessRules: [],
+              },
+              {
+                id: "error-setmeal",
+                title: "套餐模块（5xxx）",
+                method: "ERR",
+                path: "套餐相关错误码",
+                contentType: null,
+                description: "套餐操作相关错误码。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: null,
+                typescript: `// 套餐模块错误码`,
+                errorCodes: [
+                  {
+                    code: "5001",
+                    description: "起售中的套餐不能删除",
+                    httpStatus: 409,
+                  },
+                  {
+                    code: "5002",
+                    description: "套餐内包含未启售菜品，无法启用",
+                    httpStatus: 409,
+                  },
+                  { code: "5003", description: "套餐不存在", httpStatus: 409 },
+                ],
+                businessRules: [],
+              },
+              {
+                id: "error-order",
+                title: "订单模块（6xxx）",
+                method: "ERR",
+                path: "订单相关错误码",
+                contentType: null,
+                description: "订单操作相关错误码。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: null,
+                typescript: `// 订单模块错误码`,
+                errorCodes: [
+                  {
+                    code: "6001",
+                    description: "订单状态错误",
+                    httpStatus: 422,
+                  },
+                  { code: "6002", description: "订单不存在", httpStatus: 422 },
+                  {
+                    code: "6003",
+                    description: "订单业务异常",
+                    httpStatus: 422,
+                  },
+                ],
+                businessRules: [],
+              },
+              {
+                id: "error-cart",
+                title: "购物车模块（7xxx）",
+                method: "ERR",
+                path: "购物车相关错误码",
+                contentType: null,
+                description: "购物车操作相关错误码。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: null,
+                typescript: `// 购物车模块错误码`,
+                errorCodes: [
+                  {
+                    code: "7001",
+                    description: "购物车数据为空，不能下单",
+                    httpStatus: 422,
+                  },
+                  {
+                    code: "7002",
+                    description: "购物车业务异常",
+                    httpStatus: 422,
+                  },
+                ],
+                businessRules: [],
+              },
+              {
+                id: "error-address",
+                title: "地址簿模块（8xxx）",
+                method: "ERR",
+                path: "地址簿相关错误码",
+                contentType: null,
+                description: "地址簿操作相关错误码。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: null,
+                typescript: `// 地址簿模块错误码`,
+                errorCodes: [
+                  {
+                    code: "8001",
+                    description: "用户地址为空，不能下单",
+                    httpStatus: 422,
+                  },
+                  {
+                    code: "8002",
+                    description: "地址业务异常",
+                    httpStatus: 422,
+                  },
+                ],
+                businessRules: [],
+              },
+              {
+                id: "error-common",
+                title: "通用/系统模块（9xxx）",
+                method: "ERR",
+                path: "通用/系统错误码",
+                contentType: null,
+                description: "通用系统级错误码。",
+                requestParams: [],
+                requestBody: null,
+                responseBody: null,
+                typescript: `// 通用/系统模块错误码`,
+                errorCodes: [
+                  {
+                    code: "9001",
+                    description: "参数校验失败",
+                    httpStatus: 400,
+                  },
+                  { code: "9002", description: "数据已存在", httpStatus: 409 },
+                  {
+                    code: "9003",
+                    description: "文件上传失败",
+                    httpStatus: 500,
+                  },
+                  {
+                    code: "9004",
+                    description: "JSON 序列化/反序列化异常",
+                    httpStatus: 500,
+                  },
+                  { code: "9005", description: "不允许删除", httpStatus: 409 },
+                  { code: "9999", description: "未知错误", httpStatus: 500 },
+                ],
+                businessRules: [],
+              },
+            ],
+          },
+        ],
+      };
+      const commonErrorCodes = [
+        { code: "1001", description: "令牌已过期", httpStatus: 401 },
+        { code: "1002", description: "令牌无效", httpStatus: 401 },
+        { code: "1003", description: "用户未登录", httpStatus: 401 },
+        { code: "1004", description: "账号不存在", httpStatus: 401 },
+        { code: "1005", description: "账号已被锁定", httpStatus: 401 },
+        { code: "1006", description: "密码错误", httpStatus: 401 },
+        { code: "1007", description: "登录失败", httpStatus: 401 },
+        { code: "9001", description: "参数校验失败", httpStatus: 400 },
+        { code: "9002", description: "数据已存在", httpStatus: 409 },
+        { code: "9003", description: "文件上传失败", httpStatus: 500 },
+        {
+          code: "9004",
+          description: "JSON 序列化/反序列化异常",
+          httpStatus: 500,
+        },
+        { code: "9005", description: "不允许删除", httpStatus: 409 },
+        { code: "9999", description: "未知错误", httpStatus: 500 },
+      ];
+
+      // ============================================================
+      // 渲染侧边栏
+      // ============================================================
+      function renderSidebar(data) {
+        const container = document.getElementById("sidebarContent");
+        let html = "";
+
+        // 首页节点（特殊节点，不可折叠）
+        html += '<div class="sidebar-home-node" onclick="showHome()">';
+        html += '<span class="home-node-icon">&#127968;</span>';
+        html += '<span class="home-node-text">首页</span>';
+        html += "</div>";
+
+        data.modules.forEach((module, mIdx) => {
+          html += '<div class="module-group" data-module="' + mIdx + '">';
+          html +=
+            '<div class="module-header collapsed" onclick="toggleModule(' +
+            mIdx +
+            ')">';
+          html += '<span class="arrow">&#9660;</span>';
+          html += '<span class="module-icon">' + module.icon + "</span>";
+          html += "<span>" + module.name + "</span>";
+          html += "</div>";
+          html +=
+            '<div class="module-children collapsed" id="moduleChildren' +
+            mIdx +
+            '" style="max-height: 0px;">';
+
+          module.apis.forEach(function (api) {
+            html +=
+              '<div class="api-node" data-id="' +
+              api.id +
+              '" onclick="showApiDetail(\'' +
+              api.id +
+              "')\">";
+            html +=
+              '<span class="method-badge ' +
+              api.method.toLowerCase() +
+              '">' +
+              api.method +
+              "</span>";
+            html += '<span class="node-text">' + api.title + "</span>";
+            html += "</div>";
+          });
+
+          html += "</div></div>";
+        });
+
+        container.innerHTML = html;
+      }
+
+      // ============================================================
+      // 展开/折叠模块
+      // ============================================================
+      function toggleModule(idx) {
+        var header = document.querySelectorAll(".module-header")[idx];
+        var children = document.getElementById("moduleChildren" + idx);
+
+        if (header.classList.contains("collapsed")) {
+          header.classList.remove("collapsed");
+          children.classList.remove("collapsed");
+          children.style.maxHeight = children.scrollHeight + "px";
+        } else {
+          header.classList.add("collapsed");
+          children.classList.add("collapsed");
+          children.style.maxHeight = "0px";
+        }
+      }
+
+      function expandAll() {
+        document.querySelectorAll(".module-header").forEach(function (h, i) {
+          h.classList.remove("collapsed");
+          var c = document.getElementById("moduleChildren" + i);
+          c.classList.remove("collapsed");
+          c.style.maxHeight = c.scrollHeight + "px";
+        });
+      }
+
+      function collapseAll() {
+        document.querySelectorAll(".module-header").forEach(function (h, i) {
+          h.classList.add("collapsed");
+          var c = document.getElementById("moduleChildren" + i);
+          c.classList.add("collapsed");
+          c.style.maxHeight = "0px";
+        });
+      }
+
+      // ============================================================
+      // 搜索
+      // ============================================================
+      function handleSearch(query) {
+        query = query.trim().toLowerCase();
+        var nodes = document.querySelectorAll(".api-node");
+        var groups = document.querySelectorAll(".module-group");
+
+        if (!query) {
+          nodes.forEach(function (n) {
+            n.style.display = "";
+          });
+          groups.forEach(function (g) {
+            g.style.display = "";
+          });
+          return;
+        }
+
+        groups.forEach(function (g) {
+          var mIdx = parseInt(g.dataset.module);
+          var mod = apiData.modules[mIdx];
+          var hasVisible = false;
+
+          // 搜索模块名
+          if (mod.name.toLowerCase().includes(query)) {
+            hasVisible = true;
+          }
+
+          // 搜索接口
+          g.querySelectorAll(".api-node").forEach(function (n) {
+            var text = n.querySelector(".node-text").textContent.toLowerCase();
+            var path = "";
+            var api = mod.apis.find(function (a) {
+              return a.id === n.dataset.id;
+            });
+            if (api) path = api.path.toLowerCase();
+
+            if (text.includes(query) || path.includes(query)) {
+              n.style.display = "";
+              hasVisible = true;
+            } else {
+              n.style.display = "none";
+            }
+          });
+
+          g.style.display = hasVisible ? "" : "none";
+
+          if (hasVisible && query) {
+            var header = g.querySelector(".module-header");
+            var children = g.querySelector(".module-children");
+            header.classList.remove("collapsed");
+            children.classList.remove("collapsed");
+            children.style.maxHeight = children.scrollHeight + "px";
+          }
+        });
+      }
+
+      // ============================================================
+      // 显示接口详情
+      // ============================================================
+      function findApiById(id) {
+        for (var m = 0; m < apiData.modules.length; m++) {
+          for (var a = 0; a < apiData.modules[m].apis.length; a++) {
+            if (apiData.modules[m].apis[a].id === id) {
+              return apiData.modules[m].apis[a];
+            }
+          }
+        }
+        return null;
+      }
+
+      // 显示首页
+      function showHome() {
+        document.getElementById("welcomePage").style.display = "";
+        document.getElementById("apiDetailContainer").style.display = "none";
+        document.getElementById("apiDetailContainer").innerHTML = "";
+
+        // 更新侧边栏激活状态
+        document.querySelectorAll(".api-node").forEach(function (n) {
+          n.classList.remove("active");
+        });
+
+        // 更新首页节点高亮
+        document.querySelectorAll(".sidebar-home-node").forEach(function (n) {
+          n.classList.add("active");
+        });
+
+        // 滚动到顶部
+        document.getElementById("contentArea").scrollTop = 0;
+
+        // 移动端关闭侧边栏
+        if (window.innerWidth <= 768) {
+          document.getElementById("sidebar").classList.remove("mobile-open");
+        }
+      }
+
+      // 跳转到指定模块
+      function showModule(moduleIdx) {
+        var mod = apiData.modules[moduleIdx];
+        if (!mod || !mod.apis || mod.apis.length === 0) return;
+
+        // 展开该模块
+        var header = document.querySelectorAll(".module-header")[moduleIdx];
+        var children = document.getElementById("moduleChildren" + moduleIdx);
+        if (header && children) {
+          header.classList.remove("collapsed");
+          children.classList.remove("collapsed");
+          children.style.maxHeight = children.scrollHeight + "px";
+        }
+
+        // 显示该模块的第一个接口
+        showApiDetail(mod.apis[0].id);
+      }
+
+      // 导出 PDF
+      function exportPDF() {
+        if (typeof html2pdf === "undefined") {
+          alert("PDF 导出组件加载中，请稍后重试");
+          return;
+        }
+
+        var btn = document.getElementById("pdfBtn");
+        btn.disabled = true;
+        btn.title = "导出中...";
+
+        // 克隆内容区用于导出
+        var contentClone = document
+          .querySelector(".content-inner")
+          .cloneNode(true);
+        contentClone.style.width = "210mm";
+        contentClone.style.padding = "20mm";
+        contentClone.style.background = "#fff";
+        contentClone.style.color = "#333";
+
+        // 临时添加到 body
+        var tempDiv = document.createElement("div");
+        tempDiv.style.position = "absolute";
+        tempDiv.style.left = "-9999px";
+        tempDiv.style.top = "0";
+        tempDiv.appendChild(contentClone);
+        document.body.appendChild(tempDiv);
+
+        var opt = {
+          margin: [10, 10, 10, 10],
+          filename: "叮叮餐饮管理端API文档.pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        };
+
+        html2pdf()
+          .set(opt)
+          .from(tempDiv)
+          .save()
+          .then(function () {
+            document.body.removeChild(tempDiv);
+            btn.disabled = false;
+            btn.title = "导出 PDF";
+          })
+          .catch(function (err) {
+            console.error("PDF 导出失败:", err);
+            document.body.removeChild(tempDiv);
+            btn.disabled = false;
+            btn.title = "导出 PDF";
+            alert("PDF 导出失败，请查看控制台");
+          });
+      }
+
+      function showApiDetail(id) {
+        var api = findApiById(id);
+        if (!api) return;
+
+        // 更新侧边栏激活状态
+        document.querySelectorAll(".api-node").forEach(function (n) {
+          n.classList.toggle("active", n.dataset.id === id);
+        });
+
+        // 取消首页节点高亮
+        document.querySelectorAll(".sidebar-home-node").forEach(function (n) {
+          n.classList.remove("active");
+        });
+
+        // 隐藏欢迎页
+        document.getElementById("welcomePage").style.display = "none";
+
+        // 渲染详情（带动画）
+        var container = document.getElementById("apiDetailContainer");
+        var existingDetail = container.querySelector(".api-detail");
+
+        if (existingDetail) {
+          // 旧内容先淡出 + 滑出
+          existingDetail.classList.remove("active");
+          existingDetail.classList.add("exiting");
+          setTimeout(function () {
+            var html = buildApiDetailHtml(api);
+            container.innerHTML = html;
+            // 高亮代码
+            if (window.hljs) {
+              container.querySelectorAll("pre code").forEach(function (block) {
+                hljs.highlightElement(block);
+              });
+            }
+            // 滚动到顶部
+            document.getElementById("contentArea").scrollTop = 0;
+          }, 200);
+        } else {
+          var html = buildApiDetailHtml(api);
+          container.innerHTML = html;
+          container.style.display = "block";
+
+          // 高亮代码
+          if (window.hljs) {
+            container.querySelectorAll("pre code").forEach(function (block) {
+              hljs.highlightElement(block);
+            });
+          }
+
+          // 滚动到顶部
+          document.getElementById("contentArea").scrollTop = 0;
+        }
+
+        // 移动端关闭侧边栏
+        if (window.innerWidth <= 768) {
+          document.getElementById("sidebar").classList.remove("mobile-open");
+        }
+      }
+
+      function buildApiDetailHtml(api) {
+        var html = '<div class="api-detail active">';
+
+        // 头部
+        html += '<div class="api-detail-header">';
+        html += "<h1>" + api.title + "</h1>";
+        html += '<div class="api-meta">';
+        html +=
+          '<span class="api-method-badge ' +
+          api.method.toLowerCase() +
+          '">' +
+          api.method +
+          "</span>";
+        html += '<span class="api-path">' + escapeHtml(api.path) + "</span>";
+        if (api.contentType) {
+          html +=
+            '<span class="api-content-type">Content-Type: ' +
+            escapeHtml(api.contentType) +
+            "</span>";
+        }
+        html += "</div>";
+        html += "</div>";
+
+        // 描述
+        if (api.description) {
+          html += '<div class="detail-section">';
+          html += "<h2>接口说明</h2>";
+          html +=
+            '<p class="note-text">' + escapeHtml(api.description) + "</p>";
+          html += "</div>";
+        }
+
+        // ERR 类型：只显示错误码表和业务规则，跳过请求参数/请求体/响应体/cURL
+        if (api.method === "ERR") {
+          if (api.errorCodes && api.errorCodes.length > 0) {
+            html += '<div class="detail-section">';
+            html += "<h2>错误码列表</h2>";
+            html += '<table class="error-code-table">';
+            html +=
+              "<thead><tr><th>错误码</th><th>说明</th><th>HTTP 状态码</th></tr></thead>";
+            html += "<tbody>";
+            api.errorCodes.forEach(function (e) {
+              html += "<tr>";
+              html += "<td><code>" + escapeHtml(e.code) + "</code></td>";
+              html += "<td>" + escapeHtml(e.description) + "</td>";
+              html += "<td>" + e.httpStatus + "</td>";
+              html += "</tr>";
+            });
+            html += "</tbody></table></div>";
+          }
+          if (api.businessRules && api.businessRules.length > 0) {
+            html += '<div class="detail-section">';
+            html += "<h2>业务规则</h2>";
+            html += '<div class="note-text"><ul>';
+            api.businessRules.forEach(function (r) {
+              html += "<li>" + escapeHtml(r) + "</li>";
+            });
+            html += "</ul></div></div>";
+          }
+          html += "</div>";
+          return html;
+        }
+
+        // 请求参数
+        if (api.requestParams && api.requestParams.length > 0) {
+          html += '<div class="detail-section">';
+          html += "<h2>请求参数</h2>";
+          html += '<table class="param-table">';
+          html +=
+            "<thead><tr><th>参数名</th><th>类型</th><th>必填</th><th>位置</th><th>说明</th></tr></thead>";
+          html += "<tbody>";
+          api.requestParams.forEach(function (p) {
+            var loc = p.location || "query";
+            var locLabel =
+              loc === "path"
+                ? "路径"
+                : loc === "query"
+                  ? "查询"
+                  : loc === "body"
+                    ? "请求体"
+                    : loc;
+            html += "<tr>";
+            html += "<td><code>" + escapeHtml(p.name) + "</code></td>";
+            html += "<td><code>" + escapeHtml(p.type) + "</code></td>";
+            html += "<td>" + escapeHtml(p.required) + "</td>";
+            html += "<td>" + locLabel + "</td>";
+            html += "<td>" + escapeHtml(p.description) + "</td>";
+            html += "</tr>";
+          });
+          html += "</tbody></table></div>";
+        }
+
+        // 请求体
+        if (api.requestBody) {
+          html += '<div class="detail-section">';
+          html += "<h2>请求体</h2>";
+          html += '<div class="code-block">';
+          html +=
+            '<span class="code-label">' +
+            escapeHtml(api.requestBody.label) +
+            "</span>";
+          html +=
+            '<pre><code class="language-typescript">' +
+            escapeHtml(api.requestBody.code) +
+            "</code></pre>";
+          html += "</div></div>";
+        }
+
+        // 响应体
+        if (api.responseBody) {
+          html += '<div class="detail-section">';
+          html += "<h2>响应体</h2>";
+          html += '<div class="code-block">';
+          html +=
+            '<span class="code-label">' +
+            escapeHtml(api.responseBody.label) +
+            "</span>";
+          html +=
+            '<pre><code class="language-json">' +
+            escapeHtml(api.responseBody.code) +
+            "</code></pre>";
+          html += "</div></div>";
+        }
+
+        // TypeScript 类型定义
+        if (api.typescript) {
+          html += '<div class="detail-section">';
+          html += "<h2>TypeScript 类型定义</h2>";
+          html += '<div class="code-block">';
+          html += '<span class="code-label">TypeScript</span>';
+          html +=
+            '<pre><code class="language-typescript">' +
+            escapeHtml(api.typescript) +
+            "</code></pre>";
+          html += "</div></div>";
+        }
+
+        // 错误码
+        if (api.errorCodes && api.errorCodes.length > 0) {
+          html += '<div class="detail-section">';
+          html += "<h2>业务错误码</h2>";
+          html += '<table class="error-code-table">';
+          html +=
+            "<thead><tr><th>错误码</th><th>说明</th><th>HTTP 状态码</th></tr></thead>";
+          html += "<tbody>";
+          api.errorCodes.forEach(function (e) {
+            html += "<tr>";
+            html += "<td><code>" + escapeHtml(e.code) + "</code></td>";
+            html += "<td>" + escapeHtml(e.description) + "</td>";
+            html += "<td>" + e.httpStatus + "</td>";
+            html += "</tr>";
+          });
+          html += "</tbody></table></div>";
+        }
+
+        // 业务规则
+        if (api.businessRules && api.businessRules.length > 0) {
+          html += '<div class="detail-section">';
+          html += "<h2>业务规则</h2>";
+          html += '<div class="note-text"><ul>';
+          api.businessRules.forEach(function (r) {
+            html += "<li>" + escapeHtml(r) + "</li>";
+          });
+          html += "</ul></div></div>";
+        }
+
+        // curl 示例
+        html += '<div class="detail-section">';
+        html += "<h2>cURL 示例</h2>";
+        html += '<div class="code-block">';
+        html += '<span class="code-label">bash</span>';
+        html +=
+          '<pre><code class="language-bash">' +
+          buildCurlExample(api) +
+          "</code></pre>";
+        html += "</div></div>";
+
+        html += "</div>";
+        return html;
+      }
+
+      function buildCurlExample(api) {
+        var method = api.method;
+        var path = api.path.replace(/\{(\w+)\}/g, "<$1>");
+        var url = "http://localhost:8080" + path;
+        var cmd = "curl -X " + method;
+
+        if (api.contentType) {
+          cmd += ' \\\n  -H "Content-Type: ' + api.contentType + '"';
+        }
+        cmd += ' \\\n  -H "token: YOUR_TOKEN"';
+
+        if (method === "POST" || method === "PUT") {
+          if (api.requestBody) {
+            // 提取接口中的 code 作为示例 body
+            var bodyCode = api.requestBody.code;
+            // 移除注释
+            var cleanBody = bodyCode
+              .replace(/\/\/.*/g, "")
+              .replace(/\/\*[\s\S]*?\*\//g, "");
+            cmd += " \\\n  -d '" + cleanBody.trim() + "'";
+          }
+        }
+
+        cmd += ' \\\n  "' + url + '"';
+        return cmd;
+      }
+
+      function escapeHtml(str) {
+        var div = document.createElement("div");
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+      }
+
+      // ============================================================
+      // 主题切换
+      // ============================================================
+      function toggleTheme() {
+        var html = document.documentElement;
+        var btn = document.getElementById("themeBtn");
+        var hljsLight = document.getElementById("hljs-light");
+        var hljsDark = document.getElementById("hljs-dark");
+
+        if (html.classList.contains("dark")) {
+          html.classList.remove("dark");
+          btn.innerHTML = "\u2600";
+          hljsLight.disabled = false;
+          hljsDark.disabled = true;
+          localStorage.setItem("theme", "light");
+        } else {
+          html.classList.add("dark");
+          btn.innerHTML = "\uD83C\uDF19";
+          hljsLight.disabled = true;
+          hljsDark.disabled = false;
+          localStorage.setItem("theme", "dark");
+        }
+
+        // 重新高亮代码
+        if (window.hljs) {
+          document.querySelectorAll("pre code").forEach(function (block) {
+            hljs.highlightElement(block);
+          });
+        }
+      }
+
+      // 初始化主题
+      (function initTheme() {
+        var saved = localStorage.getItem("theme");
+        var btn = document.getElementById("themeBtn");
+        var hljsLight = document.getElementById("hljs-light");
+        var hljsDark = document.getElementById("hljs-dark");
+
+        if (
+          saved === "dark" ||
+          (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
+          btn.innerHTML = "\uD83C\uDF19";
+          hljsLight.disabled = true;
+          hljsDark.disabled = false;
+        }
+      })();
+
+      // 移动端侧边栏切换
+      function toggleMobileSidebar() {
+        document.getElementById("sidebar").classList.toggle("mobile-open");
+      }
+
+      // 点击内容区关闭移动端侧边栏
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("contentArea")
+          .addEventListener("click", function () {
+            if (window.innerWidth <= 768) {
+              document
+                .getElementById("sidebar")
+                .classList.remove("mobile-open");
+            }
+          });
+      });
+
+      // ============================================================
+      // 背景动画 - 弹性碰撞小球
+      // ============================================================
+
+      // === 可配置参数 ===
+      const BALL_CONFIG = {
+        minCount: 15, // 最小球数量
+        maxCount: 25, // 最大球数量
+        minSize: 20, // 最小直径 (px)
+        maxSize: 80, // 最大直径 (px)
+        minSpeed: 0.3, // 最小速度
+        maxSpeed: 1.2, // 最大速度
+        baseOpacity: 0.5, // 基础透明度
+        breatheSpeed: 0.008, // 呼吸速度（透明度变化速率）
+        pauseChance: 0.002, // 每帧停顿概率（模拟呼吸节奏）
+        pauseDuration: 60, // 停顿帧数
+        collisionLoss: 0.05, // 碰撞能量损耗（5%）
+        mouseRadius: 150, // 鼠标影响半径
+        mouseForce: 0.8, // 鼠标排斥力强度
+        acceleration: 0.02, // 加速度（启动/停止过渡）
+        glowBlur: 15, // 发光模糊半径
+        glowColor: "rgba(255,255,255,0.3)", // 发光颜色
+      };
+
+      // 浅色主题配色
+      const LIGHT_COLORS = [
+        "rgba(129, 199, 132, 0.85)", // 薄荷绿
+        "rgba(100, 181, 246, 0.85)", // 浅蓝
+        "rgba(179, 157, 219, 0.85)", // 淡紫
+        "rgba(255, 183, 77, 0.85)", // 暖黄
+        "rgba(240, 98, 146, 0.85)", // 粉红
+        "rgba(128, 203, 196, 0.85)", // 青绿
+      ];
+
+      // 深色主题配色
+      const DARK_COLORS = [
+        "rgba(102, 187, 106, 0.7)", // 荧光绿
+        "rgba(66, 165, 245, 0.7)", // 霓虹蓝
+        "rgba(171, 71, 188, 0.7)", // 亮紫
+        "rgba(255, 167, 38, 0.7)", // 亮橙
+        "rgba(255, 82, 82, 0.7)", // 霓虹红
+        "rgba(0, 229, 255, 0.7)", // 赛博青
+      ];
+
+      let bgAnimationId = null;
+      let balls = [];
+      let isBgAnimationRunning = false;
+
+      class Ball {
+        constructor(canvasWidth, canvasHeight, colors) {
+          this.radius =
+            BALL_CONFIG.minSize +
+            Math.random() * (BALL_CONFIG.maxSize - BALL_CONFIG.minSize);
+          this.x =
+            this.radius + Math.random() * (canvasWidth - this.radius * 2);
+          this.y =
+            this.radius + Math.random() * (canvasHeight - this.radius * 2);
+
+          // 大球更慢，小球更快（质量影响速度）
+          const sizeRatio =
+            (this.radius - BALL_CONFIG.minSize) /
+            (BALL_CONFIG.maxSize - BALL_CONFIG.minSize);
+          const speedRange = BALL_CONFIG.maxSpeed - BALL_CONFIG.minSpeed;
+          const targetSpeed =
+            BALL_CONFIG.maxSpeed - sizeRatio * speedRange * 0.5;
+          const angle = Math.random() * Math.PI * 2;
+
+          // 加速度系统：目标速度 vs 当前速度
+          this.targetVx = Math.cos(angle) * targetSpeed;
+          this.targetVy = Math.sin(angle) * targetSpeed;
+          this.vx = 0;
+          this.vy = 0;
+
+          this.mass = this.radius * this.radius;
+
+          // 呼吸效果
+          this.breathePhase = Math.random() * Math.PI * 2;
+          this.currentOpacity = BALL_CONFIG.baseOpacity;
+
+          // 停顿机制（个体差异）
+          this.isPaused = false;
+          this.pauseTimer = 0;
+          this.savedVx = 0;
+          this.savedVy = 0;
+          this.pauseChance = BALL_CONFIG.pauseChance * (0.5 + Math.random()); // 个体差异 ±50%
+
+          // 颜色基础值
+          const baseColor = colors[Math.floor(Math.random() * colors.length)];
+          this.baseColor = baseColor;
+          this.color = baseColor;
+
+          // 解析 RGB 用于渐变
+          const rgbaMatch = baseColor.match(/rgba\((\d+),\s*(\d+),\s*(\d+)/);
+          if (rgbaMatch) {
+            this.r = parseInt(rgbaMatch[1]);
+            this.g = parseInt(rgbaMatch[2]);
+            this.b = parseInt(rgbaMatch[3]);
+          }
+        }
+
+        update(canvasWidth, canvasHeight, mouseX, mouseY) {
+          // 呼吸效果：透明度正弦变化
+          this.breathePhase += BALL_CONFIG.breatheSpeed;
+          const breatheFactor = 0.3 + 0.3 * Math.sin(this.breathePhase);
+          this.currentOpacity = BALL_CONFIG.baseOpacity * breatheFactor;
+
+          // 更新颜色透明度
+          this.color = `rgba(${this.r}, ${this.g}, ${this.b}, ${this.currentOpacity})`;
+
+          // 停顿逻辑
+          if (this.isPaused) {
+            this.pauseTimer--;
+            if (this.pauseTimer <= 0) {
+              this.isPaused = false;
+              this.targetVx = this.savedVx;
+              this.targetVy = this.savedVy;
+            }
+            return;
+          }
+
+          // 随机停顿（个体差异）
+          if (Math.random() < this.pauseChance) {
+            this.isPaused = true;
+            this.pauseTimer = BALL_CONFIG.pauseDuration;
+            this.savedVx = this.targetVx;
+            this.savedVy = this.targetVy;
+            this.targetVx = 0;
+            this.targetVy = 0;
+            return;
+          }
+
+          // 鼠标交互：排斥力
+          if (mouseX !== null && mouseY !== null) {
+            const dx = this.x - mouseX;
+            const dy = this.y - mouseY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < BALL_CONFIG.mouseRadius && dist > 0) {
+              const force =
+                (1 - dist / BALL_CONFIG.mouseRadius) * BALL_CONFIG.mouseForce;
+              this.targetVx += (dx / dist) * force;
+              this.targetVy += (dy / dist) * force;
+            }
+          }
+
+          // 加速度系统：平滑过渡到目标速度
+          this.vx += (this.targetVx - this.vx) * BALL_CONFIG.acceleration;
+          this.vy += (this.targetVy - this.vy) * BALL_CONFIG.acceleration;
+
+          this.x += this.vx;
+          this.y += this.vy;
+
+          // 边界反弹
+          if (this.x - this.radius < 0) {
+            this.x = this.radius;
+            this.targetVx = Math.abs(this.targetVx);
+          }
+          if (this.x + this.radius > canvasWidth) {
+            this.x = canvasWidth - this.radius;
+            this.targetVx = -Math.abs(this.targetVx);
+          }
+          if (this.y - this.radius < 0) {
+            this.y = this.radius;
+            this.targetVy = Math.abs(this.targetVy);
+          }
+          if (this.y + this.radius > canvasHeight) {
+            this.y = canvasHeight - this.radius;
+            this.targetVy = -Math.abs(this.targetVy);
+          }
+        }
+
+        draw(ctx) {
+          // 发光效果
+          ctx.shadowBlur = BALL_CONFIG.glowBlur;
+          ctx.shadowColor = this.color;
+
+          // 径向渐变
+          const gradient = ctx.createRadialGradient(
+            this.x - this.radius * 0.3,
+            this.y - this.radius * 0.3,
+            0,
+            this.x,
+            this.y,
+            this.radius,
+          );
+          gradient.addColorStop(
+            0,
+            `rgba(255, 255, 255, ${this.currentOpacity * 0.8})`,
+          );
+          gradient.addColorStop(
+            0.4,
+            `rgba(${this.r}, ${this.g}, ${this.b}, ${this.currentOpacity * 0.6})`,
+          );
+          gradient.addColorStop(
+            1,
+            `rgba(${this.r}, ${this.g}, ${this.b}, ${this.currentOpacity * 0.2})`,
+          );
+
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = gradient;
+          ctx.fill();
+          ctx.closePath();
+
+          // 重置阴影
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      // 弹性碰撞（动量守恒 + 能量损耗）
+      function resolveCollision(ball1, ball2) {
+        const dx = ball2.x - ball1.x;
+        const dy = ball2.y - ball1.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < ball1.radius + ball2.radius) {
+          // 碰撞法线
+          const nx = dx / distance;
+          const ny = dy / distance;
+
+          // 相对速度
+          const dvx = ball1.targetVx - ball2.targetVx;
+          const dvy = ball1.targetVy - ball2.targetVy;
+          const dvn = dvx * nx + dvy * ny;
+
+          // 只在球靠近时处理碰撞
+          if (dvn > 0) {
+            const massSum = ball1.mass + ball2.mass;
+            const impulse = (2 * dvn) / massSum;
+
+            ball1.targetVx -= impulse * ball2.mass * nx;
+            ball1.targetVy -= impulse * ball2.mass * ny;
+            ball2.targetVx += impulse * ball1.mass * nx;
+            ball2.targetVy += impulse * ball1.mass * ny;
+
+            // 碰撞能量损耗
+            const loss = BALL_CONFIG.collisionLoss;
+            ball1.targetVx *= 1 - loss;
+            ball1.targetVy *= 1 - loss;
+            ball2.targetVx *= 1 - loss;
+            ball2.targetVy *= 1 - loss;
+
+            // 分离重叠
+            const overlap = (ball1.radius + ball2.radius - distance) / 2;
+            ball1.x -= overlap * nx;
+            ball1.y -= overlap * ny;
+            ball2.x += overlap * nx;
+            ball2.y += overlap * ny;
+          }
+        }
+      }
+
+      let mouseX = null;
+      let mouseY = null;
+
+      function initBalls() {
+        const canvas = document.getElementById("bgCanvas");
+        const ctx = canvas.getContext("2d");
+        const isDark = document.body.classList.contains("dark");
+        const colors = isDark ? DARK_COLORS : LIGHT_COLORS;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const count =
+          BALL_CONFIG.minCount +
+          Math.floor(
+            Math.random() * (BALL_CONFIG.maxCount - BALL_CONFIG.minCount + 1),
+          );
+        balls = [];
+        for (let i = 0; i < count; i++) {
+          balls.push(new Ball(canvas.width, canvas.height, colors));
+        }
+      }
+
+      function animateBalls() {
+        const canvas = document.getElementById("bgCanvas");
+        const ctx = canvas.getContext("2d");
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 更新位置（传入鼠标位置）
+        for (const ball of balls) {
+          ball.update(canvas.width, canvas.height, mouseX, mouseY);
+        }
+
+        // 碰撞检测
+        for (let i = 0; i < balls.length; i++) {
+          for (let j = i + 1; j < balls.length; j++) {
+            resolveCollision(balls[i], balls[j]);
+          }
+        }
+
+        // 绘制
+        for (const ball of balls) {
+          ball.draw(ctx);
+        }
+
+        bgAnimationId = requestAnimationFrame(animateBalls);
+      }
+
+      function startBgAnimation() {
+        if (isBgAnimationRunning) return;
+
+        const canvas = document.getElementById("bgCanvas");
+
+        // 淡入效果
+        canvas.classList.remove("fade-out");
+
+        initBalls();
+        animateBalls();
+        isBgAnimationRunning = true;
+
+        // 更新按钮状态
+        const btn = document.getElementById("bgAnimBtn");
+        if (btn) btn.classList.add("active");
+      }
+
+      function stopBgAnimation() {
+        if (!isBgAnimationRunning) return;
+
+        const canvas = document.getElementById("bgCanvas");
+
+        // 淡出效果
+        canvas.classList.add("fade-out");
+
+        // 等待动画结束后停止
+        setTimeout(() => {
+          if (bgAnimationId) {
+            cancelAnimationFrame(bgAnimationId);
+            bgAnimationId = null;
+          }
+          const ctx = canvas.getContext("2d");
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          balls = [];
+          isBgAnimationRunning = false;
+
+          // 更新按钮状态
+          const btn = document.getElementById("bgAnimBtn");
+          if (btn) btn.classList.remove("active");
+        }, 800);
+      }
+
+      function toggleBgAnimation() {
+        if (isBgAnimationRunning) {
+          stopBgAnimation();
+        } else {
+          startBgAnimation();
+        }
+      }
+
+      // 监听主题切换，重新生成小球颜色
+      const originalToggleTheme = window.toggleTheme;
+      window.toggleTheme = function () {
+        if (originalToggleTheme) originalToggleTheme();
+        if (isBgAnimationRunning) {
+          // 直接重新初始化小球，不需要停止再启动
+          initBalls();
+        }
+      };
+
+      // 监听窗口大小变化
+      window.addEventListener("resize", () => {
+        if (isBgAnimationRunning) {
+          const canvas = document.getElementById("bgCanvas");
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+      });
+
+      // 鼠标位置追踪
+      document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      document.addEventListener("mouseleave", () => {
+        mouseX = null;
+        mouseY = null;
+      });
+
+      // ============================================================
+      // 初始化
+      // ============================================================
+      document.addEventListener("DOMContentLoaded", function () {
+        renderSidebar(apiData);
+        // 页面加载时自动启动背景动画
+        startBgAnimation();
+      });
+    </script>
+  </body>
+</html>

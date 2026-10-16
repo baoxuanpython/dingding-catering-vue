@@ -182,9 +182,9 @@ axios.interceptors.response.use(
 
 ```typescript
 interface CategoryDTO {
-  id: number; // 分类id（必填）
-  name: string; // 分类名称（必填）
-  sort: number; // 排序（必填，int32）
+  id: number; // 分类id（必填，int64）
+  name: string; // 分类名称（必填，string）
+  sort: number; // 排序权重（数值越小越靠前，必填，int32）
   type: number; // 分类类型：1=菜品分类，2=套餐分类（必填，int32）
 }
 ```
@@ -198,10 +198,10 @@ interface CategoryDTO {
 
 ```typescript
 interface CategoryPageQueryDTO {
-  name?: string; // 分类名称（可选，模糊查询）
-  page: number; // 页码（必填）
-  pageSize: number; // 每页记录数（必填）
-  type?: number; // 分类类型：1=菜品分类，2=套餐分类（可选）
+  name?: string; // 分类名称（可选，模糊查询，string）
+  page: number; // 页码（必填，int32）
+  pageSize: number; // 每页记录数（必填，int32）
+  type?: number; // 分类类型：1=菜品分类，2=套餐分类（可选，int32）
 }
 ```
 
@@ -209,15 +209,15 @@ interface CategoryPageQueryDTO {
 
 ```typescript
 interface Category {
-  id: number;
-  type: number;
-  name: string;
-  sort: number;
-  status: number; // 状态
-  createTime: string;
-  updateTime: string;
-  createUser: number;
-  updateUser: number;
+  id: number; // 分类id（int64）
+  type: number; // 分类类型：1=菜品分类，2=套餐分类（int32）
+  name: string; // 分类名称（string）
+  sort: number; // 排序权重（数值越小越靠前，int32）
+  status: number; // 状态：1=启用，0=禁用（int32，1=启用），0=禁用（int32）
+  createTime: string; // 创建时间（date-time）
+  updateTime: string; // 更新时间（date-time）
+  createUser: number; // 创建人id（int64）
+  updateUser: number; // 更新人id（int64）
 }
 ```
 
@@ -238,8 +238,8 @@ interface Category {
 
 ```typescript
 interface CategoryDTO {
-  name: string; // 分类名称（必填）
-  sort: number; // 排序（必填，int32，按照升序排序）
+  name: string; // 分类名称（必填，string）
+  sort: number; // 排序权重（数值越小越靠前，必填，int32）
   type: number; // 分类类型：1=菜品分类，2=套餐分类（必填，int32）
 }
 ```
@@ -262,15 +262,15 @@ interface CategoryDTO {
 
 ```typescript
 interface Category {
-  createTime?: string; // date-time
-  createUser?: number; // int64
-  id?: number; // int64
-  name?: string;
-  sort?: number; // int32
-  status?: number; // int32
-  type?: number; // int32
-  updateTime?: string; // date-time
-  updateUser?: number; // int64
+  createTime?: string; // 创建时间（date-time）
+  createUser?: number; // 创建人id（int64）
+  id?: number; // 分类id（int64）
+  name?: string; // 分类名称（string）
+  sort?: number; // 排序权重（数值越小越靠前，int32）
+  status?: number; // 状态（int32）
+  type?: number; // 类型（int32）
+  updateTime?: string; // 更新时间（date-time）
+  updateUser?: number; // 更新人id（int64）
 }
 ```
 
@@ -287,8 +287,8 @@ interface Category {
 ```typescript
 interface PasswordEditDTO {
   empId: number; // 员工id（必填，int64）
-  newPassword: string; // 新密码（必填）
-  oldPassword: string; // 旧密码（必填）
+  newPassword: string; // 新密码（必填，string）
+  oldPassword: string; // 旧密码（必填，string）
 }
 ```
 
@@ -310,11 +310,11 @@ interface PasswordEditDTO {
 
 ```typescript
 interface EmployeePageQueryDTO {
-  name?: string; // 员工姓名（可选，模糊查询）
-  page: number; // 页码（必填）
-  pageSize: number; // 每页记录数（必填）
+  name?: string; // 员工姓名（可选，模糊查询，string）
+  page: number; // 页码（必填，int32）
+  pageSize: number; // 每页记录数（必填，int32）
   status?: number; // 状态（可选，int32）
-  phone?: string; // 手机号（可选，模糊查询）
+  phone?: string; // 手机号（可选，模糊查询，string）
 }
 ```
 
@@ -322,18 +322,18 @@ interface EmployeePageQueryDTO {
 
 ```typescript
 interface Employee {
-  id: number;
-  username: string;
-  name: string;
-  password: string;
-  phone: string;
-  sex: string;
-  idNumber: string; // 身份证号
-  status: number;
-  createTime: string | null;
-  updateTime: string;
-  createUser: number | null;
-  updateUser: number;
+  id: number; // 员工id（int64）
+  username: string; // 用户名（string）
+  name: string; // 姓名（string）
+  password: string; // 密码（string）
+  phone: string; // 手机号（string）
+  sex: string; // 性别（男1，女2，string）
+  idNumber: string; // 身份证号（string）
+  status: number; // 账号状态（int32）
+  createTime: string | null; // 创建时间（date-time）
+  updateTime: string; // 更新时间（date-time）
+  createUser: number | null; // 创建人id（int64）
+  updateUser: number; // 更新人id（int64）
 }
 ```
 
@@ -345,8 +345,8 @@ interface Employee {
 
 ```typescript
 interface EmployeeLoginDTO {
-  password: string; // 密码（必填）
-  username: string; // 用户名（必填）
+  password: string; // 密码（必填，string）
+  username: string; // 用户名（必填，string）
 }
 ```
 
@@ -355,9 +355,9 @@ interface EmployeeLoginDTO {
 ```typescript
 interface EmployeeLoginVO {
   id?: number; // 主键值（int64）
-  name?: string; // 姓名
-  token?: string; // JWT令牌
-  userName?: string; // 用户名
+  name?: string; // 姓名（string）
+  token?: string; // JWT令牌（string）
+  userName?: string; // 用户名（string）
 }
 ```
 
@@ -370,11 +370,11 @@ interface EmployeeLoginVO {
 ```typescript
 interface EmployeeDTO {
   id?: number; // 员工id（可选，int64）
-  idNumber: string; // 身份证（必填）
-  name: string; // 姓名（必填）
-  phone: string; // 手机号（必填）
-  sex: string; // 性别（必填）
-  username: string; // 用户名（必填）
+  idNumber: string; // 身份证号（必填，string）
+  name: string; // 姓名（必填，string）
+  phone: string; // 手机号（必填，string）
+  sex: string; // 性别（必填，string）
+  username: string; // 用户名（必填，string）
 }
 ```
 
@@ -389,18 +389,18 @@ interface EmployeeDTO {
 
 ```typescript
 interface Employee {
-  createTime?: string; // date-time
-  createUser?: number; // int64
-  id?: number; // int64
-  idNumber?: string; // 身份证号
-  name?: string; // 姓名
-  password?: string; // 密码
-  phone?: string; // 手机号
-  sex?: string; // 性别
-  status?: number; // int32
-  updateTime?: string; // date-time
-  updateUser?: number; // int64
-  username?: string;
+  createTime?: string; // 创建时间（date-time）
+  createUser?: number; // 创建人id（int64）
+  id?: number; // 员工id（int64）
+  idNumber?: string; // 身份证号（string）
+  name?: string; // 姓名（string）
+  password?: string; // 密码（string）
+  phone?: string; // 手机号（string）
+  sex?: string; // 性别（男1，女2，string）
+  status?: number; // 账号状态（int32）
+  updateTime?: string; // 更新时间（date-time）
+  updateUser?: number; // 更新人id（int64）
+  username?: string; // 用户名（string）
 }
 ```
 
@@ -413,11 +413,11 @@ interface Employee {
 ```typescript
 interface EmployeeDTO {
   id: number; // 员工id（必填，int64）
-  idNumber: string; // 身份证（必填）
-  name: string; // 姓名（必填）
-  phone: string; // 手机号（必填）
-  sex: string; // 性别（必填）
-  username: string; // 用户名（必填）
+  idNumber: string; // 身份证号（必填，string）
+  name: string; // 姓名（必填，string）
+  phone: string; // 手机号（必填，string）
+  sex: string; // 性别（男1，女2，string）
+  username: string; // 用户名（必填，string）
 }
 ```
 
@@ -443,23 +443,29 @@ interface EmployeeDTO {
 ```typescript
 interface SetMealDTO {
   categoryId: number; // 分类id（必填，int64）
-  description?: string; // 套餐描述（可选）
+  description?: string; // 套餐描述（可选，string）
   id: number; // 套餐id（必填，int64）
-  image: string; // 套餐图片路径（必填）
-  name: string; // 套餐名称（必填）
-  price: number; // 套餐价格（必填）
+  image: string; // 套餐图片路径（必填，string）
+  name: string; // 套餐名称（必填，string）
+  price: number; // 套餐价格（必填，double）
   status?: number; // 套餐起售状态（可选，int32）
-  setmealDishes: SetMealDish[]; // 套餐和菜品关联关系（必填）
+  setmealDishes: SetMealDish[]; // 套餐和菜品关联关系（必填，SetMealDish[]）
 }
 
 interface SetMealDish {
   copies: number; // 菜品份数（必填，int32）
   dishId: number; // 菜品id（必填，int64）
   id?: number; // 关系表主键值（可选，int64）
-  name: string; // 菜品名称（必填）
-  price: number; // 菜品价格（必填）
+  name: string; // 菜品名称（必填，string）
+  price: number; // 菜品价格（必填，double）
   setmealId?: number; // 套餐id（可选，int64，修改时不强制要求）
-  flavors: number[]; // 口味列表
+  flavors?: Flavor[]; // 口味类型id列表（可选，Flavor[]，修改时不强制要求）
+}
+interface Flavor {
+  id?: number; // 口味类型id（可选，int64）
+  flavorName: string; // 口味类型名称（必填，如"辣度"、"麻度"）
+  flavorValue?: string; // 口味类型值（可选，如"不辣"、"微辣"）
+  valueList?: string[]; // 口味类型值列表（必填，逗号分隔，如"不辣,微辣,中辣,特辣"）
 }
 ```
 
@@ -472,11 +478,11 @@ interface SetMealDish {
 
 ```typescript
 interface SetMealPageQueryDTO {
-  categoryId?: number; // 分类id（可选）
-  name?: string; // 套餐名称（可选，模糊查询）
-  page: number; // 页码（必填）
-  pageSize: number; // 每页记录数（必填）
-  status?: number; // 套餐起售状态（可选）
+  categoryId?: number; // 分类id（可选，int64）
+  name?: string; // 套餐名称（可选，模糊查询，string）
+  page: number; // 页码（必填，int32）
+  pageSize: number; // 每页记录数（必填，int32）
+  status?: number; // 套餐起售状态（可选，int32）
 }
 ```
 
@@ -484,26 +490,32 @@ interface SetMealPageQueryDTO {
 
 ```typescript
 interface SetmealVO {
-  id: number; // 套餐id
-  categoryId: number; // 分类id
-  name: string; // 套餐名称
-  price: number; // 套餐价格
-  status: number; // 套餐起售状态
-  description: string; // 套餐描述
-  image: string; // 套餐图片路径
-  updateTime: string; // 更新时间
-  categoryName: string; // 分类名称（后端关联查询返回）
-  setmealDishes: SetMealDish[]; // 套餐包含的菜品（后端关联查询返回）
+  id: number; // 套餐id（int64）
+  categoryId: number; // 分类id（int64）
+  name: string; // 套餐名称（string）
+  price: number; // 套餐价格（double）
+  status: number; // 套餐起售状态（int32）
+  description: string; // 套餐描述（string）
+  image: string; // 套餐图片路径（string）
+  updateTime: string; // 更新时间（date-time）
+  categoryName: string; // 分类名称（后端关联查询返回，string）
+  setmealDishes: SetMealDish[]; // 套餐包含的菜品（后端关联查询返回，SetMealDish[]）
 }
 
 interface SetMealDish {
   copies: number; // 菜品份数（必填，int32）
   dishId: number; // 菜品id（必填，int64）
   id?: number; // 关系表主键值（可选，int64）
-  name: string; // 菜品名称（必填）
-  price: number; // 菜品价格（必填）
+  name: string; // 菜品名称（必填，string）
+  price: number; // 菜品价格（必填，double）
   setmealId?: number; // 套餐id（可选，int64，修改时不强制要求）
-  flavors: number[]; // 口味列表
+  flavors?: Flavor[]; // 口味类型id列表（可选，Flavor[]，修改时不强制要求）
+}
+interface Flavor {
+  id?: number; // 口味类型id（可选，int64）
+  flavorName: string; // 口味类型名称（必填，如"辣度"、"麻度"）
+  flavorValue?: string; // 口味类型值（可选，如"不辣"、"微辣"）
+  valueList?: string[]; // 口味类型值列表（必填，逗号分隔，如"不辣,微辣,中辣,特辣"）
 }
 ```
 
@@ -530,24 +542,31 @@ interface SetMealDish {
 - **请求体**:
 
 ```typescript
-interface CreateSetmealRequest {
+interface SetMealDTO {
   categoryId: number; // 分类id（必填，int64）
-  description?: string; // 套餐描述（可选）
+  description?: string; // 套餐描述（可选，string）
   id?: number; // 套餐id（可选，int64）
-  image: string; // 套餐图片（必填）
-  name: string; // 套餐名称（必填）
-  price: number; // 套餐价格（必填）
-  setmealDishes: CreateSetmealDishItem[]; // 套餐包含的菜品（必填）
-  status: number; // 套餐状态：1=起售，0=停售（必填，int32）
+  image: string; // 套餐图片路径（必填，string）
+  name: string; // 套餐名称（必填，string）
+  price: number; // 套餐价格（必填，double）
+  setmealDishes: SetMealDish[]; // 套餐包含的菜品（必填，SetMealDish[]）
+  status?: number; // 套餐起售状态（可选，int32）
 }
 
-interface CreateSetmealDishItem {
-  copies: number; // 份数（必填，int32）
+interface SetMealDish {
+  copies: number; // 菜品份数（必填，int32）
   dishId: number; // 菜品id（必填，int64）
-  id?: number; // 套餐和菜品关系id（可选，int64）
-  name: string; // 菜品名称（必填）
-  price: number; // 菜品价格（必填）
-  setmealId: number; // 套餐id（必填，int64）
+  id?: number; // 关系表主键值（可选，int64）
+  name: string; // 菜品名称（必填，string）
+  price: number; // 菜品价格（必填，double）
+  setmealId?: number; // 套餐id（可选，int64，修改时不强制要求）
+  flavors?: Flavor[]; // 口味类型id列表（可选，Flavor[]，修改时不强制要求）
+}
+interface Flavor {
+  id?: number; // 口味类型id（可选，int64）
+  flavorName: string; // 口味类型名称（必填，如"辣度"、"麻度"）
+  flavorValue?: string; // 口味类型值（可选，如"不辣"、"微辣"）
+  valueList?: string[]; // 口味类型值列表（必填，逗号分隔，如"不辣,微辣,中辣,特辣"）
 }
 ```
 
@@ -561,17 +580,33 @@ interface CreateSetmealDishItem {
 - **响应**: `ApiResponse<SetmealDetail>`
 
 ```typescript
-interface SetmealDetail {
-  categoryId: number;
-  categoryName: string;
-  description: string;
-  id: number;
-  image: string;
-  name: string;
-  price: number;
-  setmealDishes: SetmealDishItem[];
-  status: number;
-  updateTime: string; // date-time
+interface SetmealVO {
+  id: number; // 套餐id（int64）
+  categoryId: number; // 分类id（int64）
+  name: string; // 套餐名称（string）
+  price: number; // 套餐价格（double）
+  status: number; // 套餐起售状态（int32）
+  description: string; // 套餐描述（string）
+  image: string; // 套餐图片路径（string）
+  updateTime: string; // 更新时间（date-time）
+  categoryName: string; // 分类名称（后端关联查询返回，string）
+  setmealDishes: SetMealDish[]; // 套餐包含的菜品（后端关联查询返回，SetMealDish[]）
+}
+
+interface SetMealDish {
+  copies: number; // 菜品份数（必填，int32）
+  dishId: number; // 菜品id（必填，int64）
+  id?: number; // 关系表主键值（可选，int64）
+  name: string; // 菜品名称（必填，string）
+  price: number; // 菜品价格（必填，double）
+  setmealId?: number; // 套餐id（可选，int64，修改时不强制要求）
+  flavors?: Flavor[]; // 口味类型id列表（可选，Flavor[]，修改时不强制要求）  
+}
+interface Flavor {
+  id?: number; // 口味类型id（可选，int64）
+  flavorName: string; // 口味类型名称（必填，如"辣度"、"麻度"）
+  flavorValue?: string; // 口味类型值（可选，如"不辣"、"微辣"）
+  valueList?: string[]; // 口味类型值列表（必填，逗号分隔，如"不辣,微辣,中辣,特辣"）
 }
 ```
 
@@ -586,15 +621,21 @@ interface SetmealDetail {
 - **请求体**:
 
 ```typescript
-interface UpdateDishRequest {
+interface DishDTO {
   id: number; // 菜品id（必填，int64）
-  name: string; // 菜品名称（必填）
+  name: string; // 菜品名称（必填，string）
   categoryId: number; // 分类id（必填，int64）
-  price: number; // 菜品价格（必填）
-  image: string; // 菜品图片路径（必填）
-  description?: string; // 菜品描述（可选）
+  price: number; // 菜品价格（必填，double）
+  image: string; // 菜品图片路径（必填，string）
+  description?: string; // 菜品描述（可选，string）
   status?: number; // 菜品状态：1=起售，0=停售（可选，int32）
-  flavors?: number[]; // 口味列表（可选）
+  flavors?: Flavor[]; // 口味类型id列表（可选，Flavor[]，修改时不强制要求）
+}
+interface Flavor {
+  id?: number; // 口味类型id（可选，int64）
+  flavorName: string; // 口味类型名称（必填，如"辣度"、"麻度"）
+  flavorValue?: string; // 口味类型值（可选，如"不辣"、"微辣"）
+  valueList?: string[]; // 口味类型值列表（必填，逗号分隔，如"不辣,微辣,中辣,特辣"）
 }
 ```
 
@@ -614,14 +655,21 @@ interface UpdateDishRequest {
 - **请求体**:
 
 ```typescript
-interface CreateDishRequest {
-  name: string; // 菜品名称（必填）
+interface DishDTO {
+  name: string; // 菜品名称（必填，string）
   categoryId: number; // 分类id（必填，int64）
-  price: number; // 菜品价格（必填）
-  image: string; // 菜品图片路径（必填）
-  description?: string; // 菜品描述（可选）
+  price: number; // 菜品价格（必填，double）
+  image: string; // 菜品图片路径（必填，string）
+  description?: string; // 菜品描述（可选，string）
   status?: number; // 菜品状态：1=起售，0=停售（可选，int32）
-  flavors?: number[]; // 口味列表（可选）
+  flavors?: Flavor[]; // 口味类型id列表（可选，Flavor[]，修改时不强制要求）
+}
+
+interface Flavor {
+  id?: number; // 口味类型id（可选，int64）
+  flavorName: string; // 口味类型名称（必填，如"辣度"、"麻度"）
+  flavorValue?: string; // 口味类型值（可选，如"不辣"、"微辣"）
+  valueList?: string[]; // 口味类型值列表（必填，逗号分隔，如"不辣,微辣,中辣,特辣"）
 }
 ```
 
@@ -635,17 +683,23 @@ interface CreateDishRequest {
 - **响应**: `ApiResponse<DishDetail>`
 
 ```typescript
-interface DishDetail {
-  id: number;
-  name: string;
-  categoryId: number;
-  categoryName: string;
-  price: number;
-  image: string;
-  description: string;
-  status: number; // 1=起售，0=停售
-  updateTime: string; // date-time
-  flavors: number[]; // 口味列表(可选)
+interface DishVO {
+  id: number; // 菜品id（int64）
+  name: string; // 菜品名称（string）
+  categoryId: number; // 分类id（int64）
+  categoryName: string; // 分类名称（string）
+  price: number; // 菜品价格（double）
+  image: string; // 菜品图片路径（string）
+  description: string; // 菜品描述（string）
+  status: number; // 菜品状态（1=起售，0=停售，int32）
+  updateTime: string; // 更新时间（date-time）
+  flavors: Flavor[]; // 口味类型id列表（可选，Flavor[]，修改时不强制要求）
+}
+interface Flavor {
+  id?: number; // 口味类型id（可选，int64）
+  flavorName: string; // 口味类型名称（必填，如"辣度"、"麻度"）
+  flavorValue?: string; // 口味类型值（可选，如"不辣"、"微辣"）
+  valueList?: string[]; // 口味类型值列表（必填，逗号分隔，如"不辣,微辣,中辣,特辣"）
 }
 ```
 
@@ -658,17 +712,17 @@ interface DishDetail {
 
 ```typescript
 interface Dish {
-  id?: number;
-  name?: string;
-  categoryId?: number;
-  price?: number;
-  image?: string;
-  description?: string;
-  status?: number;
-  createTime?: string; // date-time
-  updateTime?: string; // date-time
-  createUser?: number;
-  updateUser?: number;
+  id?: number; // 菜品id（int64）
+  name?: string; // 菜品名称（string）
+  categoryId?: number; // 分类id（int64）
+  price?: number; // 菜品价格（double）
+  image?: string; // 菜品图片路径（string）
+  description?: string; // 菜品描述（string）
+  status?: number; // 菜品状态（1=起售，0=停售，int32）
+  createTime?: string; // 创建时间（date-time）
+  updateTime?: string; // 更新时间（date-time）
+  createUser?: number; // 创建用户id（int64）
+  updateUser?: number; // 更新用户id（int64）
 }
 ```
 
@@ -679,11 +733,11 @@ interface Dish {
 
 ```typescript
 interface DishPageQuery {
-  page: number; // 页码（必填）
-  pageSize: number; // 每页记录数（必填）
-  name?: string; // 菜品名称（可选，模糊查询）
-  categoryId?: number; // 分类id（可选）
-  status?: number; // 菜品状态（可选）
+  page: number; // 页码（必填，int32）
+  pageSize: number; // 每页记录数（必填，int32）
+  name?: string; // 菜品名称（可选，模糊查询，string）
+  categoryId?: number; // 分类id（可选，int64）
+  status?: number; // 菜品状态（可选，int32）
 }
 ```
 
@@ -691,17 +745,22 @@ interface DishPageQuery {
 
 ```typescript
 interface DishVO {
-  id: number;
-  name: string;
-  categoryId: number;
-  categoryName: string; // 分类名称
-  price: number;
-  image: string;
-  description: string;
-  status: number;
-  updateTime: string;
-  categoryName: string;
-  flavors: number[]; // 口味列表(可选)
+  id: number; // 菜品id（int64）
+  name: string; // 菜品名称（string）
+  categoryId: number; // 分类id（int64）
+  categoryName: string; // 分类名称（string）
+  price: number; // 菜品价格（double）
+  image: string; // 菜品图片路径（string）
+  description: string; // 菜品描述（string）
+  status: number; // 菜品状态（1=起售，0=停售，int32）
+  updateTime: string; // 更新时间（date-time）
+  flavors?: Flavor[]; // 口味类型id列表（可选，Flavor[]，修改时不强制要求）
+}
+interface Flavor {
+  id?: number; // 口味类型id（可选，int64）
+  flavorName: string; // 口味类型名称（必填，如"辣度"、"麻度"）
+  flavorValue?: string; // 口味类型值（可选，如"不辣"、"微辣"）
+  valueList?: string[]; // 口味类型值列表（必填，逗号分隔，如"不辣,微辣,中辣,特辣"）
 }
 ```
 
@@ -727,7 +786,7 @@ interface DishVO {
 ```typescript
 interface CancelOrderRequest {
   id: number; // 订单id（必填，int64）
-  cancelReason: string; // 订单取消原因（必填）
+  cancelReason: string; // 订单取消原因（必填，string）
 }
 ```
 
@@ -765,7 +824,7 @@ interface OrderStatistics {
 ```typescript
 interface RejectOrderRequest {
   id: number; // 订单id（必填，int64）
-  rejectionReason: string; // 拒单原因（必填）
+  rejectionReason: string; // 拒单原因（必填，string）
 }
 ```
 
@@ -794,44 +853,44 @@ interface ConfirmOrderRequest {
 
 ```typescript
 interface OrderDetail {
-  id?: number;
-  number?: string; // 订单号
-  status?: number; // 订单状态
-  userId?: number;
-  addressBookId?: number;
-  address?: string;
-  consignee?: string; // 收货人
-  phone?: string;
-  amount?: number; // 订单金额
-  remark?: string; // 备注
-  orderTime?: string; // date-time
-  checkoutTime?: string | null; // date-time，可为空
-  payMethod?: number; // 支付方式
-  payStatus?: number; // 支付状态
-  cancelReason?: string; // 取消原因
-  rejectionReason?: string; // 拒单原因
-  cancelTime?: string; // date-time
-  estimatedDeliveryTime?: string; // date-time
-  deliveryStatus?: number; // 派送状态
-  deliveryTime?: string; // date-time
-  packAmount?: number; // 打包费
-  tablewareNumber?: number; // 餐具数量
-  tablewareStatus?: number; // 餐具状态
-  userName?: string; // 用户名
-  orderDishes?: string; // 订单包含的菜品（字符串）
-  orderDetailList?: OrderDetailItem[]; // 订单明细
+  id?: number; // 订单id（int64）
+  number?: string; // 订单号（string）
+  status?: number; // 订单状态（int32）
+  userId?: number; // 用户id（int64）
+  addressBookId?: number; // 地址本id（int64）
+  address?: string; // 地址（string）
+  consignee?: string; // 收货人（string）
+  phone?: string; // 手机号（string）
+  amount?: number; // 订单金额（double）
+  remark?: string; // 备注（string）
+  orderTime?: string; // 下单时间（date-time）
+  checkoutTime?: string | null; // 取货时间（date-time）可为空
+  payMethod?: number; // 支付方式（int32）
+  payStatus?: number; // 支付状态（int32）
+  cancelReason?: string; // 取消原因（string）
+  rejectionReason?: string; // 拒单原因（string）
+  cancelTime?: string; // 取消时间（date-time）
+  estimatedDeliveryTime?: string; // 预计送达时间（date-time）
+  deliveryStatus?: number; // 派送状态（int32）
+  deliveryTime?: string; // 派送时间（date-time）
+  packAmount?: number; // 打包费（double）
+  tablewareNumber?: number; // 餐具数量（int32）
+  tablewareStatus?: number; // 餐具状态（int32）
+  userName?: string; // 用户名（string）
+  orderDishes?: string; // 订单包含的菜品（string）
+  orderDetailList?: OrderDetailItem[]; // 订单明细列表（可选，OrderDetailItem[]）
 }
 
 interface OrderDetailItem {
-  id?: number;
-  name?: string; // 菜品名称
-  image?: string; // 菜品图片
-  orderId?: number;
-  dishId?: number;
-  setmealId?: number;
-  dishFlavor?: string; // 口味
+  id?: number; // 订单明细id（int64）
+  name?: string; // 菜品名称（string）
+  image?: string; // 菜品图片（string）
+  orderId?: number; // 订单id（int64）
+  dishId?: number; // 菜品id（int64）
+  setmealId?: number; // 套餐id（int64）
+  dishFlavor?: string; // 口味（string）
   number?: number; // 数量（int32）
-  amount?: number; // 金额
+  amount?: number; // 金额（double）
 }
 ```
 
@@ -849,13 +908,13 @@ interface OrderDetailItem {
 
 ```typescript
 interface OrderSearchQuery {
-  page: number; // 页码（必填）
-  pageSize: number; // 每页记录数（必填）
-  number?: string; // 订单号（可选）
-  phone?: string; // 手机号（可选）
-  status?: number; // 订单状态（可选）
-  beginTime?: string; // 开始时间（可选）
-  endTime?: string; // 结束时间（可选）
+  page: number; // 页码（必填，int32）
+  pageSize: number; // 每页记录数（必填，int32）
+  number?: string; // 订单号（可选，string）
+  phone?: string; // 手机号（可选，string）
+  status?: number; // 订单状态（可选，int32）
+  beginTime?: string; // 开始时间（可选，date-time）
+  endTime?: string; // 结束时间（可选，date-time）
 }
 ```
 
@@ -863,31 +922,32 @@ interface OrderSearchQuery {
 
 ```typescript
 interface OrderVO {
-  id: number;
-  number: string; // 订单号
-  status: number;
-  userId: number;
-  addressBookId: number;
-  orderTime: string;
-  checkoutTime: string | null; // 可为空
-  payMethod: number;
-  payStatus: number;
-  amount: number;
-  remark: string;
-  userName: string;
-  phone: string;
-  address: string;
-  consignee: string;
-  cancelReason: string;
-  rejectionReason: string;
-  cancelTime: string;
-  estimatedDeliveryTime: string;
-  deliveryStatus: number;
-  deliveryTime: string;
-  packAmount: number;
-  tablewareNumber: number;
-  tablewareStatus: number;
-  orderDishes: string; // 订单包含的菜品，以字符串形式展示
+  id: number; // 订单id（int64）
+  number: string; // 订单号（string）
+  status: number; // 订单状态（int32）
+  userId: number; // 用户id（int64）
+  addressBookId: number; // 地址本id（int64）
+  orderTime: string; // 下单时间（date-time）
+  checkoutTime: string | null; // 取货时间（date-time）
+  payMethod: number; // 支付方式（int32）
+  payStatus: number; // 支付状态（int32）
+  amount: number; // 订单金额（double）
+  remark: string; // 备注（string）
+  userName: string; // 用户名（string）
+  phone: string; // 手机号（string）
+  address: string; // 地址（string）
+  consignee: string; // 收货人（string）
+  cancelReason: string; // 取消原因（string）
+  rejectionReason: string; // 拒单原因（string）
+  cancelTime: string; // 取消时间（date-time）
+  estimatedDeliveryTime: string; // 预计送达时间（date-time）
+  deliveryStatus: number; // 派送状态（int32）
+  deliveryTime: string; // 派送时间（date-time）
+  packAmount: number; // 打包费（double）
+  tablewareNumber: number; // 餐具数量（int32）
+  tablewareStatus: number; // 餐具状态（int32）
+  orderDishes: string; // 订单包含的菜品（string）
+
 }
 ```
 
@@ -980,8 +1040,8 @@ interface OrderOverview {
 
 ```typescript
 interface Top10Query {
-  begin: string; // 开始日期（必填，格式：YYYY-MM-DD）
-  end: string; // 结束日期（必填，格式：YYYY-MM-DD）
+  begin: string; // 开始日期（必填，date-time）
+  end: string; // 结束日期（必填，date-time）
 }
 ```
 
@@ -989,8 +1049,8 @@ interface Top10Query {
 
 ```typescript
 interface Top10Data {
-  nameList: string; // 商品名称列表，以逗号分隔
-  numberList: string; // 销量列表，以逗号分隔
+  nameList: string; // 商品名称列表，以逗号分隔（string）
+  numberList: string; // 销量列表，以逗号分隔（string）
 }
 ```
 
@@ -1001,8 +1061,8 @@ interface Top10Data {
 
 ```typescript
 interface UserStatisticsQuery {
-  begin: string; // 开始日期（必填，格式：YYYY-MM-DD）
-  end: string; // 结束日期（必填，格式：YYYY-MM-DD）
+  begin: string; // 开始日期（必填，date-time）
+  end: string; // 结束日期（必填，date-time）
 }
 ```
 
@@ -1010,9 +1070,9 @@ interface UserStatisticsQuery {
 
 ```typescript
 interface UserStatisticsData {
-  dateList: string; // 日期列表，以逗号分隔
-  newUserList: string; // 新增用户数列表，以逗号分隔
-  totalUserList: string; // 总用户量列表，以逗号分隔
+  dateList: string; // 日期列表，以逗号分隔（string）
+  newUserList: string; // 新增用户数列表，以逗号分隔（string）
+  totalUserList: string; // 总用户量列表，以逗号分隔（string）
 }
 ```
 
@@ -1023,8 +1083,8 @@ interface UserStatisticsData {
 
 ```typescript
 interface TurnoverStatisticsQuery {
-  begin: string; // 开始日期（必填，格式：YYYY-MM-DD）
-  end: string; // 结束日期（必填，格式：YYYY-MM-DD）
+  begin: string; // 开始日期（必填，date-time）
+  end: string; // 结束日期（必填，date-time）
 }
 ```
 
@@ -1032,8 +1092,8 @@ interface TurnoverStatisticsQuery {
 
 ```typescript
 interface TurnoverStatisticsData {
-  dateList: string; // 日期列表，以逗号分隔
-  turnoverList: string; // 营业额列表，以逗号分隔
+  dateList: string; // 日期列表，以逗号分隔（string）
+  turnoverList: string; // 营业额列表，以逗号分隔（string）
 }
 ```
 
@@ -1044,8 +1104,8 @@ interface TurnoverStatisticsData {
 
 ```typescript
 interface OrdersStatisticsQuery {
-  begin: string; // 开始日期（必填，格式：YYYY-MM-DD）
-  end: string; // 结束日期（必填，格式：YYYY-MM-DD）
+  begin: string; // 开始日期（必填，date-time）
+  end: string; // 结束日期（必填，date-time）
 }
 ```
 
@@ -1053,9 +1113,9 @@ interface OrdersStatisticsQuery {
 
 ```typescript
 interface OrdersStatisticsData {
-  dateList: string; // 日期列表，以逗号分隔
-  orderCountList: string; // 订单数列表，以逗号分隔
-  validOrderCountList: string; // 有效订单数列表，以逗号分隔
+  dateList: string; // 日期列表，以逗号分隔（string）
+  orderCountList: string; // 订单数列表，以逗号分隔（string）
+  validOrderCountList: string; // 有效订单数列表，以逗号分隔（string）
   totalOrderCount: number; // 订单总数（int32）
   validOrderCount: number; // 有效订单数（int32）
   orderCompletionRate: number; // 订单完成率（double）
@@ -1074,7 +1134,7 @@ interface OrdersStatisticsData {
 
 ```typescript
 interface UploadRequest {
-  file: File; // 文件（必填）
+  file: File; // 文件（必填，文件大小不超过 10MB）
 }
 ```
 
@@ -1090,21 +1150,21 @@ interface UploadRequest {
 ```typescript
 // 统一响应
 interface ApiResponse<T> {
-  code: number; // 1=成功，0=失败
-  data: T; // 响应数据
-  msg?: string; // 提示信息
+  code: number; // 1=成功，0=失败（int32）
+  data: T; // 响应数据（T）
+  msg?: string; // 提示信息（string）
 }
 
 // 分页结果
 interface PageResult<T> {
-  total: number; // 总记录数
-  records: T[]; // 当前页数据
+  total: number; // 总记录数（int32）
+  records: T[]; // 当前页数据（T[]）
 }
 
 // 分页查询参数
 interface PageQuery {
-  page: number; // 页码
-  pageSize: number; // 每页记录数
+  page: number; // 页码（int32）
+  pageSize: number; // 每页记录数（int32）
 }
 ```
 
@@ -1134,7 +1194,7 @@ enum OrderStatus {
 ## 注意事项
 
 1. **日期格式**：所有日期参数均为 `YYYY-MM-DD` 格式（如 `2022-05-01`）
-2. **日期时间格式**：响应中的日期为 ISO 8601 格式（`date-time`）
+2. **日期时间格式**：响应中的日期为 ISO 8601 格式（`date-time`，如 `2022-05-01T12:00:00`）
 3. **逗号分隔**：统计接口返回的列表数据以逗号分隔的字符串形式返回，前端需自行拆分
 4. **文件上传**：使用 `multipart/form-data` 格式，返回值为文件路径字符串
 5. **导出报表**：`/admin/report/export` 返回 Excel 文件流，非 JSON 格式
