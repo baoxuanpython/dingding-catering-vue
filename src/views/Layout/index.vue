@@ -43,6 +43,10 @@
           <el-icon class="menu-icon"><Menu /></el-icon>
           <template #title>分类管理</template>
         </el-menu-item>
+        <el-menu-item index="/flavors" class="menu-item">
+          <el-icon class="menu-icon"><CoffeeCup /></el-icon>
+          <template #title>口味管理</template>
+        </el-menu-item>
         <el-menu-item index="/employees" class="menu-item">
           <el-icon class="menu-icon"><UserFilled /></el-icon>
           <template #title>员工管理</template>
@@ -177,6 +181,7 @@ import {
   Monitor,
   Food,
   Loading,
+  CoffeeCup,
 } from "@element-plus/icons-vue";
 
 const route = useRoute();

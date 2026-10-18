@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 员工管理 - API 调用
  */
 import request from "@/utils/request";
@@ -27,19 +27,14 @@ export function updateEmployee(data: EmployeeForm) {
   return request.put("/employee", data);
 }
 
-/** 删除员工 */
-export function deleteEmployee(id: number) {
-  return request.delete(`/employee/${id}`);
-}
-
-/** 批量删除员工 */
-export function batchDeleteEmployees(ids: number[]) {
-  return request.delete("/employee", { data: { ids } });
-}
-
 /** 启用/禁用员工 */
 export function updateEmployeeStatus(status: number, id: number) {
   return request.post(`/employee/status/${status}`, null, { params: { id } });
+}
+
+/** 根据ID查询员工 */
+export function getEmployeeById(id: number) {
+  return request.get<EmployeeVO>(`/employee/${id}`);
 }
 
 /** 修改密码 */

@@ -511,7 +511,12 @@ async function handleEdit(row: DishVO) {
       price: data.price,
       image: data.image,
       description: data.description,
-      flavors: data.flavors || [],
+      flavors: (data.flavors || []).map((f: any) => ({
+        id: f.id,
+        flavorName: f.flavorName || "",
+        flavorValue: f.flavorValue || "",
+        valueList: f.valueList || "",
+      })),
     });
     dialogVisible.value = true;
   } catch (error) {
@@ -525,6 +530,14 @@ async function handleSubmit(imageUrl?: string) {
 
     const imageData = imageUrl || formData.image;
 
+    // 格式化口味数据：将 flavorValue 数组转换为逗号分隔的字符串
+    const formattedFlavors = formData.flavors.map((f) => ({
+      id: f.id,
+      flavorName: f.flavorName,
+      flavorValue: f.flavorValue,
+      valueList: f.valueList || f.flavorValue,
+    }));
+
     if (isEdit.value && formData.id) {
       await updateDish({
         id: formData.id,
@@ -534,7 +547,7 @@ async function handleSubmit(imageUrl?: string) {
         image: imageData,
         description: formData.description,
         status: formData.status,
-        flavors: formData.flavors,
+        flavors: formattedFlavors,
       });
       ElMessage.success("修改成功");
     } else {
@@ -545,7 +558,7 @@ async function handleSubmit(imageUrl?: string) {
         image: imageData,
         description: formData.description,
         status: formData.status,
-        flavors: formData.flavors,
+        flavors: formattedFlavors,
       });
       ElMessage.success("新增成功");
     }

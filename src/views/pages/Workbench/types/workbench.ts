@@ -31,7 +31,9 @@ export interface DishOverview {
 export interface OrderOverview {
   waitingOrders: number;
   deliveredOrders: number;
+  deliveryInProgress: number; // 派送中数（状态=4）
   allOrders: number;
   completedOrders: number;
   cancelledOrders: number;
+  refunded: number; // 已退款数（状态=7）
 }

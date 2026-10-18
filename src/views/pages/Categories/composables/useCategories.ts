@@ -201,9 +201,12 @@ export function useCategories() {
       ElMessage.success("删除成功");
       await Promise.all([fetchCategories(), fetchStats()]);
     } catch (error) {
-      if (error !== "cancel" && error !== "close") {
-        throw error;
+      // 用户取消操作，静默处理
+      if (error === "cancel" || error === "close") {
+        return;
       }
+      // 其他错误（如关联菜品不能删除）已在 Axios 拦截器中弹窗提示，此处不再重复处理
+      console.error("删除分类失败:", error);
     }
   }
 

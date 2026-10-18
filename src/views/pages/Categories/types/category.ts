@@ -31,6 +31,8 @@ export interface Category {
   updateTime: string;
   createUser: number;
   updateUser: number;
+  createEmployeeName: string; // 创建人姓名（冗余字段）
+  updateEmployeeName: string; // 更新人姓名（冗余字段）
 }
 
 /**

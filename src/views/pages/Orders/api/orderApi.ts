@@ -10,8 +10,8 @@ export function searchOrders(params: OrderSearchQuery) {
 /**
  * 查询订单详情
  */
-export function getOrderDetail(id: number) {
-  return request.get(`/order/details/${id}`);
+export function getOrderDetail(number: string) {
+  return request.get(`/order/details/${number}`);
 }
 
 /**
@@ -75,6 +75,7 @@ export interface OrderSearchQuery {
 
 export interface ConfirmOrderRequest {
   id: number;
+  status: number; // 订单状态（必填，设为3表示已确认）
 }
 
 export interface RejectOrderRequest {
@@ -113,6 +114,7 @@ export interface OrderVO {
   tablewareNumber: number;
   tablewareStatus: number;
   orderDishes: string;
+  orderDetailList?: OrderDetailItem[];
 }
 
 export interface OrderDetail {
@@ -144,16 +146,24 @@ export interface OrderDetail {
   orderDetailList?: OrderDetailItem[];
 }
 
+import type { DishVO } from "@/views/pages/Meals/types/dish";
+import type { SetmealVO } from "@/views/pages/Combos/types/combo";
+
 export interface OrderDetailItem {
-  id?: number;
-  name?: string;
-  image?: string;
-  orderId?: number;
-  dishId?: number;
-  setmealId?: number;
-  dishFlavor?: string;
-  number?: number;
-  amount?: number;
+  id: number;
+  name: string;
+  image: string;
+  orderId: number;
+  dishId: number | null;
+  setmealId: number | null;
+  flavorId: string;
+  flavorName: string;
+  flavorVal: string;
+  dishCopies: number;
+  setmealCopies: number | null;
+  amount: number;
+  dishVO?: DishVO;
+  setmealVO?: SetmealVO;
 }
 
 export interface OrderStatistics {

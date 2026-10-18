@@ -1,82 +1,51 @@
-[{
-	"resource": "/f:/document/GitHub/dingding-catering-vue/src/views/pages/Employees/index.vue",
-	"owner": "typescript",
-	"code": "2339",
-	"severity": 8,
-	"message": "类型“{ id?: number | undefined; name?: string | undefined; token?: string | undefined; userName?: string | undefined; username?: string | undefined; }”上不存在属性“role”。",
-	"source": "ts-plugin",
-	"startLineNumber": 473,
-	"startColumn": 39,
-	"endLineNumber": 473,
-	"endColumn": 43,
-	"modelVersionId": 11,
-	"origin": "extHost1"
-},{
-	"resource": "/f:/document/GitHub/dingding-catering-vue/src/views/pages/Employees/index.vue",
-	"owner": "typescript",
-	"code": "2339",
-	"severity": 8,
-	"message": "类型“{ id?: number | undefined; name?: string | undefined; token?: string | undefined; userName?: string | undefined; username?: string | undefined; }”上不存在属性“role”。",
-	"source": "ts-plugin",
-	"startLineNumber": 536,
-	"startColumn": 39,
-	"endLineNumber": 536,
-	"endColumn": 43,
-	"modelVersionId": 11,
-	"origin": "extHost1"
-},{
-	"resource": "/f:/document/GitHub/dingding-catering-vue/src/views/pages/Employees/index.vue",
-	"owner": "typescript",
-	"code": "2339",
-	"severity": 8,
-	"message": "类型“{ id?: number | undefined; name?: string | undefined; token?: string | undefined; userName?: string | undefined; username?: string | undefined; }”上不存在属性“role”。",
-	"source": "ts-plugin",
-	"startLineNumber": 542,
-	"startColumn": 39,
-	"endLineNumber": 542,
-	"endColumn": 43,
-	"modelVersionId": 11,
-	"origin": "extHost1"
-}],
+main.ts:26 [Vue warn]: Invalid prop: validation failed for prop "type". Expected one of ["default", "primary", "success", "warning", "info", "danger", "text", ""], got value "button". 
+  at <ElButton class="search-btn" type="button" onClick=fn > 
+  at <ElForm model= {flavorName: ''} class="search-form" onSubmit=fn > 
+  at <FlavorSearchBar search-form= {flavorName: ''} onSearch=fn<handleSearch> onReset=fn<handleReset> > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <ElMain class="layout-main" > 
+  at <ElContainer class="layout-right" > 
+  at <ElContainer class="layout-container" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <App>
 
-[{
-	"resource": "/f:/document/GitHub/dingding-catering-vue/src/views/pages/Meals/components/DishFormDialog.vue",
-	"owner": "typescript",
-	"code": "2322",
-	"severity": 8,
-	"message": "不能将类型“never[]”分配给类型“string”。",
-	"source": "ts-plugin",
-	"startLineNumber": 258,
-	"startColumn": 43,
-	"endLineNumber": 258,
-	"endColumn": 48,
-	"relatedInformation": [
-		{
-			"startLineNumber": 46,
-			"startColumn": 3,
-			"endLineNumber": 46,
-			"endColumn": 8,
-			"message": "所需类型来自属性 \"value\"，在此处的 \"DishFlavor\" 类型上声明该属性",
-			"resource": "/f:/document/GitHub/dingding-catering-vue/src/views/pages/Meals/types/dish.ts"
-		}
-	],
-	"modelVersionId": 13,
-	"origin": "extHost1"
-}],
-[{
-	"resource": "/f:/document/GitHub/dingding-catering-vue/src/views/pages/Categories/components/CategoryTable.vue",
-	"owner": "typescript",
-	"code": "6133",
-	"severity": 4,
-	"message": "已声明“CategoryType”，但从未读取其值。",
-	"source": "ts-plugin",
-	"startLineNumber": 53,
-	"startColumn": 1,
-	"endLineNumber": 53,
-	"endColumn": 50,
-	"modelVersionId": 1,
-	"tags": [
-		1
-	],
-	"origin": "extHost1"
-}]
+[Vue warn]: Invalid prop: custom validator check failed for prop "type". 
+  at <ElButton class="search-btn" type="button" onClick=fn > 
+  at <ElForm model= {flavorName: ''} class="search-form" onSubmit=fn > 
+  at <FlavorSearchBar search-form= {flavorName: ''} onSearch=fn<handleSearch> onReset=fn<handleReset> > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <ElMain class="layout-main" > 
+  at <ElContainer class="layout-right" > 
+  at <ElContainer class="layout-container" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <App>
+
+main.ts:26 [Vue warn]: Invalid prop: validation failed for prop "type". Expected one of ["default", "primary", "success", "warning", "info", "danger", "text", ""], got value "button". 
+  at <ElButton class="reset-btn" type="button" onClick=fn > 
+  at <ElForm model= {flavorName: ''} class="search-form" onSubmit=fn > 
+  at <FlavorSearchBar search-form= {flavorName: ''} onSearch=fn<handleSearch> onReset=fn<handleReset> > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <ElMain class="layout-main" > 
+  at <ElContainer class="layout-right" > 
+  at <ElContainer class="layout-container" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <App>
+
+main.ts:26 [Vue warn]: Invalid prop: custom validator check failed for prop "type". 
+  at <ElButton class="reset-btn" type="button" onClick=fn > 
+  at <ElForm model= {flavorName: ''} class="search-form" onSubmit=fn > 
+  at <FlavorSearchBar search-form= {flavorName: ''} onSearch=fn<handleSearch> onReset=fn<handleReset> > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <ElMain class="layout-main" > 
+  at <ElContainer class="layout-right" > 
+  at <ElContainer class="layout-container" > 
+  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <RouterView> 
+  at <App>

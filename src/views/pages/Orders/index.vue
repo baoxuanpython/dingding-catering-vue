@@ -352,7 +352,6 @@ import {
 } from "./api/orderApi";
 import type {
   OrderVO,
-  OrderDetail,
   OrderSearchQuery,
   OrderStatistics,
 } from "./api/orderApi";
@@ -361,7 +360,7 @@ import { ORDER_STATUS_MAP } from "./types/order";
 const loading = ref(false);
 const orderList = ref<OrderVO[]>([]);
 const detailVisible = ref(false);
-const orderDetail = ref<OrderDetail | null>(null);
+const orderDetail = ref<OrderVO | null>(null);
 const rejectVisible = ref(false);
 const rejectLoading = ref(false);
 const cancelVisible = ref(false);
@@ -651,7 +650,7 @@ async function handleComplete(row: OrderVO) {
 
 async function handleViewDetail(row: OrderVO) {
   try {
-    const res = await getOrderDetail(row.id);
+    const res = await getOrderDetail(row.number);
     orderDetail.value = res;
     detailVisible.value = true;
   } catch {

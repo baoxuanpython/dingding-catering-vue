@@ -70,21 +70,32 @@
             :key="index"
             class="flavor-item"
           >
-            <el-input
-              v-model="flavor.name"
-              placeholder="口味名（如：辣度）"
-              style="width: 150px"
-            />
             <el-select
-              v-model="flavor.value"
-              multiple
-              placeholder="选择选项"
-              style="flex: 1; margin-left: 8px"
+              v-model="flavor.flavorName"
+              placeholder="选择口味类型"
+              style="width: 150px"
+              @change="handleFlavorTypeChange(index)"
             >
-              <el-option label="微辣" value="微辣" />
-              <el-option label="中辣" value="中辣" />
-              <el-option label="重辣" value="重辣" />
-              <el-option label="不辣" value="不辣" />
+              <el-option
+                v-for="f in flavorDictList"
+                :key="f.id"
+                :label="f.flavorName"
+                :value="f.flavorName"
+              />
+            </el-select>
+            <el-select
+              v-model="flavor.flavorValue"
+              multiple
+              placeholder="选择口味值"
+              style="flex: 1; margin-left: 8px"
+              :disabled="!flavor.flavorName"
+            >
+              <el-option
+                v-for="val in getFlavorValues(flavor.flavorName)"
+                :key="val"
+                :label="val"
+                :value="val"
+              />
             </el-select>
             <el-button
               type="danger"
@@ -131,7 +142,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, onMounted } from "vue";
 import { Plus, Delete } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules, UploadProps } from "element-plus";
@@ -158,9 +169,13 @@ const visible = computed({
 
 const formRef = ref<FormInstance>();
 
-// 暂存待上传的文件和预览 URL
 const pendingFile = ref<File | null>(null);
 const previewUrl = ref<string>("");
+
+// 口味字典列表
+const flavorDictList = ref<
+  { id: number; flavorName: string; valueList: string }[]
+>([]);
 
 const formRules: FormRules = {
   name: [{ required: true, message: "请输入菜品名称", trigger: "blur" }],
@@ -172,6 +187,23 @@ const formRules: FormRules = {
     { type: "number", min: 0, message: "售价不能为负数", trigger: "blur" },
   ],
 };
+
+// 获取口味字典
+async function fetchFlavorDict() {
+  try {
+    const res =
+      await request.get<
+        { id: number; flavorName: string; valueList: string }[]
+      >("/flavor/list");
+    flavorDictList.value = res || [];
+  } catch (error) {
+    console.error("获取口味字典失败:", error);
+  }
+}
+
+onMounted(() => {
+  fetchFlavorDict();
+});
 
 watch(
   () => props.modelValue,
@@ -254,8 +286,23 @@ async function uploadImage(): Promise<string | null> {
   }
 }
 
+function getFlavorValues(flavorName: string): string[] {
+  const flavor = flavorDictList.value.find((f) => f.flavorName === flavorName);
+  if (!flavor) return [];
+  return flavor.valueList.split(",").map((v) => v.trim());
+}
+
+function handleFlavorTypeChange(index: number) {
+  // 切换口味类型时清空已选口味值
+  props.formData.flavors[index].flavorValue = "";
+}
+
 function addFlavor() {
-  props.formData.flavors.push({ name: "", value: [] });
+  props.formData.flavors.push({
+    flavorName: "",
+    flavorValue: "",
+    valueList: "",
+  });
 }
 
 function removeFlavor(index: number) {

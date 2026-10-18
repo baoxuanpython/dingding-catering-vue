@@ -22,6 +22,9 @@ export interface DishVO {
   description: string;
   status: number;
   updateTime: string;
+  createEmployeeName: string;
+  updateEmployeeName: string;
+  flavors: DishFlavor[];
 }
 
 /** 菜品详情 */
@@ -35,15 +38,17 @@ export interface DishDetail {
   description: string;
   status: number;
   updateTime: string;
+  createEmployeeName: string; // 创建人姓名（冗余字段）
+  updateEmployeeName: string; // 更新人姓名（冗余字段）
   flavors: DishFlavor[];
 }
 
-/** 菜品口味 */
+/** 菜品口味（与接口文档一致） */
 export interface DishFlavor {
   id?: number;
-  dishId?: number;
-  name: string;
-  value: string[]; // 口味选项（多选）
+  flavorName: string;
+  flavorValue: string;
+  valueList: string;
 }
 
 /** 新增菜品请求 */
@@ -91,6 +96,8 @@ export interface Dish {
   updateTime?: string;
   createUser?: number;
   updateUser?: number;
+  createEmployeeName?: string; // 创建人姓名（冗余字段）
+  updateEmployeeName?: string; // 更新人姓名（冗余字段）
 }
 
 /** 菜品总览统计 */

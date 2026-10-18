@@ -6,7 +6,7 @@
     destroy-on-close
     class="form-dialog"
   >
-    <div class="dialog-content">
+    <div class="dialog-content form-dialog-content">
       <!-- 价格对比展示 -->
       <div v-if="showPriceComparison" class="price-comparison">
         <div class="price-item original-price">
@@ -87,9 +87,8 @@
             <el-button
               v-if="!isDetailMode"
               type="primary"
-              plain
               @click="showDishSelector = true"
-              class="add-dish-btn"
+              class="add-btn"
             >
               <el-icon><Plus /></el-icon> 添加菜品
             </el-button>
@@ -116,7 +115,7 @@
               <el-table-column
                 prop="copies"
                 label="份数"
-                width="120"
+                width="180"
                 align="center"
               >
                 <template #default="{ row }">
@@ -144,9 +143,9 @@
                 <template #default="{ $index }">
                   <el-button
                     type="danger"
-                    text
                     size="small"
                     @click="removeDish($index)"
+                    class="batch-delete-btn"
                   >
                     删除
                   </el-button>
@@ -212,7 +211,7 @@
             style="width: 200px"
           >
             <template #prefix>
-             <el-icon><Search /></el-icon> 
+              <el-icon><Search /></el-icon>
             </template>
           </el-input>
           <el-select
@@ -562,9 +561,57 @@ watch(
 </script>
 
 <style scoped lang="scss">
+@import "@/styles/common-page.scss";
+
 .form-dialog {
   :deep(.el-dialog__body) {
     padding: 24px;
+  }
+}
+
+/* 让公共样式在对话框内生效 */
+.form-dialog-content {
+  :deep(.add-btn) {
+    height: 36px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    background: var(--btn-confirm-bg);
+    color: var(--btn-confirm-text);
+
+    &:hover {
+      background: var(--btn-confirm-hover);
+      box-shadow: var(--btn-confirm-shadow-hover);
+      transform: translateY(-2px);
+    }
+  }
+
+  :deep(.batch-delete-btn) {
+    height: 28px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: var(--btn-danger-bg);
+    color: var(--btn-danger-text);
+    border: 1px solid var(--btn-danger-border);
+    box-shadow: var(--btn-danger-shadow);
+
+    &:hover:not(:disabled) {
+      background: var(--btn-danger-hover);
+      box-shadow: var(--btn-danger-shadow-hover);
+      transform: translateY(0px);
+    }
+
+    &:disabled {
+      background: var(--btn-danger-disabled);
+      color: var(--btn-danger-text);
+      border: 1px solid var(--btn-danger-border);
+      box-shadow: none;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
   }
 }
 

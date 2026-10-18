@@ -88,14 +88,6 @@
             <el-icon><Plus /></el-icon>
             新增员工
           </el-button>
-          <el-button
-            class="batch-delete-btn"
-            :disabled="selectedIds.length === 0"
-            @click="handleBatchDelete"
-          >
-            <el-icon><Delete /></el-icon>
-            批量删除
-          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -106,14 +98,7 @@
         <span class="table-title">员工列表</span>
         <span class="table-count">共 {{ pagination.total }} 条记录</span>
       </div>
-      <el-table
-        v-loading="loading"
-        :data="employeeList"
-        border
-        stripe
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="55" />
+      <el-table v-loading="loading" :data="employeeList" border stripe>
         <el-table-column label="姓名" min-width="80">
           <template #default="{ row }">
             <div class="name-cell">
@@ -162,7 +147,7 @@
             <span class="time-text">{{ row.createTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="320" fixed="right">
+        <el-table-column label="操作" width="240" fixed="right">
           <template #default="{ row }">
             <div class="action-btns">
               <el-button link type="primary" @click="handleView(row)">
@@ -173,14 +158,6 @@
               </el-button>
               <el-button link type="warning" @click="handleEditPassword(row)">
                 修改密码
-              </el-button>
-              <el-button
-                link
-                type="danger"
-                :disabled="canDelete(row)"
-                @click="handleDelete(row)"
-              >
-                删除
               </el-button>
             </div>
           </template>
@@ -227,8 +204,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
-import { Search, RefreshLeft, Plus, Delete } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { Search, RefreshLeft, Plus } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 import EmployeeFormDialog from "./components/EmployeeFormDialog.vue";
 import EmployeeDetailDialog from "./components/EmployeeDetailDialog.vue";
 import PasswordDialog from "./components/PasswordDialog.vue";
@@ -236,8 +213,6 @@ import {
   getEmployeePage,
   createEmployee,
   updateEmployee,
-  deleteEmployee,
-  batchDeleteEmployees,
   updateEmployeeStatus,
   editPassword,
 } from "./api/employeeApi";
@@ -363,13 +338,6 @@ function handleReset() {
   fetchEmployees();
 }
 
-// ==================== 批量选择 ====================
-const selectedIds = ref<number[]>([]);
-
-function handleSelectionChange(selection: EmployeeVO[]) {
-  selectedIds.value = selection.map((item) => item.id);
-}
-
 // ==================== 新增/编辑 ====================
 const editFormVisible = ref(false);
 const isEdit = ref(false);
@@ -395,7 +363,6 @@ function handleEdit(row: EmployeeVO) {
     phone: row.phone,
     sex: row.sex,
     idNumber: row.idNumber,
-    status: row.status,
   });
   editFormVisible.value = true;
 }
@@ -465,58 +432,6 @@ async function handlePasswordSubmit(data: {
 
 function resetPasswordForm() {
   currentPasswordEmpId.value = 0;
-}
-
-// ==================== 删除 ====================
-function canDelete(row: EmployeeVO): boolean {
-  const currentUserId = userStore.userInfo?.id;
-  const isAdmin = userStore.userInfo?.role === "admin";
-
-  // 不能删除自己
-  if (row.id === currentUserId) return true;
-  // 非管理员不能删除
-  if (!isAdmin) return true;
-  // 不能删除启用中的员工
-  if (row.status === 1) return true;
-
-  return false;
-}
-
-async function handleDelete(row: EmployeeVO) {
-  try {
-    await ElMessageBox.confirm("确定要删除该员工吗？", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
-    });
-    await deleteEmployee(row.id);
-    ElMessage.success("删除成功");
-    fetchEmployees();
-    fetchStatistics();
-  } catch {
-    // 用户取消
-  }
-}
-
-async function handleBatchDelete() {
-  try {
-    await ElMessageBox.confirm(
-      `确定要删除选中的 ${selectedIds.value.length} 个员工吗？`,
-      "提示",
-      {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      },
-    );
-    await batchDeleteEmployees(selectedIds.value);
-    ElMessage.success("批量删除成功");
-    selectedIds.value = [];
-    fetchEmployees();
-    fetchStatistics();
-  } catch {
-    // 用户取消
-  }
 }
 
 // ==================== 状态切换 ====================

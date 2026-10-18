@@ -45,6 +45,12 @@ const routes = [
         meta: { title: "分类管理", requiresAuth: true },
       },
       {
+        path: "flavors",
+        name: "Flavors",
+        component: () => import("../views/pages/Flavors/index.vue"),
+        meta: { title: "口味管理", requiresAuth: true },
+      },
+      {
         path: "employees",
         name: "Employees",
         component: () => import("../views/pages/Employees/index.vue"),

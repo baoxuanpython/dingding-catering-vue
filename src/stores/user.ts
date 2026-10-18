@@ -16,9 +16,11 @@ export const useUserStore = defineStore("user", () => {
 
   const login = async (username: string, password: string) => {
     const res = await loginApi({ username, password });
-    token.value = res.token || "";
+    token.value = res.token;
+    // 根据 userName 判断角色：admin 为管理员，其他为员工
+    res.role = res.userName === "admin" ? "admin" : "user";
     userInfo.value = res;
-    localStorage.setItem("token", res.token || "");
+    localStorage.setItem("token", res.token);
     localStorage.setItem("userInfo", JSON.stringify(res));
   };
 

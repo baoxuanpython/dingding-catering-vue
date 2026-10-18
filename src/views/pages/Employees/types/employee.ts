@@ -13,6 +13,10 @@ export interface EmployeeVO {
   status: number; // 1=启用, 0=禁用
   createTime: string;
   updateTime: string;
+  createUser: number; // 创建人ID
+  updateUser: number; // 更新人ID
+  createEmployeeName: string; // 创建人姓名（冗余字段）
+  updateEmployeeName: string; // 更新人姓名（冗余字段）
 }
 
 /** 员工分页查询参数 */
@@ -32,7 +36,6 @@ export interface EmployeeForm {
   phone: string;
   sex: string;
   idNumber: string;
-  status?: number;
 }
 
 /** 修改密码表单 */

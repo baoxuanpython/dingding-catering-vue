@@ -1,3 +1,12 @@
+export interface SetMealDishFlavor {
+  id: number;
+  setmealDishId: number;
+  flavorId: number;
+  flavorValue: string;
+  flavorName: string;
+  valueList: string;
+}
+
 export interface SetmealVO {
   id: number;
   categoryId: number;
@@ -8,6 +17,9 @@ export interface SetmealVO {
   image: string;
   updateTime: string;
   categoryName: string;
+  createEmployeeName: string;
+  updateEmployeeName: string;
+  setmealDishes: SetmealDishItem[];
 }
 
 export interface SetmealPageQuery {
@@ -18,26 +30,14 @@ export interface SetmealPageQuery {
   pageSize: number;
 }
 
-export interface SetmealDetail {
-  id: number;
-  categoryId: number;
-  categoryName: string;
-  name: string;
-  price: number;
-  status: number;
-  description: string;
-  image: string;
-  updateTime: string;
-  setmealDishes: SetmealDishItem[];
-}
-
 export interface SetmealDishItem {
-  copies: number;
-  dishId: number;
   id?: number;
+  setmealId?: number;
+  dishId: number;
   name: string;
   price: number;
-  setmealId?: number;
+  copies: number;
+  setmealDishFlavors?: SetMealDishFlavor[];
 }
 
 export interface CreateSetmealRequest {
@@ -48,16 +48,15 @@ export interface CreateSetmealRequest {
   name: string;
   price: number;
   setmealDishes: CreateSetmealDishItem[];
-  status: number;
+  status?: number;
 }
 
 export interface CreateSetmealDishItem {
-  copies: number;
   dishId: number;
-  id?: number;
   name: string;
   price: number;
-  setmealId: number;
+  copies: number;
+  setmealDishFlavors?: SetMealDishFlavor[];
 }
 
 export interface UpdateSetmealRequest {

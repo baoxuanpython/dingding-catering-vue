@@ -1,0 +1,236 @@
+node -e "
+const fs = require('fs');
+const path = require('path');
+
+console.log('='.repeat(70));
+console.log('🔧 叮叮餐饮 OpenAPI 3.0 文件自动修复工具');
+console.log('='.repeat(70));
+
+// 读取 JSON 文件
+const filePath = path.join('f:\\\\document\\\\GitHub\\\\dingding-catering-vue', '叮叮餐饮接口文档', 'dingding-catering-openapi.json');
+let apiData;
+
+try {
+  const fileContent = fs.readFileSync(filePath, 'utf8');
+  apiData = JSON.parse(fileContent);
+  console.log('\n✅ 成功读取 JSON 文件');
+  console.log('   当前接口数:', Object.keys(apiData.paths).length);
+} catch (error) {
+  console.error('\n❌ 读取文件失败:', error.message);
+  process.exit(1);
+}
+
+let fixCount = 0;
+let addCount = 0;
+let deleteCount = 0;
+
+// 步骤1: 为所有接口路径添加 /admin 前缀
+console.log('\n📌 步骤1/7: 为所有接口路径添加 /admin 前缀...');
+const newPaths = {};
+for (const [pathKey, pathValue] of Object.entries(apiData.paths)) {
+  if (!pathKey.startsWith('/admin')) {
+    const newPath = '/admin' + pathKey;
+    newPaths[newPath] = pathValue;
+    fixCount++;
+    console.log('   ✅', pathKey, '→', newPath);
+  } else {
+    newPaths[pathKey] = pathValue;
+  }
+}
+apiData.paths = newPaths;
+console.log('✨ 已为', fixCount, '个接口添加 /admin 前缀');
+
+// 步骤2: 修正工作台模块
+console.log('\n📌 步骤2/7: 修正工作台模块路径名称...');
+const workspaceFixes = [
+  { old: '/admin/workspace/overview', new: '/admin/workspace/businessData' },
+  { old: '/admin/workspace/dish-overview', new: '/admin/workspace/overviewDishes' },
+  { old: '/admin/workspace/setmeal-overview', new: '/admin/workspace/overviewSetmeals' },
+  { old: '/admin/workspace/order-overview', new: '/admin/workspace/overviewOrders' }
+];
+for (const fix of workspaceFixes) {
+  if (apiData.paths[fix.old]) {
+    apiData.paths[fix.new] = apiData.paths[fix.old];
+    delete apiData.paths[fix.old];
+    fixCount++;
+    console.log('   ✅', fix.old, '→', fix.new);
+  }
+}
+
+// 步骤3: 修正数据统计模块
+console.log('\n📌 步骤3/7: 修正数据统计模块路径名称...');
+const reportFixes = [
+  { old: '/admin/report/orderStatistics', new: '/admin/report/ordersStatistics' },
+  { old: '/admin/report/salesTop10', new: '/admin/report/top10' }
+];
+for (const fix of reportFixes) {
+  if (apiData.paths[fix.old]) {
+    apiData.paths[fix.new] = apiData.paths[fix.old];
+    delete apiData.paths[fix.old];
+    fixCount++;
+    console.log('   ✅', fix.old, '→', fix.new);
+  }
+}
+
+// 步骤4: 补充导出报表接口
+console.log('\n📌 步骤4/7: 补充遗漏的导出报表接口...');
+if (!apiData.paths['/admin/report/export']) {
+  apiData.paths['/admin/report/export'] = {
+    get: {
+      tags: ['7. 数据统计'],
+      summary: '导出运营报表',
+      description: '导出指定时间范围内的运营数据为 Excel 文件',
+      operationId: 'exportReport',
+      parameters: [
+        { name: 'begin', in: 'query', required: true, description: '开始日期（yyyy-MM-dd）', schema: { type: 'string', format: 'date' } },
+        { name: 'end', in: 'query', required: true, description: '结束日期（yyyy-MM-dd）', schema: { type: 'string', format: 'date' } },
+        { name: 'type', in: 'query', required: true, description: '报表类型：1=营业额,2=用户,3=订单,4=销量排行', schema: { type: 'integer', enum: [1,2,3,4] } }
+      ],
+      responses: {
+        200: {
+          description: '导出成功，返回 Excel 文件流',
+          content: {
+            'application/vnd.ms-excel': {
+              schema: { type: 'string', format: 'binary' },
+              example: '[Binary File Content]'
+            }
+          }
+        }
+      }
+    }
+  };
+  addCount++;
+  console.log('   ✅ 新增 GET /admin/report/export');
+}
+
+// 步骤5: 修正店铺操作模块
+console.log('\n📌 步骤5/7: 修正店铺操作模块 PUT 接口...');
+if (apiData.paths['/admin/shop/status']) {
+  const shopStatus = apiData.paths['/admin/shop/status'];
+  if (shopStatus.put) {
+    const putOp = { ...shopStatus.put };
+    putOp.parameters = [{ name: 'status', in: 'path', required: true, description: '店铺状态：1=营业中，0=打烊中', schema: { type: 'integer', enum: [0,1] } }];
+    putOp.description = '设置店铺营业状态';
+    apiData.paths['/admin/shop/{status}'] = { put: putOp };
+    delete shopStatus.put;
+    fixCount++;
+    console.log('   ✅ PUT /admin/shop/status → PUT /admin/shop/{status}');
+  }
+}
+
+// 步骤6: 修正订单管理模块
+console.log('\n📌 步骤6/7: 修正订单管理模块...');
+
+// 删除多余的 PUT /admin/order
+if (apiData.paths['/admin/order'] && apiData.paths['/admin/order'].put) {
+  delete apiData.paths['/admin/order'].put;
+  if (Object.keys(apiData.paths['/admin/order']).length === 0) {
+    delete apiData.paths['/admin/order'];
+  }
+  deleteCount++;
+  console.log('   🗑️ 删除多余的 PUT /admin/order');
+}
+
+// 修正订单查询接口
+if (apiData.paths['/admin/order/page']) {
+  apiData.paths['/admin/order/conditionSearch'] = apiData.paths['/admin/order/page'];
+  delete apiData.paths['/admin/order/page'];
+  fixCount++;
+  console.log('   ✅ GET /admin/order/page → GET /admin/order/conditionSearch');
+}
+
+// 修正订单详情接口
+if (apiData.paths['/admin/order/details']) {
+  const detailsOp = apiData.paths['/admin/order/details'].get;
+  detailsOp.parameters = [{ name: 'number', in: 'path', required: true, description: '订单号', schema: { type: 'string' } }];
+  detailsOp.operationId = 'getOrderDetailsByNumber';
+  detailsOp.summary = '查询订单详情';
+  detailsOp.description = '根据订单号查询订单完整信息';
+  apiData.paths['/admin/order/details/{number}'] = { get: detailsOp };
+  delete apiData.paths['/admin/order/details'];
+  fixCount++;
+  console.log('   ✅ GET /admin/order/details?id= → GET /admin/order/details/{number}');
+}
+
+// 修正派送订单接口
+if (apiData.paths['/admin/order/delivery']) {
+  const deliveryOp = apiData.paths['/admin/order/delivery'].put;
+  deliveryOp.parameters = [{ name: 'id', in: 'path', required: true, description: '订单主键', schema: { type: 'integer' } }];
+  deliveryOp.operationId = 'deliveryOrderById';
+  deliveryOp.summary = '派送订单';
+  deliveryOp.description = '将订单状态设为派送中（状态=4）';
+  apiData.paths['/admin/order/delivery/{id}'] = { put: deliveryOp };
+  delete apiData.paths['/admin/order/delivery'];
+  fixCount++;
+  console.log('   ✅ PUT /admin/order/delivery?id= → PUT /admin/order/delivery/{id}');
+}
+
+// 修正完成订单接口
+if (apiData.paths['/admin/order/complete']) {
+  const completeOp = apiData.paths['/admin/order/complete'].put;
+  completeOp.parameters = [{ name: 'id', in: 'path', required: true, description: '订单主键', schema: { type: 'integer' } }];
+  completeOp.operationId = 'completeOrderById';
+  completeOp.summary = '完成订单';
+  completeOp.description = '将订单状态设为已完成（状态=5）';
+  apiData.paths['/admin/order/complete/{id}'] = { put: completeOp };
+  delete apiData.paths['/admin/order/complete'];
+  fixCount++;
+  console.log('   ✅ PUT /admin/order/complete?id= → PUT /admin/order/complete/{id}');
+}
+
+// 步骤7: 补充口味管理模块
+console.log('\n📌 步骤7/7: 补充口味管理模块遗漏的接口...');
+if (!apiData.paths['/admin/flavor/{id}']) {
+  apiData.paths['/admin/flavor/{id}'] = {
+    get: {
+      tags: ['4. 口味字典管理'],
+      summary: '根据ID查询口味',
+      description: '根据ID查询口味类型详细信息',
+      operationId: 'getFlavorById',
+      parameters: [{ name: 'id', in: 'path', required: true, description: '口味类型ID', schema: { type: 'integer' } }],
+      responses: {
+        200: {
+          description: '操作成功',
+          content: {
+            'application/json': {
+              schema: { type: 'object', properties: { code: { type: 'integer', enum: [1] }, msg: { type: 'string' }, data: { '$ref': '#/components/schemas/Flavor' } } },
+              example: { code: 1, msg: '操作成功', data: { id: 1, flavorName: '辣度', valueList: '不辣,微辣,中辣,特辣' } }
+            }
+          }
+        }
+      }
+    }
+  };
+  addCount++;
+  console.log('   ✅ 新增 GET /admin/flavor/{id}');
+}
+
+// 写回文件
+console.log('\n💾 正在保存修复后的文件...');
+fs.writeFileSync(filePath, JSON.stringify(apiData, null, 2), 'utf8');
+
+// 验证并输出最终统计
+console.log('\n' + '='.repeat(70));
+console.log('🎉 修复完成！最终统计报告');
+console.log('='.repeat(70));
+
+const finalData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+const finalPaths = Object.keys(finalData.paths).sort();
+
+console.log('\n📊 最终结果:');
+console.log('   • 总接口数:', finalPaths.length);
+console.log('   • Schema 数:', Object.keys(finalData.components.schemas).length);
+console.log('\n✏️ 修改统计:');
+console.log('   • 路径修正:', fixCount, '处');
+console.log('   • 新增接口:', addCount, '个');
+console.log('   • 删除接口:', deleteCount, '个');
+console.log('   • 总计处理:', fixCount + addCount + deleteCount, '处');
+
+console.log('\n📋 所有接口路径列表:');
+finalPaths.forEach((p, index) => {
+  const methods = Object.keys(finalData.paths[p]).join(', ').toUpperCase();
+  console.log('   ' + (index+1) + '. ' + methods.padEnd(8), p);
+});
+
+console.log('\n✨ 现在可以将此 JSON 文件导入 Apifox 了！');
+"

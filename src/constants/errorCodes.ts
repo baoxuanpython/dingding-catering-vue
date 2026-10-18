@@ -57,7 +57,7 @@ export enum ErrorCode {
   DATA_ALREADY_EXISTS = 9002, // 数据已存在
   FILE_UPLOAD_FAILED = 9003, // 文件上传失败
   JSON_SERIALIZE_ERROR = 9004, // JSON 序列化/反序列化异常
-  DELETE_NOT_ALLOWED = 9005, // 不允许删除
+  DELETE_NOT_ALLOWED = 99005, // 不允许删除
   UNKNOWN_ERROR = 9999, // 未知错误
 }
 

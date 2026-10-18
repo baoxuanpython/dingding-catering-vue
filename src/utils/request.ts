@@ -142,13 +142,13 @@ request.interceptors.response.use(
       return res.data;
     }
 
-    // 业务错误处理：优先使用业务错误码映射的提示文案
+    // 业务错误处理：优先使用后端返回的详细错误信息，其次使用业务错误码映射的提示文案
     if (config.showError !== false) {
       const businessCode = res.code;
       const preciseMessage = businessErrorMessageMap[businessCode];
 
-      // 优先使用业务错误码对应的精确提示，其次使用后端返回的 msg，最后使用默认提示
-      const message = preciseMessage || res.msg || "操作失败";
+      // 优先使用后端返回的详细错误信息（如关联的套餐名称），其次使用业务错误码映射的提示，最后使用默认提示
+      const message = res.msg || preciseMessage || "操作失败";
 
       // 401 认证类错误：弹窗提示后跳转登录页
       if (authErrorCodes.includes(businessCode)) {
@@ -182,7 +182,7 @@ request.interceptors.response.use(
       );
     }
 
-    return Promise.reject(new Error(res.msg || "操作失败"));
+    return Promise.reject(new Error(res.msg || preciseMessage || "操作失败"));
   },
   (error) => {
     const config = error.config as CustomAxiosRequestConfig;
@@ -196,7 +196,8 @@ request.interceptors.response.use(
     // 如果有业务错误码，优先按业务错误处理
     if (businessCode && businessCode !== ErrorCode.SUCCESS) {
       if (config.showError !== false) {
-        const message = preciseMessage || errorData?.msg || "操作失败";
+        // 优先使用后端返回的详细错误信息（如关联的套餐名称），其次使用业务错误码映射的提示，最后使用默认提示
+        const message = errorData?.msg || preciseMessage || "操作失败";
 
         // 401 认证类错误：弹窗提示后跳转
         if (authErrorCodes.includes(businessCode)) {
@@ -228,7 +229,9 @@ request.interceptors.response.use(
         );
       }
 
-      return Promise.reject(new Error(errorData?.msg || "操作失败"));
+      return Promise.reject(
+        new Error(errorData?.msg || preciseMessage || "操作失败"),
+      );
     }
 
     // 无业务错误码：按 HTTP 状态码处理
@@ -238,7 +241,7 @@ request.interceptors.response.use(
         if (config.showError !== false) {
           ElMessage.error({
             message:
-              preciseMessage || errorData?.msg || "登录已过期，请重新登录",
+              errorData?.msg || preciseMessage || "登录已过期，请重新登录",
             duration: 3000,
             showClose: true,
           });
@@ -254,28 +257,28 @@ request.interceptors.response.use(
       case HttpStatusCode.BAD_REQUEST:
         // 400 参数校验失败
         if (config.showError !== false) {
-          ElMessage.error(preciseMessage || errorData?.msg || "参数错误");
+          ElMessage.error(errorData?.msg || preciseMessage || "参数错误");
         }
         break;
 
       case HttpStatusCode.FORBIDDEN:
         // 403 权限不足：弹窗提示，不跳转
         if (config.showError !== false) {
-          ElMessage.error(preciseMessage || errorData?.msg || "无权操作");
+          ElMessage.error(errorData?.msg || preciseMessage || "无权操作");
         }
         break;
 
       case HttpStatusCode.CONFLICT:
         // 409 资源冲突
         if (config.showError !== false) {
-          ElMessage.error(preciseMessage || errorData?.msg || "资源冲突");
+          ElMessage.error(errorData?.msg || preciseMessage || "资源冲突");
         }
         break;
 
       case HttpStatusCode.UNPROCESSABLE_ENTITY:
         // 422 业务规则不满足
         if (config.showError !== false) {
-          ElMessage.error(preciseMessage || errorData?.msg || "业务规则不满足");
+          ElMessage.error(errorData?.msg || preciseMessage || "业务规则不满足");
         }
         break;
 
@@ -283,7 +286,7 @@ request.interceptors.response.use(
         // 500 服务器内部错误
         if (config.showError !== false) {
           ElMessage.error(
-            preciseMessage || errorData?.msg || "系统异常，请联系管理员",
+            errorData?.msg || preciseMessage || "系统异常，请联系管理员",
           );
         }
         break;
