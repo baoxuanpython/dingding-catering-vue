@@ -1,0 +1,770 @@
+/**
+ * 主题：工作台页面特有样式
+ * > 创建日期：2026-10-19
+ * > 标签：#Vue3 #工作台 #深色主题
+ *
+ * 包含模块：
+ * 1. 欢迎卡片
+ * 2. 店铺状态卡片
+ * 3. 运营数据卡片（biz-card）
+ * 4. 订单统计环形图
+ * 5. 商品总览
+ * 6. 动画定义
+ */
+
+/* ==================== 工作台页面基础 ==================== */
+.workbench-page {
+  padding: 24px;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  transition: background 0.3s;
+}
+
+/* ==================== 顶部欢迎区 ==================== */
+.top-section {
+  margin-bottom: 24px;
+}
+
+.welcome-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--bg-primary) 50%, var(--bg-card) 100%);
+  border-radius: 16px;
+  box-shadow: var(--shadow-light), 0 0 30px rgba(76, 175, 80, 0.1);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(76, 175, 80, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  &:hover {
+    box-shadow: var(--shadow), 0 0 40px rgba(76, 175, 80, 0.15);
+    transform: translateY(-2px);
+  }
+}
+
+.welcome-text {
+  .welcome-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .wave-emoji {
+    display: inline-block;
+    animation: wave 2.5s ease-in-out infinite;
+    transform-origin: 70% 70%;
+  }
+
+  .welcome-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+.shop-status-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+
+  &.is-open {
+    background: rgba(103, 194, 58, 0.1);
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #909399;
+    transition: background 0.3s;
+
+    &.dot-pulse {
+      background: var(--primary);
+      animation: pulse 2s ease-in-out infinite;
+    }
+  }
+
+  .status-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .shop-switch {
+    :deep(.el-switch__core) {
+      --el-switch-on-color: var(--primary);
+    }
+  }
+}
+
+/* ==================== 今日运营数据卡片 ==================== */
+.business-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.biz-card {
+  position: relative;
+  padding: 24px 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: default;
+  border: 1px solid transparent;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(135deg, transparent 0%, rgba(76, 175, 80, 0.3) 50%, transparent 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  .biz-card-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+
+    .biz-card-icon {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 28px;
+      opacity: 0.15;
+      transition: all 0.3s;
+    }
+
+    .biz-card-circle {
+      position: absolute;
+      bottom: -30px;
+      right: -30px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      opacity: 0.08;
+      transition: all 0.3s;
+    }
+  }
+
+  .biz-card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .biz-card-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .biz-card-value {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .biz-card-unit {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+}
+
+.turnover-card {
+  background: linear-gradient(135deg, rgba(103, 194, 58, 0.12) 0%, rgba(103, 194, 58, 0.04) 100%);
+  border: 1px solid rgba(103, 194, 58, 0.15);
+
+  .biz-card-value { color: var(--primary); }
+  .biz-card-circle { background: var(--primary); }
+}
+
+.order-card {
+  background: linear-gradient(135deg, rgba(64, 158, 255, 0.12) 0%, rgba(64, 158, 255, 0.04) 100%);
+  border: 1px solid rgba(64, 158, 255, 0.15);
+
+  .biz-card-value { color: #409eff; }
+  .biz-card-circle { background: #409eff; }
+}
+
+.user-card {
+  background: linear-gradient(135deg, rgba(230, 162, 60, 0.12) 0%, rgba(230, 162, 60, 0.04) 100%);
+  border: 1px solid rgba(230, 162, 60, 0.15);
+
+  .biz-card-value { color: #e6a23c; }
+  .biz-card-circle { background: #e6a23c; }
+}
+
+.rate-card {
+  background: linear-gradient(135deg, rgba(144, 147, 153, 0.12) 0%, rgba(144, 147, 153, 0.04) 100%);
+  border: 1px solid rgba(144, 147, 153, 0.15);
+
+  .biz-card-value { color: #909399; }
+  .biz-card-circle { background: #909399; }
+}
+
+.price-card {
+  background: linear-gradient(135deg, rgba(103, 194, 58, 0.12) 0%, rgba(82, 155, 46, 0.04) 100%);
+  border: 1px solid rgba(82, 155, 46, 0.15);
+
+  .biz-card-value { color: var(--primary-dark); }
+  .biz-card-circle { background: var(--primary-dark); }
+}
+
+/* ==================== 底部面板区域 ==================== */
+.bottom-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* 面板顶部装饰条（工作台特有） */
+.panel {
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 50%, var(--accent-mint) 100%);
+    background-size: 200% 100%;
+    animation: gradient-flow 4s ease infinite;
+  }
+
+  &:hover {
+    box-shadow: var(--shadow), 0 0 30px rgba(76, 175, 80, 0.1);
+    transform: translateY(-2px);
+  }
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+
+  .panel-icon {
+    font-size: 20px;
+  }
+}
+
+.panel-total {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ==================== 订单统计环形图 ==================== */
+.order-stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.order-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s;
+
+  &:hover {
+    transform: scale(1.05);
+
+    .ring-svg {
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+  }
+}
+
+.order-stat-ring {
+  position: relative;
+  width: 90px;
+  height: 90px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(76, 175, 80, 0.05) 0%, transparent 70%);
+    animation: breathe 3s ease-in-out infinite;
+  }
+}
+
+.ring-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  transition: all 0.3s;
+}
+
+.ring-bg {
+  fill: none;
+  stroke: var(--border-color);
+  stroke-width: 8;
+  opacity: 0.3;
+}
+
+.ring-progress {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dasharray 1s ease;
+  animation: ring-pulse 2s ease-in-out infinite;
+}
+
+.ring-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: all 0.3s;
+}
+
+.order-stat-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: all 0.3s;
+}
+
+.waiting .ring-progress {
+  stroke: url(#gradient-lime);
+  animation: ring-pulse-lime 2s ease-in-out infinite;
+}
+
+.delivering .ring-progress {
+  stroke: url(#gradient-mint);
+  animation: ring-pulse-mint 2s ease-in-out infinite;
+}
+
+.completed .ring-progress {
+  stroke: url(#gradient-primary);
+  animation: ring-pulse-green 2s ease-in-out infinite;
+}
+
+.cancelled .ring-progress {
+  stroke: url(#gradient-rose);
+  animation: ring-pulse-rose 2s ease-in-out infinite;
+}
+
+/* ==================== 商品总览 ==================== */
+.goods-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.goods-category {
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-hover) 100%);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
+    border-radius: 2px;
+  }
+
+  &:hover {
+    border-color: var(--primary-lighter);
+    box-shadow: var(--shadow-light);
+    transform: translateX(4px);
+
+    .goods-category-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+  }
+}
+
+.goods-category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.goods-category-icon {
+  font-size: 24px;
+  transition: all 0.3s;
+}
+
+.goods-category-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.goods-stats-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 12px;
+}
+
+.goods-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.goods-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.goods-stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.goods-stat.sold .goods-stat-value {
+  color: var(--primary);
+  text-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
+}
+
+.goods-stat.discontinued .goods-stat-value {
+  color: var(--danger);
+  text-shadow: 0 0 10px rgba(244, 67, 54, 0.2);
+}
+
+.goods-progress {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-card);
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.goods-progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--accent-mint));
+  background-size: 200% 100%;
+  animation: gradient-flow 3s ease infinite;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
+}
+
+/* ==================== 动画定义 ==================== */
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+}
+
+@keyframes ring-pulse-lime {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 4px rgba(205, 220, 57, 0.6)); }
+  50% { opacity: 0.85; filter: drop-shadow(0 0 8px rgba(205, 220, 57, 0.8)); }
+}
+
+@keyframes ring-pulse-mint {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 4px rgba(0, 188, 212, 0.6)); }
+  50% { opacity: 0.85; filter: drop-shadow(0 0 8px rgba(0, 188, 212, 0.8)); }
+}
+
+@keyframes ring-pulse-green {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 4px rgba(76, 175, 80, 0.6)); }
+  50% { opacity: 0.85; filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.8)); }
+}
+
+@keyframes ring-pulse-rose {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 4px rgba(244, 67, 54, 0.6)); }
+  50% { opacity: 0.85; filter: drop-shadow(0 0 8px rgba(244, 67, 54, 0.8)); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==================== 深色主题适配 ==================== */
+html.dark {
+  .workbench-page {
+    .welcome-card {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, var(--bg-card) 50%, var(--bg-primary) 100%);
+      box-shadow: var(--shadow-light), 0 0 30px rgba(133, 206, 97, 0.1);
+
+      &::before {
+        background: radial-gradient(circle, rgba(133, 206, 97, 0.1) 0%, transparent 70%);
+      }
+
+      &:hover {
+        box-shadow: var(--shadow), 0 0 40px rgba(133, 206, 97, 0.15);
+      }
+    }
+
+    .shop-status-card {
+      background: rgba(255, 255, 255, 0.05);
+
+      &.is-open {
+        background: rgba(133, 206, 97, 0.15);
+      }
+
+      .status-dot {
+        background: #909399;
+
+        &.dot-pulse {
+          background: var(--primary);
+        }
+      }
+
+      .status-text {
+        color: var(--text-primary);
+      }
+    }
+
+    .biz-card {
+      &::before {
+        background: linear-gradient(135deg, transparent 0%, rgba(133, 206, 97, 0.4) 50%, transparent 100%);
+      }
+
+      &:hover {
+        box-shadow: var(--shadow-glow);
+      }
+
+      .biz-card-icon { opacity: 0.2; }
+      .biz-card-circle { opacity: 0.12; }
+    }
+
+    .turnover-card {
+      background: linear-gradient(135deg, rgba(133, 206, 97, 0.15) 0%, rgba(133, 206, 97, 0.05) 100%);
+      border-color: rgba(133, 206, 97, 0.2);
+    }
+
+    .order-card {
+      background: linear-gradient(135deg, rgba(0, 188, 212, 0.15) 0%, rgba(0, 188, 212, 0.05) 100%);
+      border-color: rgba(0, 188, 212, 0.2);
+      .biz-card-value { color: #26c6da !important; }
+      .biz-card-circle { background: #26c6da !important; }
+    }
+
+    .user-card {
+      background: linear-gradient(135deg, rgba(255, 152, 0, 0.15) 0%, rgba(255, 152, 0, 0.05) 100%);
+      border-color: rgba(255, 152, 0, 0.2);
+      .biz-card-value { color: #ffa726 !important; }
+      .biz-card-circle { background: #ffa726 !important; }
+    }
+
+    .rate-card {
+      background: linear-gradient(135deg, rgba(158, 158, 158, 0.15) 0%, rgba(158, 158, 158, 0.05) 100%);
+      border-color: rgba(158, 158, 158, 0.2);
+      .biz-card-value { color: #bdbdbd !important; }
+      .biz-card-circle { background: #bdbdbd !important; }
+    }
+
+    .price-card {
+      background: linear-gradient(135deg, rgba(133, 206, 97, 0.15) 0%, rgba(103, 194, 58, 0.05) 100%);
+      border-color: rgba(103, 194, 58, 0.2);
+      .biz-card-value { color: var(--primary-light) !important; }
+      .biz-card-circle { background: var(--primary-light) !important; }
+    }
+
+    .panel {
+      background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-primary) 100%);
+      border-color: var(--border-color);
+      box-shadow: var(--shadow-light), 0 0 20px rgba(133, 206, 97, 0.05);
+
+      &::before {
+        background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 50%, var(--accent-mint) 100%);
+      }
+
+      &:hover {
+        box-shadow: var(--shadow), 0 0 30px rgba(133, 206, 97, 0.1);
+      }
+    }
+
+    .goods-category {
+      background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-primary) 100%);
+      border-color: var(--border-color);
+
+      &::before {
+        background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
+      }
+
+      &:hover {
+        border-color: var(--primary);
+      }
+    }
+
+    .goods-stat.sold .goods-stat-value {
+      color: var(--primary);
+      text-shadow: 0 0 10px rgba(133, 206, 97, 0.3);
+    }
+
+    .goods-stat.discontinued .goods-stat-value {
+      color: #ef5350;
+      text-shadow: 0 0 10px rgba(239, 83, 80, 0.3);
+    }
+
+    .goods-progress {
+      background: var(--bg-card);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .order-stat-ring::before {
+      background: radial-gradient(circle, rgba(133, 206, 97, 0.08) 0%, transparent 70%);
+    }
+
+    .ring-bg {
+      stroke: var(--border-color);
+      opacity: 0.2;
+    }
+
+    .ring-value { color: var(--text-primary); }
+    .order-stat-label { color: var(--text-secondary); }
+
+    .waiting .ring-progress { filter: drop-shadow(0 0 4px rgba(205, 220, 57, 0.5)); }
+    .delivering .ring-progress { filter: drop-shadow(0 0 4px rgba(38, 198, 218, 0.5)); }
+    .completed .ring-progress { filter: drop-shadow(0 0 4px rgba(133, 206, 97, 0.5)); }
+    .cancelled .ring-progress { filter: drop-shadow(0 0 4px rgba(239, 83, 80, 0.5)); }
+  }
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 1400px) {
+  .business-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  .business-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bottom-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .workbench-page {
+    padding: 16px;
+  }
+
+  .welcome-card {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .business-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .order-stats {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}

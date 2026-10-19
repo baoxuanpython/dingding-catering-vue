@@ -2204,6 +2204,41 @@ interface EmployeeLoginVO {
               ],
               businessRules: ["status 为路径参数，id 为查询参数。"],
             },
+            {
+              id: "employee-batch-delete",
+              title: "批量删除员工",
+              method: "DELETE",
+              path: "/admin/employee/batch",
+              contentType: null,
+              description: "批量删除指定员工，仅管理员可操作。",
+              requestParams: [
+                {
+                  name: "ids",
+                  type: "string",
+                  required: "是",
+                  description: "员工ID列表，逗号分隔（如 1,2,3）",
+                  location: "query",
+                },
+              ],
+              requestBody: null,
+              responseBody: {
+                label: "ApiResponse<string>",
+                code: `{
+  "code": 1,
+  "msg": "操作成功",
+  "data": "删除成功"
+}`,
+              },
+              typescript: `// 无额外类型定义`,
+              errorCodes: [
+                {
+                  code: "2001",
+                  description: "非管理员无权操作",
+                  httpStatus: 403,
+                },
+              ],
+              businessRules: ["仅管理员可操作，ids 为逗号分隔的字符串。"],
+            }
           ],
         },
         {

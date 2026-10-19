@@ -121,13 +121,9 @@ defineEmits<{
 </script>
 
 <style scoped lang="scss">
-.value-tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px;
-}
+@import "@/styles/common-page.scss";
 
+/* 口味表格特有样式 */
 .value-tag-item {
   margin: 2px;
 }

@@ -123,6 +123,9 @@ function handleClose() {
 </script>
 
 <style scoped lang="scss">
+@import "@/styles/common-page.scss";
+
+/* 密码弹窗特有样式 */
 .dialog-footer {
   display: flex;
   justify-content: flex-end;

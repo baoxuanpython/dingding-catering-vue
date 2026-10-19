@@ -1,51 +1,120 @@
-main.ts:26 [Vue warn]: Invalid prop: validation failed for prop "type". Expected one of ["default", "primary", "success", "warning", "info", "danger", "text", ""], got value "button". 
-  at <ElButton class="search-btn" type="button" onClick=fn > 
-  at <ElForm model= {flavorName: ''} class="search-form" onSubmit=fn > 
-  at <FlavorSearchBar search-form= {flavorName: ''} onSearch=fn<handleSearch> onReset=fn<handleReset> > 
-  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView> 
-  at <ElMain class="layout-main" > 
-  at <ElContainer class="layout-right" > 
-  at <ElContainer class="layout-container" > 
-  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView> 
-  at <App>
-
-[Vue warn]: Invalid prop: custom validator check failed for prop "type". 
-  at <ElButton class="search-btn" type="button" onClick=fn > 
-  at <ElForm model= {flavorName: ''} class="search-form" onSubmit=fn > 
-  at <FlavorSearchBar search-form= {flavorName: ''} onSearch=fn<handleSearch> onReset=fn<handleReset> > 
-  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView> 
-  at <ElMain class="layout-main" > 
-  at <ElContainer class="layout-right" > 
-  at <ElContainer class="layout-container" > 
-  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView> 
-  at <App>
-
-main.ts:26 [Vue warn]: Invalid prop: validation failed for prop "type". Expected one of ["default", "primary", "success", "warning", "info", "danger", "text", ""], got value "button". 
-  at <ElButton class="reset-btn" type="button" onClick=fn > 
-  at <ElForm model= {flavorName: ''} class="search-form" onSubmit=fn > 
-  at <FlavorSearchBar search-form= {flavorName: ''} onSearch=fn<handleSearch> onReset=fn<handleReset> > 
-  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView> 
-  at <ElMain class="layout-main" > 
-  at <ElContainer class="layout-right" > 
-  at <ElContainer class="layout-container" > 
-  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView> 
-  at <App>
-
-main.ts:26 [Vue warn]: Invalid prop: custom validator check failed for prop "type". 
-  at <ElButton class="reset-btn" type="button" onClick=fn > 
-  at <ElForm model= {flavorName: ''} class="search-form" onSubmit=fn > 
-  at <FlavorSearchBar search-form= {flavorName: ''} onSearch=fn<handleSearch> onReset=fn<handleReset> > 
-  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView> 
-  at <ElMain class="layout-main" > 
-  at <ElContainer class="layout-right" > 
-  at <ElContainer class="layout-container" > 
-  at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView> 
-  at <App>
+[{
+	"resource": "/f:/document/GitHub/dingding-catering-vue/src/styles/layout.scss",
+	"owner": "_generated_diagnostic_collection_name_#7",
+	"code": "css-ruleorselectorexpected",
+	"severity": 8,
+	"message": "应为 @ 规则或选择器",
+	"source": "scss",
+	"startLineNumber": 417,
+	"startColumn": 1,
+	"endLineNumber": 417,
+	"endColumn": 2,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/f:/document/GitHub/dingding-catering-vue/src/styles/layout.scss",
+	"owner": "_generated_diagnostic_collection_name_#7",
+	"code": "css-lcurlyexpected",
+	"severity": 8,
+	"message": "应为 {",
+	"source": "scss",
+	"startLineNumber": 419,
+	"startColumn": 1,
+	"endLineNumber": 419,
+	"endColumn": 2,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/f:/document/GitHub/dingding-catering-vue/src/styles/layout.scss",
+	"owner": "_generated_diagnostic_collection_name_#7",
+	"code": "css-lcurlyexpected",
+	"severity": 8,
+	"message": "应为 {",
+	"source": "scss",
+	"startLineNumber": 423,
+	"startColumn": 13,
+	"endLineNumber": 423,
+	"endColumn": 14,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/f:/document/GitHub/dingding-catering-vue/src/styles/layout.scss",
+	"owner": "_generated_diagnostic_collection_name_#7",
+	"code": "css-lcurlyexpected",
+	"severity": 8,
+	"message": "应为 {",
+	"source": "scss",
+	"startLineNumber": 424,
+	"startColumn": 13,
+	"endLineNumber": 424,
+	"endColumn": 14,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/f:/document/GitHub/dingding-catering-vue/src/styles/layout.scss",
+	"owner": "_generated_diagnostic_collection_name_#7",
+	"code": "css-lcurlyexpected",
+	"severity": 8,
+	"message": "应为 {",
+	"source": "scss",
+	"startLineNumber": 425,
+	"startColumn": 10,
+	"endLineNumber": 425,
+	"endColumn": 11,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/f:/document/GitHub/dingding-catering-vue/src/styles/layout.scss",
+	"owner": "_generated_diagnostic_collection_name_#7",
+	"code": "css-lcurlyexpected",
+	"severity": 8,
+	"message": "应为 {",
+	"source": "scss",
+	"startLineNumber": 426,
+	"startColumn": 16,
+	"endLineNumber": 426,
+	"endColumn": 17,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+},{
+	"resource": "/f:/document/GitHub/dingding-catering-vue/src/styles/layout.scss",
+	"owner": "_generated_diagnostic_collection_name_#7",
+	"code": "css-ruleorselectorexpected",
+	"severity": 8,
+	"message": "应为 @ 规则或选择器",
+	"source": "scss",
+	"startLineNumber": 427,
+	"startColumn": 1,
+	"endLineNumber": 427,
+	"endColumn": 2,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+}],
+[{
+	"resource": "/f:/document/GitHub/dingding-catering-vue/src/utils/request.ts",
+	"owner": "typescript",
+	"code": "2304",
+	"severity": 8,
+	"message": "找不到名称“preciseMessage”。",
+	"source": "ts",
+	"startLineNumber": 185,
+	"startColumn": 48,
+	"endLineNumber": 185,
+	"endColumn": 62,
+	"modelVersionId": 1,
+	"origin": "extHost1"
+}],
+[{
+	"resource": "/f:/document/GitHub/dingding-catering-vue/src/views/Layout/index.vue",
+	"owner": "typescript",
+	"code": "2551",
+	"severity": 8,
+	"message": "属性“username”在类型“{ id: number; name: string; token: string; userName: string; role: \"user\" | \"admin\"; }”上不存在。你是否指的是“userName”?",
+	"source": "ts-plugin",
+	"startLineNumber": 138,
+	"startColumn": 37,
+	"endLineNumber": 138,
+	"endColumn": 45,
+	"modelVersionId": 3,
+	"origin": "extHost1"
+}]

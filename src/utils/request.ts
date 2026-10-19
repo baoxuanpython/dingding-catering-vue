@@ -182,7 +182,7 @@ request.interceptors.response.use(
       );
     }
 
-    return Promise.reject(new Error(res.msg || preciseMessage || "操作失败"));
+    return Promise.reject(new Error(res.msg || "操作失败"));
   },
   (error) => {
     const config = error.config as CustomAxiosRequestConfig;

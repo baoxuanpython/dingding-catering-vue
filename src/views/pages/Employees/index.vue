@@ -84,9 +84,19 @@
             <el-icon><RefreshLeft /></el-icon>
             重置
           </el-button>
-          <el-button class="add-btn" @click="handleAdd">
+          <el-button v-if="isAdmin" class="add-btn" @click="handleAdd">
             <el-icon><Plus /></el-icon>
             新增员工
+          </el-button>
+          <el-button
+            v-if="isAdmin"
+            class="batch-delete-btn"
+            type="danger"
+            :disabled="selectedIds.length === 0"
+            @click="handleBatchDelete"
+          >
+            <el-icon><Delete /></el-icon>
+            批量删除
           </el-button>
         </el-form-item>
       </el-form>
@@ -98,7 +108,19 @@
         <span class="table-title">员工列表</span>
         <span class="table-count">共 {{ pagination.total }} 条记录</span>
       </div>
-      <el-table v-loading="loading" :data="employeeList" border stripe>
+      <el-table
+        v-loading="loading"
+        :data="employeeList"
+        border
+        stripe
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column
+          v-if="isAdmin"
+          type="selection"
+          width="55"
+          :selectable="(row: EmployeeVO) => row.username !== 'admin'"
+        />
         <el-table-column label="姓名" min-width="80">
           <template #default="{ row }">
             <div class="name-cell">
@@ -132,14 +154,16 @@
             {{ maskIdNumber(row.idNumber) }}
           </template>
         </el-table-column>
-        <el-table-column label="账号状态" width="100">
+        <el-table-column v-if="isAdmin" label="账号状态" width="100">
           <template #default="{ row }">
             <el-switch
+              v-if="row.id !== currentEmpId"
               v-model="row.status"
               :active-value="1"
               :inactive-value="0"
               @change="(val: number) => handleStatusChange(row, val)"
             />
+            <el-tag v-else type="success" size="small">启用</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="创建时间" min-width="160">
@@ -153,10 +177,20 @@
               <el-button link type="primary" @click="handleView(row)">
                 查看
               </el-button>
-              <el-button link type="primary" @click="handleEdit(row)">
+              <el-button
+                v-if="isAdmin || row.id === currentEmpId"
+                link
+                type="primary"
+                @click="handleEdit(row)"
+              >
                 编辑
               </el-button>
-              <el-button link type="warning" @click="handleEditPassword(row)">
+              <el-button
+                v-if="isAdmin || row.id === currentEmpId"
+                link
+                type="warning"
+                @click="handleEditPassword(row)"
+              >
                 修改密码
               </el-button>
             </div>
@@ -204,8 +238,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
-import { Search, RefreshLeft, Plus } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { Search, RefreshLeft, Plus, Delete } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import EmployeeFormDialog from "./components/EmployeeFormDialog.vue";
 import EmployeeDetailDialog from "./components/EmployeeDetailDialog.vue";
 import PasswordDialog from "./components/PasswordDialog.vue";
@@ -215,6 +249,7 @@ import {
   updateEmployee,
   updateEmployeeStatus,
   editPassword,
+  batchDeleteEmployee,
 } from "./api/employeeApi";
 import type {
   EmployeeVO,
@@ -225,6 +260,9 @@ import { getSurnamePinyin, getAvatarColor } from "./utils/pinyin";
 import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();
+
+const isAdmin = computed(() => userStore.userInfo?.role === "admin");
+const currentEmpId = computed(() => userStore.userInfo?.id ?? 0);
 
 // ==================== 统计卡片 ====================
 interface EmployeeStatistics {
@@ -287,6 +325,12 @@ const pagination = reactive({
 
 const employeeList = ref<EmployeeVO[]>([]);
 const loading = ref(false);
+const selectedRows = ref<EmployeeVO[]>([]);
+const selectedIds = computed(() => selectedRows.value.map((row) => row.id));
+
+function handleSelectionChange(rows: EmployeeVO[]) {
+  selectedRows.value = rows;
+}
 
 async function fetchEmployees() {
   loading.value = true;
@@ -437,25 +481,67 @@ function resetPasswordForm() {
 // ==================== 状态切换 ====================
 async function handleStatusChange(row: EmployeeVO, val: number) {
   try {
+    if (val === 0) {
+      await ElMessageBox.confirm(
+        `确定要禁用员工"${row.name}"吗？禁用后该员工将无法登录系统。`,
+        "禁用确认",
+        {
+          confirmButtonText: "确定禁用",
+          cancelButtonText: "取消",
+          type: "warning",
+        },
+      );
+    }
+
     await updateEmployeeStatus(row.id, val);
     ElMessage.success(val === 1 ? "已启用" : "已禁用");
     fetchStatistics();
   } catch (error) {
-    console.error("状态切换失败:", error);
-    row.status = val === 1 ? 0 : 1; // 回滚
+    if (error !== "cancel") {
+      console.error("状态切换失败:", error);
+      row.status = val === 1 ? 0 : 1;
+    }
+  }
+}
+
+// ==================== 批量删除 ====================
+async function handleBatchDelete() {
+  const deletableIds = selectedIds.value.filter(
+    (id) => id !== currentEmpId.value,
+  );
+  if (deletableIds.length === 0) return;
+
+  try {
+    await ElMessageBox.confirm(
+      `确定要删除选中的 ${deletableIds.length} 个员工吗？此操作不可恢复`,
+      "批量删除确认",
+      {
+        confirmButtonText: "确定删除",
+        cancelButtonText: "取消",
+        type: "warning",
+      },
+    );
+
+    await batchDeleteEmployee(deletableIds.join(","));
+    ElMessage.success("删除成功");
+    selectedRows.value = [];
+    fetchEmployees();
+    fetchStatistics();
+  } catch (error) {
+    if (error !== "cancel") {
+      console.error("批量删除失败:", error);
+    }
   }
 }
 
 // ==================== 脱敏工具 ====================
 function maskPhone(phone: string): string {
-  const isAdmin = userStore.userInfo?.role === "admin";
-  if (isAdmin || phone.length !== 11) return phone;
+  if (isAdmin.value || phone.length !== 11) return phone;
   return phone.slice(0, 3) + "****" + phone.slice(7);
 }
 
 function maskIdNumber(idNumber: string): string {
-  const isAdmin = userStore.userInfo?.role === "admin";
-  if (isAdmin || idNumber.length !== 18) return idNumber;
+  if (isAdmin.value || idNumber.length !== 18) return idNumber;
   return idNumber.slice(0, 4) + "**********" + idNumber.slice(14);
 }
 
@@ -467,27 +553,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.name-cell {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+@import "@/styles/common-page.scss";
 
-  .avatar-placeholder {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-weight: 600;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-
-  .name-text {
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-}
+/* 员工页面特有样式（如有） */
 </style>

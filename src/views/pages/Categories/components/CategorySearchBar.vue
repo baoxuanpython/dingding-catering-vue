@@ -45,17 +45,7 @@ const handleReset = () => {
 </script>
 
 <style scoped>
-.search-panel {
-  padding: 20px 24px;
-  background: var(--bg-card);
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-light);
-}
+@import "@/styles/common-page.scss";
 
-.search-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
+/* 分类搜索栏特有样式（如有） */
 </style>

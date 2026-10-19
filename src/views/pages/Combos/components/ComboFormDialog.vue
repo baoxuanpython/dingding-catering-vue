@@ -563,11 +563,7 @@ watch(
 <style scoped lang="scss">
 @import "@/styles/common-page.scss";
 
-.form-dialog {
-  :deep(.el-dialog__body) {
-    padding: 24px;
-  }
-}
+/* 套餐表单弹窗特有样式 */
 
 /* 让公共样式在对话框内生效 */
 .form-dialog-content {
@@ -613,12 +609,6 @@ watch(
       opacity: 0.7;
     }
   }
-}
-
-.dialog-content {
-  max-height: 70vh;
-  overflow-y: auto;
-  padding-right: 8px;
 }
 
 .combo-form {
@@ -685,46 +675,6 @@ html.dark .combo-price .price-value {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.avatar-uploader {
-  :deep(.el-upload) {
-    border: 1px dashed var(--border-color);
-    border-radius: 8px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: var(--el-transition-duration-fast);
-
-    &:hover {
-      border-color: var(--primary);
-    }
-  }
-}
-
-.avatar {
-  width: 148px;
-  height: 148px;
-  display: block;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: var(--text-secondary);
-  width: 148px;
-  height: 148px;
-  text-align: center;
-  line-height: 148px;
-  border-radius: 8px;
-  background: var(--input-bg);
-}
-
-.upload-tip {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 8px;
 }
 
 .dish-section {

@@ -145,7 +145,7 @@
               :src="row.image || defaultImage"
               :preview-src-list="[row.image]"
               fit="cover"
-              class="dish-image"
+              class="image-thumbnail"
               preview-teleported
             >
               <template #error>
@@ -165,7 +165,7 @@
           show-overflow-tooltip
         >
           <template #default="{ row }">
-            <span class="dish-name">{{ row.name }}</span>
+            <span class="item-name">{{ row.name }}</span>
           </template>
         </el-table-column>
 
@@ -207,7 +207,7 @@
             <el-tag
               :type="row.status === 1 ? 'success' : 'info'"
               effect="dark"
-              class="status-tag"
+              class="status-tag-clickable"
               @click="handleStatusToggle(row)"
             >
               {{ row.status === 1 ? "已启售" : "已停售" }}
@@ -657,77 +657,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-/* ==================== 菜品页面特有样式 ==================== */
+@import "@/styles/common-page.scss";
 
-/* 菜品图片 */
-.dish-image {
-  width: 70px;
-  height: 70px;
-  border-radius: 8px;
-  border: 2px solid var(--border-color);
-  cursor: pointer;
-  transition: all 0.3s;
-
-  &:hover {
-    border-color: var(--primary);
-    transform: scale(1.05);
-  }
-
-  .image-error {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-primary);
-    color: var(--text-secondary);
-  }
-}
-
-/* 菜品名称 */
-.dish-name {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-/* 分类标签 */
-.category-tag {
-  font-weight: 500;
-}
-
-/* 描述文本 */
-.description-text {
-  color: var(--text-secondary);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-/* 状态标签 */
-.status-tag {
-  cursor: pointer;
-  font-weight: 500;
-  padding: 6px 16px;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-}
-
-/* 表格行悬停效果 */
-.dish-table {
-  :deep(.el-table__row) {
-    transition: background 0.2s;
-
-    &:hover {
-      background: rgba(103, 194, 58, 0.04);
-    }
-  }
-}
+/* 菜品页面特有样式（如有） */
 </style>

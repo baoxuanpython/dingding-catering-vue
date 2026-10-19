@@ -665,42 +665,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-/* ==================== 订单页面特有样式 ==================== */
+@import "@/styles/common-page.scss";
 
-/* 订单号字体 */
-.order-number {
-  font-family: "SF Mono", "Fira Code", monospace;
-  font-size: 13px;
-  color: var(--primary);
-  font-weight: 500;
-}
-
-/* 用户信息单元格 */
-.user-cell {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.user-avatar {
-  background: var(--primary-bg);
-  color: var(--primary);
-}
-
-/* 地址文本 */
-.address-text {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-/* 表格行悬停效果 */
-.order-table {
-  :deep(.el-table__row) {
-    transition: background 0.2s;
-
-    &:hover {
-      background: rgba(103, 194, 58, 0.04);
-    }
-  }
-}
+/* 订单页面特有样式（如有） */
 </style>

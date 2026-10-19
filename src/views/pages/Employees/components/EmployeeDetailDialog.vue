@@ -73,6 +73,9 @@ function maskIdNumber(idNumber?: string): string {
 </script>
 
 <style scoped lang="scss">
+@import "@/styles/common-page.scss";
+
+/* 员工详情弹窗特有样式 */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -89,14 +92,7 @@ function maskIdNumber(idNumber?: string): string {
   }
 }
 
-.detail-label {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
 .detail-value {
-  font-size: 14px;
-  color: var(--text-primary);
   word-break: break-all;
 }
 </style>

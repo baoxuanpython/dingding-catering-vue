@@ -1305,6 +1305,441 @@
   box-shadow: var(--shadow-light);
 }
 
+/* ==================== 通用组件样式 ==================== */
+
+/* ---------- 1. 图片缩略图（菜品、套餐、用户头像等） ---------- */
+.image-thumbnail {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    border-color: var(--primary);
+    transform: scale(1.05);
+  }
+
+  .image-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+  }
+}
+
+/* 小尺寸图片缩略图（用于弹窗内） */
+.image-thumbnail-sm {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    border-color: var(--primary);
+    transform: scale(1.05);
+  }
+
+  .image-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+  }
+}
+
+/* 图片占位符 */
+.image-placeholder {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  border: 2px solid var(--border-color);
+}
+
+.image-placeholder-sm {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+/* ---------- 2. 文本展示组件 ---------- */
+
+/* 项目名称（菜品名、套餐名等） */
+.item-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* 描述文本 */
+.description-text {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* 分类标签 */
+.category-tag {
+  font-weight: 500;
+}
+
+/* 地址文本 */
+.address-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* 备注文本 */
+.remark-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  padding: 12px 16px;
+  background: var(--bg-card-hover);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary);
+}
+
+/* 时间文本 */
+.time-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* 订单号字体 */
+.order-number {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* ---------- 3. 价格展示组件 ---------- */
+
+/* 价格高亮 */
+.price-highlight {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* 价格渐变展示 */
+.price-gradient {
+  font-weight: 700;
+  font-size: 16px;
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  padding: 4px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--primary-bg) 0%, transparent 100%);
+    border-radius: 8px;
+    z-index: -1;
+    opacity: 0.6;
+  }
+}
+
+/* 深色主题下的价格渐变 */
+html.dark .price-gradient {
+  background: linear-gradient(135deg, #85ce61 0%, #67c23a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  &::before {
+    background: linear-gradient(135deg, var(--primary-bg) 0%, transparent 100%);
+  }
+}
+
+/* ---------- 4. 用户信息展示组件 ---------- */
+
+/* 用户信息单元格（表格内） */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 用户头像 */
+.user-avatar {
+  background: var(--primary-bg);
+  color: var(--primary);
+}
+
+/* 姓名单元格（带头像） */
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .name-text {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+}
+
+/* ---------- 5. 区块标题组件 ---------- */
+
+/* 区块标题 */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+/* 标题装饰条 */
+.title-bar {
+  width: 4px;
+  height: 20px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+
+/* ---------- 6. 面板组件 ---------- */
+
+/* 通用面板 */
+.panel {
+  padding: 24px;
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: var(--shadow-light);
+  transition: all 0.3s;
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+}
+
+/* 面板头部 */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+/* 面板标题 */
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+
+  .panel-icon {
+    font-size: 20px;
+  }
+}
+
+/* 面板总计/统计文本 */
+.panel-total {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ---------- 7. 状态标签（可点击切换） ---------- */
+
+/* 可点击的状态标签 */
+.status-tag-clickable {
+  cursor: pointer;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* ---------- 8. 表格行悬停效果 ---------- */
+
+/* 表格行悬停 */
+.table-row-hover {
+  :deep(.el-table__row) {
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(103, 194, 58, 0.04);
+    }
+  }
+}
+
+/* ---------- 9. 上传组件 ---------- */
+
+/* 头像上传器 */
+.avatar-uploader {
+  :deep(.el-upload) {
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
+
+    &:hover {
+      border-color: var(--primary);
+    }
+  }
+}
+
+/* 上传头像 */
+.avatar {
+  width: 148px;
+  height: 148px;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* 上传图标 */
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: var(--text-secondary);
+  width: 148px;
+  height: 148px;
+  text-align: center;
+  line-height: 148px;
+  border-radius: 8px;
+  background: var(--input-bg);
+}
+
+/* 上传提示 */
+.upload-tip {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+/* ---------- 10. 弹窗内容组件 ---------- */
+
+/* 弹窗内容滚动区 */
+.dialog-content {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* 弹窗表单区 */
+.dialog-form {
+  padding-right: 16px;
+}
+
+/* 弹窗内表单 padding */
+.form-dialog {
+  :deep(.el-dialog__body) {
+    padding: 24px;
+  }
+}
+
+/* ---------- 11. 详情展示组件 ---------- */
+
+/* 详情卡片（用于订单详情弹窗内） */
+.detail-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-card-hover);
+}
+
+/* 详情卡片头部 */
+.detail-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--primary-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 详情卡片内容 */
+.detail-card-content {
+  padding: 12px 16px;
+}
+
+/* 详情项（左侧带装饰条） */
+.detail-item-accent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--bg-card) 70%, transparent);
+  border-radius: 6px;
+  border-left: 3px solid var(--primary);
+  flex-wrap: wrap;
+
+  /* 兼容不支持 color-mix 的浏览器 */
+  @supports not (background: color-mix(in srgb, red 50%, blue)) {
+    background: var(--bg-card);
+    opacity: 0.7;
+  }
+}
+
+/* ---------- 12. 操作按钮组 ---------- */
+
+/* 批量删除按钮间距 */
+.batch-delete-btn {
+  margin-left: 12px;
+}
+
 /* ==================== 响应式断点 ==================== */
 @media (max-width: 1200px) {
   .stats-row {

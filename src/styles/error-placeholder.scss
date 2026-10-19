@@ -1,0 +1,121 @@
+/**
+ * 主题：错误占位组件样式
+ * > 创建日期：2026-10-19
+ * > 标签：#Vue3 #ErrorPlaceholder #深色主题
+ */
+
+.error-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 24px;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  border: 2px solid #feb2b2;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 48px;
+  animation: shake 0.5s ease-in-out;
+}
+
+.error-content {
+  flex: 1;
+}
+
+.error-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #c53030;
+}
+
+.error-message {
+  margin: 0;
+  font-size: 14px;
+  color: #742a2a;
+}
+
+.error-details {
+  margin-top: 16px;
+  text-align: left;
+  background: #1a202c;
+  border-radius: 8px;
+  padding: 12px;
+  color: #e2e8f0;
+  font-size: 12px;
+}
+
+.error-details summary {
+  cursor: pointer;
+  color: #fc8181;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.error-stack {
+  margin: 8px 0 0;
+  padding: 12px;
+  background: #2d3748;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: "Fira Code", monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #a0aec0;
+}
+
+.retry-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(229, 62, 62, 0.3);
+}
+
+.retry-btn:hover {
+  background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.4);
+  transform: translateY(-1px);
+}
+
+.retry-icon {
+  font-size: 16px;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(14deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  30% {
+    transform: rotate(14deg);
+  }
+  40% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  }
+}

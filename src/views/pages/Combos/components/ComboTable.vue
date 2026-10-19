@@ -24,10 +24,10 @@
       <el-table-column label="图片" width="100" align="center" fixed>
         <template #default="{ row }">
           <el-image
-            :src="row.image || defaultImage"
+            :src="row.image"
             :preview-src-list="[row.image]"
             fit="cover"
-            class="combo-image"
+            class="image-thumbnail"
             preview-teleported
           >
             <template #error>
@@ -47,7 +47,7 @@
         show-overflow-tooltip
       >
         <template #default="{ row }">
-          <span class="combo-name">{{ row.name }}</span>
+          <span class="item-name">{{ row.name }}</span>
         </template>
       </el-table-column>
 
@@ -67,7 +67,7 @@
 
       <el-table-column label="售价" width="120" resizable align="center">
         <template #default="{ row }">
-          <span class="price-highlight">¥{{ row.price?.toFixed(2) }}</span>
+          <span class="price-gradient">¥{{ row.price?.toFixed(2) }}</span>
         </template>
       </el-table-column>
 
@@ -89,7 +89,7 @@
           <el-tag
             :type="row.status === 1 ? 'success' : 'info'"
             effect="dark"
-            class="status-tag"
+            class="status-tag-clickable"
             @click="handleStatusToggle(row)"
           >
             {{ row.status === 1 ? "已启售" : "已停售" }}
@@ -175,9 +175,6 @@ const emit = defineEmits<{
   (e: "currentChange"): void;
 }>();
 
-const defaultImage =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23f5f7fa' width='100' height='100'/%3E%3Ctext x='50' y='55' font-family='Arial' font-size='14' fill='%23909399' text-anchor='middle'%3E暂无图片%3C/text%3E%3C/svg%3E";
-
 function formatTime(time?: string): string {
   if (!time) return "-";
   return time.replace("T", " ").substring(0, 19);
@@ -213,107 +210,7 @@ function handleCurrentChange() {
 </script>
 
 <style scoped lang="scss">
-.combo-image {
-  width: 70px;
-  height: 70px;
-  border-radius: 8px;
-  border: 2px solid var(--border-color);
-  cursor: pointer;
-  transition: all 0.3s;
+@import "@/styles/common-page.scss";
 
-  &:hover {
-    border-color: var(--primary);
-    transform: scale(1.05);
-  }
-
-  .image-error {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-primary);
-    color: var(--text-secondary);
-  }
-}
-
-.combo-name {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.category-tag {
-  font-weight: 500;
-}
-
-.description-text {
-  color: var(--text-secondary);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.price-highlight {
-  font-weight: 700;
-  font-size: 16px;
-  background: linear-gradient(
-    135deg,
-    var(--primary) 0%,
-    var(--primary-dark) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  padding: 4px 12px;
-  border-radius: 8px;
-  display: inline-block;
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, var(--primary-bg) 0%, transparent 100%);
-    border-radius: 8px;
-    z-index: -1;
-    opacity: 0.6;
-  }
-}
-
-html.dark .price-highlight {
-  background: linear-gradient(135deg, #85ce61 0%, #67c23a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-
-  &::before {
-    background: linear-gradient(135deg, var(--primary-bg) 0%, transparent 100%);
-  }
-}
-
-.status-tag {
-  cursor: pointer;
-  font-weight: 500;
-  padding: 6px 16px;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-}
-
-.combo-table {
-  :deep(.el-table__row) {
-    transition: background 0.2s;
-
-    &:hover {
-      background: rgba(103, 194, 58, 0.04);
-    }
-  }
-}
+/* 套餐表格特有样式（如有） */
 </style>

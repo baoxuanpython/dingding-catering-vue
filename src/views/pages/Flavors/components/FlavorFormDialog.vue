@@ -138,25 +138,10 @@ function handleSubmit() {
 </script>
 
 <style scoped lang="scss">
-.form-dialog {
-  :deep(.el-dialog__body) {
-    padding: 24px;
-  }
-}
+@import "@/styles/common-page.scss";
 
+/* 口味表单弹窗特有样式 */
 .flavor-form {
   padding-right: 16px;
-}
-
-.input-tip {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 8px;
-}
-
-.preview-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 </style>

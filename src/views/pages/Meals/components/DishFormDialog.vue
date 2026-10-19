@@ -324,57 +324,13 @@ async function handleConfirm() {
 </script>
 
 <style scoped lang="scss">
-.form-dialog {
-  :deep(.el-dialog__body) {
-    padding: 24px;
-  }
-}
+@import "@/styles/common-page.scss";
 
+/* 菜品表单弹窗特有样式 */
 .dish-form {
   max-height: 60vh;
   overflow-y: auto;
   padding-right: 16px;
-}
-
-/* 图片上传 */
-.avatar-uploader {
-  :deep(.el-upload) {
-    border: 1px dashed var(--border-color);
-    border-radius: 8px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: var(--el-transition-duration-fast);
-
-    &:hover {
-      border-color: var(--primary);
-    }
-  }
-}
-
-.avatar {
-  width: 148px;
-  height: 148px;
-  display: block;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: var(--text-secondary);
-  width: 148px;
-  height: 148px;
-  text-align: center;
-  line-height: 148px;
-  border-radius: 8px;
-  background: var(--input-bg);
-}
-
-.upload-tip {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 8px;
 }
 
 /* 口味列表 */

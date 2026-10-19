@@ -41,3 +41,8 @@ export function getEmployeeById(id: number) {
 export function editPassword(data: EditPasswordForm) {
   return request.put("/employee/editPassword", data);
 }
+
+/** 批量删除员工 */
+export function batchDeleteEmployee(ids: string) {
+  return request.delete("/employee/batch", { params: { ids } });
+}

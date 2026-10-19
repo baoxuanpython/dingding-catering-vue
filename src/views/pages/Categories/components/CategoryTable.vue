@@ -72,26 +72,9 @@ const handleStatusChange = (id: number, enabled: boolean | string | number) => {
 </script>
 
 <style scoped>
-.table-panel {
-  padding: 24px;
-  background: var(--bg-card);
-  border-radius: 12px;
-  box-shadow: var(--shadow-light);
-}
+@import "@/styles/common-page.scss";
 
-.table-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.table-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
+/* 分类表格特有样式 */
 .category-table {
   --el-table-border-color: var(--border-color);
   --el-table-header-bg-color: var(--bg-secondary);

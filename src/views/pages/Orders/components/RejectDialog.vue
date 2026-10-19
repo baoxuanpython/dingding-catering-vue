@@ -55,6 +55,9 @@ function handleConfirm() {
 </script>
 
 <style scoped lang="scss">
+@import "@/styles/common-page.scss";
+
+/* 拒单弹窗特有样式 */
 .reject-dialog {
   :deep(.el-dialog__body) {
     padding: 24px;

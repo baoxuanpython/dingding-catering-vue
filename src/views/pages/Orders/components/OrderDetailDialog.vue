@@ -383,6 +383,9 @@ function parseFlavorPairs(
 </script>
 
 <style scoped lang="scss">
+@import "@/styles/common-page.scss";
+
+/* 订单详情弹窗特有样式 */
 .detail-dialog {
   :deep(.el-dialog__body) {
     padding: 24px;
@@ -402,6 +405,7 @@ function parseFlavorPairs(
   }
 }
 
+/* 订单详情专用区块标题（覆盖公共样式） */
 .dialog-section-title {
   font-size: 15px;
   font-weight: 600;
@@ -411,6 +415,7 @@ function parseFlavorPairs(
   border-bottom: 1px solid var(--border-color);
 }
 
+/* 订单详情网格（覆盖公共样式的 2 列布局） */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -425,22 +430,6 @@ function parseFlavorPairs(
   &.full-width {
     grid-column: 1 / -1;
   }
-}
-
-.detail-label {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-.detail-value {
-  font-size: 14px;
-  color: var(--text-primary);
-}
-
-.amount-highlight {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--primary);
 }
 
 .cancel-text {
@@ -498,18 +487,6 @@ function parseFlavorPairs(
     background: var(--bg-primary);
     color: var(--text-secondary);
   }
-}
-
-.setmeal-image-placeholder {
-  width: 50px;
-  height: 50px;
-  border-radius: 6px;
-  background: var(--bg-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
 }
 
 .setmeal-info {
@@ -625,18 +602,6 @@ function parseFlavorPairs(
   }
 }
 
-.dish-image-placeholder {
-  width: 50px;
-  height: 50px;
-  border-radius: 6px;
-  background: var(--bg-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
-}
-
 .dish-info {
   display: flex;
   flex-direction: column;
@@ -683,17 +648,5 @@ function parseFlavorPairs(
 .dish-quantity {
   font-size: 13px;
   color: var(--text-secondary);
-}
-
-/* 备注文本 */
-.remark-text {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 0;
-  padding: 12px 16px;
-  background: var(--bg-card-hover);
-  border-radius: 8px;
-  border-left: 3px solid var(--primary);
 }
 </style>

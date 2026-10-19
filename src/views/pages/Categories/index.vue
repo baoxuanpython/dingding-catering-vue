@@ -162,49 +162,7 @@ async function handleFormSubmit(data: {
 </script>
 
 <style scoped>
-/* Tab 包装器 */
-.tab-wrapper {
-  margin-bottom: 20px;
-  padding: 0 4px;
-}
+@import "@/styles/common-page.scss";
 
-.tab-wrapper :deep(.el-tabs__header) {
-  margin-bottom: 0;
-}
-
-.tab-wrapper :deep(.el-tabs__nav-wrap::after) {
-  height: 1px;
-}
-
-.tab-wrapper :deep(.el-tabs__active-bar) {
-  background: linear-gradient(90deg, var(--primary), var(--primary-light));
-  height: 3px;
-  border-radius: 2px;
-}
-
-.tab-wrapper :deep(.el-tabs__item.is-active) {
-  color: var(--primary);
-  font-weight: 600;
-}
-
-/* 统计卡片 - 重置激活状态的永久 transform，只在 hover 时上浮 */
-.stat-card.stat-active,
-.stat-card.stat-custom {
-  transform: none !important;
-
-  &:hover {
-    transform: translateY(-4px) !important;
-  }
-}
-
-/* 分页 */
-.pagination-wrapper {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-  padding: 16px 24px;
-  background: var(--bg-card);
-  border-radius: 12px;
-  box-shadow: var(--shadow-light);
-}
+/* 分类页面特有样式（如有） */
 </style>
