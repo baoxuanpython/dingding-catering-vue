@@ -6,11 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint:style": "stylelint \"src/**/*.{css,scss,vue}\" && node scripts/check-hardcoded-colors.cjs && node scripts/validate-theme.cjs --all && node scripts/generate-cheatsheet.cjs && git diff --exit-code reference/css-variables-cheatsheet.html",
+    "lint:style:hex": "stylelint \"src/**/*.{css,scss,vue}\"",
+    "lint:style:rgb": "node scripts/check-hardcoded-colors.cjs",
+    "validate:theme": "node scripts/validate-theme.cjs",
+    "gen:cheatsheet": "node scripts/generate-cheatsheet.cjs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
     "axios": "^1.20.0",
+    "echarts": "^6.1.0",
     "element-plus": "^2.14.7",
     "pinia": "^4.0.3",
     "pinyin-pro": "^3.29.5",
@@ -21,7 +27,11 @@
     "@types/node": "^24.13.3",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vue/tsconfig": "^0.9.1",
+    "postcss-html": "^2.0.0",
+    "postcss-scss": "^4.0.9",
     "sass-embedded": "^1.105.1",
+    "stylelint": "^17.16.0",
+    "stylelint-config-standard": "^40.0.0",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
     "vue-tsc": "^3.3.11"

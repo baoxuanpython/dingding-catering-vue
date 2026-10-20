@@ -1,90 +1,15 @@
-/* 叮叮餐饮后台管理系统 - 主题变量系统 */
-
 /* ============================================================
-   浅色主题（默认）- 清新薄荷风
+   叮叮餐饮后台管理系统 — 公共主题变量与组件风格
+   ============================================================
+   本文件仅使用 var() 引用，不定义任何色值。
+   基础色值见各 theme-*.css 文件。暗色为默认主题（:root），
+   浅色通过 html.light 激活。新增主题只需新建 theme-xxx.css 并定义同名变量即可自动适配。
    ============================================================ */
+
 :root {
-  /* ==================== 第 1 层：基础色板 ==================== */
-  /* 背景色系 */
-  --bg-primary: #f0f7f4;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f8fdf9;
-  --bg-overlay: rgba(0, 0, 0, 0.5);
+  /* ==================== 第 1 层：语义别名（--color-xxx → var(--xxx)） ==================== */
 
-  /* 文字色系 */
-  --text-primary: #1a3a2a;
-  --text-secondary: #6b8f71;
-  --text-disabled: #bdbdbd;
-  --text-inverse: #ffffff;
-
-  /* 边框色 */
-  --border-color: #c8e6c9;
-  --border-light: #e8f5e9;
-  --border-dark: #a5d6a7;
-
-  /* 主色 - 薄荷绿 */
-  --primary: #4caf50;
-  --primary-light: #81c784;
-  --primary-lighter: #a5d6a7;
-  --primary-dark: #388e3c;
-  --primary-darker: #2e7d32;
-  --primary-bg: #e8f5e9;
-
-  /* 危险色 */
-  --danger: #f44336;
-  --danger-light: #ef5350;
-  --danger-dark: #d32f2f;
-  --danger-bg: #ffebee;
-
-  /* 警告色 */
-  --warning: #ff9800;
-  --warning-light: #ffa726;
-  --warning-dark: #f57c00;
-  --warning-bg: #fff3e0;
-
-  /* 信息色 */
-  --info: #2196f3;
-  --info-light: #42a5f5;
-  --info-dark: #1976d2;
-  --info-bg: #e3f2fd;
-
-  /* 成功色 */
-  --success: #4caf50;
-  --success-light: #66bb6a;
-  --success-dark: #388e3c;
-  --success-bg: #e8f5e9;
-
-  /* 辅助色 - 青柠/薄荷/苔藓 */
-  --accent-lime: #cddc39;
-  --accent-mint: #00bcd4;
-  --accent-moss: #8bc34a;
-  --accent-teal: #26a69a;
-
-  /* 中性色 */
-  --neutral-100: #f5f5f5;
-  --neutral-200: #eeeeee;
-  --neutral-300: #e0e0e0;
-  --neutral-400: #bdbdbd;
-  --neutral-500: #9e9e9e;
-  --neutral-600: #757575;
-  --neutral-700: #616161;
-  --neutral-800: #424242;
-  --neutral-900: #212121;
-
-  /* 阴影 - 绿色光晕 */
-  --shadow: 0 4px 20px 0 rgba(76, 175, 80, 0.15);
-  --shadow-light: 0 2px 12px 0 rgba(76, 175, 80, 0.08);
-  --shadow-heavy: 0 8px 32px 0 rgba(76, 175, 80, 0.2);
-  --shadow-glow: 0 0 20px rgba(76, 175, 80, 0.3);
-  --shadow-glow-strong: 0 0 30px rgba(76, 175, 80, 0.4);
-
-  /* 渐变预设 */
-  --gradient-primary: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
-  --gradient-light: linear-gradient(135deg, #e8f5e9 0%, #f0f7f4 100%);
-  --gradient-card: linear-gradient(135deg, #ffffff 0%, #f8fdf9 100%);
-
-  /* ==================== 第 1.5 层：语义别名 ==================== */
-  /* 品牌/主色 */
+  /* 品牌 / 主色 */
   --color-primary: var(--primary);
   --color-primary-light: var(--primary-light);
   --color-primary-lighter: var(--primary-lighter);
@@ -116,491 +41,265 @@
   --color-success-dark: var(--success-dark);
   --color-success-bg: var(--success-bg);
 
-  /* ==================== 第 2 层：组件语义变量 ==================== */
-  /* 按钮 - 确认/主要 */
-  --btn-confirm-bg: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
-  --btn-confirm-hover: linear-gradient(135deg, #66bb6a 0%, #a5d6a7 100%);
-  --btn-confirm-active: linear-gradient(135deg, #388e3c 0%, #4caf50 100%);
-  --btn-confirm-disabled: linear-gradient(135deg, #a5d6a7 0%, #c8e6c9 100%);
-  --btn-confirm-text: #ffffff;
-  --btn-confirm-border: #4caf50;
-  --btn-confirm-shadow: 0 2px 6px rgba(76, 175, 80, 0.2);
-  --btn-confirm-shadow-hover: 0 4px 12px rgba(76, 175, 80, 0.3);
-
-  /* 按钮 - 危险/删除 */
-  --btn-danger-bg: linear-gradient(135deg, #f44336 0%, #ef5350 100%);
-  --btn-danger-hover: linear-gradient(135deg, #ef5350 0%, #f44336 100%);
-  --btn-danger-active: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);
-  --btn-danger-disabled: linear-gradient(135deg, #ef9a9a 0%, #ffcdd2 100%);
-  --btn-danger-text: #ffffff;
-  --btn-danger-border: #f44336;
-  --btn-danger-shadow: 0 2px 6px rgba(244, 67, 54, 0.2);
-  --btn-danger-shadow-hover: 0 4px 12px rgba(244, 67, 54, 0.3);
-
-  /* 按钮 - 警告/取消 */
-  --btn-warning-bg: linear-gradient(135deg, #ff9800 0%, #ffa726 100%);
-  --btn-warning-hover: linear-gradient(135deg, #ffa726 0%, #ffb74d 100%);
-  --btn-warning-active: linear-gradient(135deg, #f57c00 0%, #ff9800 100%);
-  --btn-warning-disabled: linear-gradient(135deg, #ffcc80 0%, #ffe0b2 100%);
-  --btn-warning-text: #ffffff;
-  --btn-warning-border: #ff9800;
-  --btn-warning-shadow: 0 2px 6px rgba(255, 152, 0, 0.2);
-  --btn-warning-shadow-hover: 0 4px 12px rgba(255, 152, 0, 0.3);
-
-  /* 按钮 - 重置/次要 */
-  --btn-reset-bg: linear-gradient(135deg, #9e9e9e 0%, #bdbdbd 100%);
-  --btn-reset-hover: linear-gradient(135deg, #bdbdbd 0%, #e0e0e0 100%);
-  --btn-reset-active: linear-gradient(135deg, #757575 0%, #9e9e9e 100%);
-  --btn-reset-disabled: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
-  --btn-reset-text: #ffffff;
-  --btn-reset-border: #9e9e9e;
-  --btn-reset-shadow: 0 2px 6px rgba(158, 158, 158, 0.2);
-  --btn-reset-shadow-hover: 0 4px 12px rgba(158, 158, 158, 0.3);
-
-  /* 按钮 - 派送/信息 */
-  --btn-delivery-bg: linear-gradient(135deg, #00bcd4 0%, #26c6da 100%);
-  --btn-delivery-hover: linear-gradient(135deg, #26c6da 0%, #4dd0e1 100%);
-  --btn-delivery-active: linear-gradient(135deg, #0097a7 0%, #00bcd4 100%);
-  --btn-delivery-disabled: linear-gradient(135deg, #80deea 0%, #b2ebf2 100%);
-  --btn-delivery-text: #ffffff;
-  --btn-delivery-border: #00bcd4;
-  --btn-delivery-shadow: 0 2px 6px rgba(0, 188, 212, 0.2);
-  --btn-delivery-shadow-hover: 0 4px 12px rgba(0, 188, 212, 0.3);
-
-  /* 标签 - 信息 */
-  --tag-info-bg: #e3f2fd;
-  --tag-info-border: #90caf9;
-  --tag-info-text: #1976d2;
-
-  /* 标签 - 警告 */
-  --tag-warning-bg: #fff3e0;
-  --tag-warning-border: #ffcc80;
-  --tag-warning-text: #f57c00;
-
-  /* 标签 - 成功 */
-  --tag-success-bg: #e8f5e9;
-  --tag-success-border: #a5d6a7;
-  --tag-success-text: #388e3c;
-
-  /* 标签 - 危险 */
-  --tag-danger-bg: #ffebee;
-  --tag-danger-border: #ef9a9a;
-  --tag-danger-text: #d32f2f;
-
-  /* 标签 - 主要 */
-  --tag-primary-bg: #e8f5e9;
-  --tag-primary-border: #a5d6a7;
-  --tag-primary-text: #388e3c;
-
-  /* 操作按钮 - 文字色 */
-  --action-confirm-bg: #4caf50;
-  --action-confirm-hover: #66bb6a;
-  --action-reject-bg: #f44336;
-  --action-reject-hover: #ef5350;
-  --action-delivery-bg: #00bcd4;
-  --action-delivery-hover: #26c6da;
-  --action-complete-bg: #4caf50;
-  --action-complete-hover: #66bb6a;
-  --action-cancel-bg: #ff9800;
-  --action-cancel-hover: #ffa726;
-  --action-detail-bg: #9e9e9e;
-  --action-detail-hover: #bdbdbd;
-
-  /* 开关 */
-  --switch-on-bg: #4caf50;
-  --switch-off-bg: #bdbdbd;
-  --switch-on-border: #388e3c;
-  --switch-off-border: #e0e0e0;
-
-  /* 复选框 */
-  --checkbox-bg: #ffffff;
-
-  /* 统计卡片 */
-  --stat-card-bg: linear-gradient(
-    135deg,
-    rgba(144, 147, 153, 0.15) 0%,
-    rgba(144, 147, 153, 0.05) 100%
-  );
-  --stat-card-border: rgba(144, 147, 153, 0.2);
-  --stat-card-text: #909399;
-  --stat-card-active-bg: linear-gradient(
-    135deg,
-    rgba(103, 194, 58, 0.25) 0%,
-    rgba(103, 194, 58, 0.1) 100%
-  );
-  --stat-card-active-border: rgba(103, 194, 58, 0.5);
-  --stat-card-active-text: #67c23a;
-  --stat-card-active-shadow: 0 8px 24px rgba(103, 194, 58, 0.2);
-  --stat-card-active-shadow-pulse: 0 8px 32px rgba(103, 194, 58, 0.35);
-  --stat-card-custom-bg: linear-gradient(
-    135deg,
-    rgba(64, 158, 255, 0.25) 0%,
-    rgba(114, 94, 255, 0.15) 100%
-  );
-  --stat-card-custom-border: rgba(64, 158, 255, 0.5);
-  --stat-card-custom-text: #409eff;
-  --stat-card-custom-shadow: 0 8px 24px rgba(64, 158, 255, 0.25);
-  --stat-card-custom-shadow-pulse: 0 8px 32px rgba(114, 94, 255, 0.35);
-
-  /* 加载遮罩 */
-  --loading-bg: rgba(240, 247, 244, 0.85);
-  --loading-text: #6b8f71;
-
-  /* 弹窗 */
-  --dialog-bg: #ffffff;
-  --dialog-header-bg: #ffffff;
-  --dialog-footer-bg: #ffffff;
-  --dialog-border: #c8e6c9;
-  --dialog-input-bg: #f0f7f4;
-
-  /* 输入框 */
-  --input-bg: #f0f7f4;
-  --input-border: #c8e6c9;
-  --input-hover-border: #4caf50;
-  --input-focus-border: #4caf50;
-  --input-disabled-bg: #f5f5f5;
-  --input-text: #1a3a2a;
-  --input-placeholder: #6b8f71;
-
-  /* 分页 */
-  --pagination-bg: #f0f7f4;
-  --pagination-border: #c8e6c9;
-  --pagination-active-bg: #4caf50;
-  --pagination-active-text: #ffffff;
-  --pagination-hover-text: #4caf50;
-  --pagination-disabled-text: #6b8f71;
-
-  /* 下拉框 */
-  --select-bg: #ffffff;
-  --select-hover-bg: #e8f5e9;
-  --select-selected-bg: #e8f5e9;
-  --select-selected-text: #388e3c;
-  --select-text: #1a3a2a;
-
-  /* 日期选择器 */
-  --datepicker-bg: #ffffff;
-  --datepicker-hover-text: #4caf50;
-  --datepicker-selected-bg: #4caf50;
-  --datepicker-selected-text: #ffffff;
-  --datepicker-range-bg: #e8f5e9;
-  --datepicker-today-text: #4caf50;
-  --datepicker-disabled-text: #6b8f71;
-
-  /* 表格 */
-  --table-header-bg: #f0f7f4;
-  --table-row-bg: #ffffff;
-  --table-row-striped-bg: #f0f7f4;
-  --table-row-hover-bg: rgba(103, 194, 58, 0.08);
-  --table-border: #c8e6c9;
-  --table-text: #1a3a2a;
-
-  /* ==================== 第 3 层：Element Plus 覆盖 ==================== */
-  --el-color-primary: var(--color-primary);
-  --el-color-primary-light-3: var(--color-primary-light);
-  --el-color-primary-dark-2: var(--color-primary-dark);
-  --el-menu-active-color: var(--color-primary);
-  --el-menu-hover-bg-color: var(--color-primary-bg);
-  --el-bg-color: var(--bg-card);
-  --el-bg-color-page: var(--bg-primary);
-  --el-text-color-primary: var(--text-primary);
-  --el-text-color-regular: var(--text-secondary);
-  --el-border-color: var(--border-color);
-  --el-border-color-light: var(--border-light);
-}
-
-/* ============================================================
-   深色主题
-   ============================================================ */
-html.dark {
-  /* ==================== 第 1 层：基础色板 ==================== */
-  /* 背景色系 */
-  --bg-primary: #1a1a2e;
-  --bg-card: #16213e;
-  --bg-card-hover: #1e2a4a;
-  --bg-overlay: rgba(0, 0, 0, 0.7);
-
-  /* 文字色系 */
-  --text-primary: #e0e0e0;
-  --text-secondary: #a0a0a0;
-  --text-disabled: #616161;
-  --text-inverse: #ffffff;
-
-  /* 边框色 */
-  --border-color: #2a2a4a;
-  --border-light: #3a3a5a;
-  --border-dark: #1a1a3a;
-
-  /* 主色 - 薄荷绿（深色适配） */
-  --primary: #85ce61;
-  --primary-light: #a8e063;
-  --primary-lighter: #c8e6c9;
-  --primary-dark: #67c23a;
-  --primary-darker: #529b2e;
-  --primary-bg: #1e3a1e;
-
-  /* 危险色 */
-  --danger: #f56c6c;
-  --danger-light: #f78989;
-  --danger-dark: #e04040;
-  --danger-bg: #3d1f1f;
-
-  /* 警告色 */
-  --warning: #e6a23c;
-  --warning-light: #ebb563;
-  --warning-dark: #cf9236;
-  --warning-bg: #3d2e1f;
-
-  /* 信息色 */
-  --info: #409eff;
-  --info-light: #79bbff;
-  --info-dark: #337ecc;
-  --info-bg: #1e3a4a;
-
-  /* 成功色 */
-  --success: #67c23a;
-  --success-light: #85ce61;
-  --success-dark: #529b2e;
-  --success-bg: #1e3a1e;
-
-  /* 辅助色 - 深色适配 */
-  --accent-lime: #cddc39;
-  --accent-mint: #00bcd4;
-  --accent-moss: #8bc34a;
-  --accent-teal: #26a69a;
-
-  /* 中性色 - 深色反转 */
-  --neutral-100: #212121;
-  --neutral-200: #424242;
-  --neutral-300: #616161;
-  --neutral-400: #757575;
-  --neutral-500: #9e9e9e;
-  --neutral-600: #bdbdbd;
-  --neutral-700: #e0e0e0;
-  --neutral-800: #eeeeee;
-  --neutral-900: #f5f5f5;
-
-  /* 阴影 - 深色 */
-  --shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
-  --shadow-light: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
-  --shadow-heavy: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 20px rgba(133, 206, 97, 0.15);
-  --shadow-glow-strong: 0 0 30px rgba(133, 206, 97, 0.25);
-
-  /* 渐变预设 - 深色 */
-  --gradient-primary: linear-gradient(135deg, #67c23a 0%, #85ce61 100%);
-  --gradient-light: linear-gradient(135deg, #1e3a1e 0%, #1a1a2e 100%);
-  --gradient-card: linear-gradient(135deg, #16213e 0%, #1e2a4a 100%);
-
-  /* ==================== 第 1.5 层：语义别名 ==================== */
-  /* 品牌/主色 */
-  --color-primary: var(--primary);
-  --color-primary-light: var(--primary-light);
-  --color-primary-lighter: var(--primary-lighter);
-  --color-primary-dark: var(--primary-dark);
-  --color-primary-darker: var(--primary-darker);
-  --color-primary-bg: var(--primary-bg);
-
-  /* 危险色 */
-  --color-danger: var(--danger);
-  --color-danger-light: var(--danger-light);
-  --color-danger-dark: var(--danger-dark);
-  --color-danger-bg: var(--danger-bg);
-
-  /* 警告色 */
-  --color-warning: var(--warning);
-  --color-warning-light: var(--warning-light);
-  --color-warning-dark: var(--warning-dark);
-  --color-warning-bg: var(--warning-bg);
-
-  /* 信息色 */
-  --color-info: var(--info);
-  --color-info-light: var(--info-light);
-  --color-info-dark: var(--info-dark);
-  --color-info-bg: var(--info-bg);
-
-  /* 成功色 */
-  --color-success: var(--success);
-  --color-success-light: var(--success-light);
-  --color-success-dark: var(--success-dark);
-  --color-success-bg: var(--success-bg);
+  /* 自定义色 */
+  --color-custom-purple: var(--accent-purple);
+  --color-white: var(--white);
 
   /* ==================== 第 2 层：组件语义变量 ==================== */
-  /* 按钮 - 确认/主要 */
-  --btn-confirm-bg: linear-gradient(135deg, #67c23a 0%, #529b2e 100%);
-  --btn-confirm-hover: linear-gradient(135deg, #85ce61 0%, #67c23a 100%);
-  --btn-confirm-active: linear-gradient(135deg, #529b2e 0%, #3d7a24 100%);
-  --btn-confirm-disabled: linear-gradient(135deg, #3a3a5c 0%, #2a2a4a 100%);
-  --btn-confirm-text: #ffffff;
-  --btn-confirm-border: #67c23a;
-  --btn-confirm-shadow: 0 2px 6px rgba(103, 194, 58, 0.2);
-  --btn-confirm-shadow-hover: 0 4px 12px rgba(103, 194, 58, 0.3);
 
-  /* 按钮 - 危险/删除 */
-  --btn-danger-bg: linear-gradient(135deg, #f56c6c 0%, #e04040 100%);
-  --btn-danger-hover: linear-gradient(135deg, #f78989 0%, #f56c6c 100%);
-  --btn-danger-active: linear-gradient(135deg, #e04040 0%, #c62828 100%);
-  --btn-danger-disabled: linear-gradient(135deg, #3d1f1f 0%, #2a1a1a 100%);
-  --btn-danger-text: #ffffff;
-  --btn-danger-border: #f56c6c;
-  --btn-danger-shadow: 0 2px 6px rgba(245, 108, 108, 0.2);
-  --btn-danger-shadow-hover: 0 4px 12px rgba(245, 108, 108, 0.3);
+  /* ---- 按钮：确认 / 主要 ---- */
+  --btn-confirm-bg: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-light) 100%
+  );
+  --btn-confirm-hover: linear-gradient(
+    135deg,
+    var(--primary-light) 0%,
+    var(--primary) 100%
+  );
+  --btn-confirm-active: linear-gradient(
+    135deg,
+    var(--primary-dark) 0%,
+    var(--primary) 100%
+  );
+  --btn-confirm-disabled: linear-gradient(
+    135deg,
+    var(--neutral-300) 0%,
+    var(--neutral-200) 100%
+  );
+  --btn-confirm-text: var(--text-inverse);
+  --btn-confirm-border: var(--primary);
+  --btn-confirm-shadow: 0 2px 6px rgba(var(--primary-rgb), 0.2);
+  --btn-confirm-shadow-hover: 0 4px 12px rgba(var(--primary-rgb), 0.3);
 
-  /* 按钮 - 警告/取消 */
-  --btn-warning-bg: linear-gradient(135deg, #e6a23c 0%, #cf9236 100%);
-  --btn-warning-hover: linear-gradient(135deg, #ebb563 0%, #e6a23c 100%);
-  --btn-warning-active: linear-gradient(135deg, #cf9236 0%, #b8860b 100%);
-  --btn-warning-disabled: linear-gradient(135deg, #3d2e1f 0%, #2a2015 100%);
-  --btn-warning-text: #ffffff;
-  --btn-warning-border: #e6a23c;
-  --btn-warning-shadow: 0 2px 6px rgba(230, 162, 60, 0.2);
-  --btn-warning-shadow-hover: 0 4px 12px rgba(230, 162, 60, 0.3);
+  /* ---- 按钮：危险 / 删除 ---- */
+  --btn-danger-bg: linear-gradient(
+    135deg,
+    var(--danger) 0%,
+    var(--danger-light) 100%
+  );
+  --btn-danger-hover: linear-gradient(
+    135deg,
+    var(--danger-light) 0%,
+    var(--danger) 100%
+  );
+  --btn-danger-active: linear-gradient(
+    135deg,
+    var(--danger-dark) 0%,
+    var(--danger) 100%
+  );
+  --btn-danger-disabled: linear-gradient(
+    135deg,
+    var(--neutral-300) 0%,
+    var(--neutral-200) 100%
+  );
+  --btn-danger-text: var(--text-inverse);
+  --btn-danger-border: var(--danger);
+  --btn-danger-shadow: 0 2px 6px rgba(var(--danger-rgb), 0.2);
+  --btn-danger-shadow-hover: 0 4px 12px rgba(var(--danger-rgb), 0.3);
 
-  /* 按钮 - 重置/次要 */
-  --btn-reset-bg: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
-  --btn-reset-hover: linear-gradient(135deg, #5a6578 0%, #3d4758 100%);
-  --btn-reset-active: linear-gradient(135deg, #3d4758 0%, #2d3748 100%);
-  --btn-reset-disabled: linear-gradient(135deg, #2a2a4a 0%, #1a1a2e 100%);
-  --btn-reset-text: #e2e8f0;
-  --btn-reset-border: #4a5568;
-  --btn-reset-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  --btn-reset-shadow-hover: 0 4px 12px rgba(74, 85, 104, 0.3);
+  /* ---- 按钮：警告 / 取消 ---- */
+  --btn-warning-bg: linear-gradient(
+    135deg,
+    var(--warning) 0%,
+    var(--warning-light) 100%
+  );
+  --btn-warning-hover: linear-gradient(
+    135deg,
+    var(--warning-light) 0%,
+    var(--warning) 100%
+  );
+  --btn-warning-active: linear-gradient(
+    135deg,
+    var(--warning-dark) 0%,
+    var(--warning) 100%
+  );
+  --btn-warning-disabled: linear-gradient(
+    135deg,
+    var(--neutral-300) 0%,
+    var(--neutral-200) 100%
+  );
+  --btn-warning-text: var(--text-inverse);
+  --btn-warning-border: var(--warning);
+  --btn-warning-shadow: 0 2px 6px rgba(var(--warning-rgb), 0.2);
+  --btn-warning-shadow-hover: 0 4px 12px rgba(var(--warning-rgb), 0.3);
 
-  /* 按钮 - 派送/信息 */
-  --btn-delivery-bg: linear-gradient(135deg, #409eff 0%, #337ecc 100%);
-  --btn-delivery-hover: linear-gradient(135deg, #79bbff 0%, #409eff 100%);
-  --btn-delivery-active: linear-gradient(135deg, #337ecc 0%, #2563a8 100%);
-  --btn-delivery-disabled: linear-gradient(135deg, #1e3a4a 0%, #152a3a 100%);
-  --btn-delivery-text: #ffffff;
-  --btn-delivery-border: #409eff;
-  --btn-delivery-shadow: 0 2px 6px rgba(64, 158, 255, 0.2);
-  --btn-delivery-shadow-hover: 0 4px 12px rgba(64, 158, 255, 0.3);
+  /* ---- 按钮：重置 / 次要 ---- */
+  --btn-reset-bg: linear-gradient(
+    135deg,
+    var(--neutral-400) 0%,
+    var(--neutral-500) 100%
+  );
+  --btn-reset-hover: linear-gradient(
+    135deg,
+    var(--neutral-300) 0%,
+    var(--neutral-400) 100%
+  );
+  --btn-reset-active: linear-gradient(
+    135deg,
+    var(--neutral-600) 0%,
+    var(--neutral-500) 100%
+  );
+  --btn-reset-disabled: linear-gradient(
+    135deg,
+    var(--neutral-200) 0%,
+    var(--neutral-100) 100%
+  );
+  --btn-reset-text: var(--text-inverse);
+  --btn-reset-border: var(--neutral-500);
+  --btn-reset-shadow: 0 2px 6px rgba(var(--neutral-500-rgb), 0.2);
+  --btn-reset-shadow-hover: 0 4px 12px rgba(var(--neutral-500-rgb), 0.3);
 
-  /* 标签 - 信息 */
-  --tag-info-bg: #2d3748;
-  --tag-info-border: #4a5568;
-  --tag-info-text: #a0aec0;
+  /* ---- 按钮：派送 / 信息 ---- */
+  --btn-delivery-bg: linear-gradient(
+    135deg,
+    var(--info) 0%,
+    var(--info-light) 100%
+  );
+  --btn-delivery-hover: linear-gradient(
+    135deg,
+    var(--info-light) 0%,
+    var(--info) 100%
+  );
+  --btn-delivery-active: linear-gradient(
+    135deg,
+    var(--info-dark) 0%,
+    var(--info) 100%
+  );
+  --btn-delivery-disabled: linear-gradient(
+    135deg,
+    var(--neutral-300) 0%,
+    var(--neutral-200) 100%
+  );
+  --btn-delivery-text: var(--text-inverse);
+  --btn-delivery-border: var(--info);
+  --btn-delivery-shadow: 0 2px 6px rgba(var(--info-rgb), 0.2);
+  --btn-delivery-shadow-hover: 0 4px 12px rgba(var(--info-rgb), 0.3);
 
-  /* 标签 - 警告 */
-  --tag-warning-bg: #3d2e1f;
-  --tag-warning-border: #8b6914;
-  --tag-warning-text: #f6e05e;
+  /* ---- 标签 ---- */
+  --tag-info-bg: var(--info-bg);
+  --tag-info-border: var(--info);
+  --tag-info-text: var(--info-dark);
 
-  /* 标签 - 成功 */
-  --tag-success-bg: #1e3a1e;
-  --tag-success-border: #38a169;
-  --tag-success-text: #68d391;
+  --tag-warning-bg: var(--warning-bg);
+  --tag-warning-border: var(--warning);
+  --tag-warning-text: var(--warning-dark);
 
-  /* 标签 - 危险 */
-  --tag-danger-bg: #3d1f1f;
-  --tag-danger-border: #c53030;
-  --tag-danger-text: #fc8181;
+  --tag-success-bg: var(--success-bg);
+  --tag-success-border: var(--success);
+  --tag-success-text: var(--success-dark);
 
-  /* 标签 - 主要 */
-  --tag-primary-bg: #1e3a2e;
-  --tag-primary-border: #319795;
-  --tag-primary-text: #4fd1c5;
+  --tag-danger-bg: var(--danger-bg);
+  --tag-danger-border: var(--danger);
+  --tag-danger-text: var(--danger-dark);
 
-  /* 操作按钮 - 文字色 */
-  --action-confirm-bg: #67c23a;
-  --action-confirm-hover: #85ce61;
-  --action-reject-bg: #f56c6c;
-  --action-reject-hover: #f78989;
-  --action-delivery-bg: #409eff;
-  --action-delivery-hover: #79bbff;
-  --action-complete-bg: #67c23a;
-  --action-complete-hover: #85ce61;
-  --action-cancel-bg: #e6a23c;
-  --action-cancel-hover: #ebb563;
-  --action-detail-bg: #909399;
-  --action-detail-hover: #a6a9ad;
+  --tag-primary-bg: var(--primary-bg);
+  --tag-primary-border: var(--primary);
+  --tag-primary-text: var(--primary-dark);
 
-  /* 开关 */
-  --switch-on-bg: #67c23a;
-  --switch-off-bg: #4a5568;
-  --switch-on-border: #529b2e;
-  --switch-off-border: #718096;
+  /* ---- 操作按钮（文字型） ---- */
+  --action-confirm-bg: var(--primary);
+  --action-confirm-hover: var(--primary-light);
+  --action-reject-bg: var(--danger);
+  --action-reject-hover: var(--danger-light);
+  --action-delivery-bg: var(--info);
+  --action-delivery-hover: var(--info-light);
+  --action-complete-bg: var(--success);
+  --action-complete-hover: var(--success-light);
+  --action-cancel-bg: var(--warning);
+  --action-cancel-hover: var(--warning-light);
+  --action-detail-bg: var(--neutral-500);
+  --action-detail-hover: var(--neutral-400);
 
-  /* 复选框 */
-  --checkbox-bg: #3a3a5c;
+  /* ---- 开关 ---- */
+  --switch-on-bg: var(--primary);
+  --switch-off-bg: var(--neutral-400);
+  --switch-on-border: var(--primary-dark);
+  --switch-off-border: var(--neutral-300);
 
-  /* 统计卡片 */
+  /* ---- 复选框 ---- */
+  --checkbox-bg: var(--bg-card);
+
+  /* ---- 统计卡片 ---- */
   --stat-card-bg: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.02) 100%
+    rgba(var(--neutral-500-rgb), 0.15) 0%,
+    rgba(var(--neutral-500-rgb), 0.05) 100%
   );
-  --stat-card-border: rgba(255, 255, 255, 0.1);
-  --stat-card-text: #a0a0a0;
+  --stat-card-border: rgba(var(--neutral-500-rgb), 0.2);
+  --stat-card-text: var(--text-secondary);
   --stat-card-active-bg: linear-gradient(
     135deg,
-    rgba(133, 206, 97, 0.25) 0%,
-    rgba(133, 206, 97, 0.1) 100%
+    rgba(var(--primary-rgb), 0.25) 0%,
+    rgba(var(--primary-rgb), 0.1) 100%
   );
-  --stat-card-active-border: rgba(133, 206, 97, 0.5);
-  --stat-card-active-text: #85ce61;
-  --stat-card-active-shadow: 0 8px 24px rgba(133, 206, 97, 0.2);
-  --stat-card-active-shadow-pulse: 0 8px 32px rgba(133, 206, 97, 0.35);
+  --stat-card-active-border: rgba(var(--primary-rgb), 0.5);
+  --stat-card-active-text: var(--primary);
+  --stat-card-active-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.2);
+  --stat-card-active-shadow-pulse: 0 8px 32px rgba(var(--primary-rgb), 0.35);
   --stat-card-custom-bg: linear-gradient(
     135deg,
-    rgba(64, 158, 255, 0.25) 0%,
-    rgba(114, 94, 255, 0.15) 100%
+    rgba(var(--info-rgb), 0.25) 0%,
+    rgba(var(--accent-purple-rgb), 0.15) 100%
   );
-  --stat-card-custom-border: rgba(64, 158, 255, 0.5);
-  --stat-card-custom-text: #79bbff;
-  --stat-card-custom-shadow: 0 8px 24px rgba(64, 158, 255, 0.25);
-  --stat-card-custom-shadow-pulse: 0 8px 32px rgba(114, 94, 255, 0.35);
+  --stat-card-custom-border: rgba(var(--info-rgb), 0.5);
+  --stat-card-custom-text: var(--info);
+  --stat-card-custom-shadow: 0 8px 24px rgba(var(--info-rgb), 0.25);
+  --stat-card-custom-shadow-pulse: 0 8px 32px
+    rgba(var(--accent-purple-rgb), 0.35);
 
-  /* 加载遮罩 */
-  --loading-bg: rgba(26, 26, 46, 0.85);
-  --loading-text: #a0a0a0;
+  /* ---- 加载遮罩 ---- */
+  --loading-bg: rgba(var(--bg-primary-rgb), 0.85);
+  --loading-text: var(--text-secondary);
 
-  /* 弹窗 */
-  --dialog-bg: #16213e;
-  --dialog-header-bg: #16213e;
-  --dialog-footer-bg: #16213e;
-  --dialog-border: #2a2a4a;
-  --dialog-input-bg: #1a1a2e;
+  /* ---- 弹窗 ---- */
+  --dialog-bg: var(--bg-card);
+  --dialog-header-bg: var(--bg-card);
+  --dialog-footer-bg: var(--bg-card);
+  --dialog-border: var(--border-color);
+  --dialog-input-bg: var(--bg-primary);
 
-  /* 输入框 */
-  --input-bg: #1a1a2e;
-  --input-border: #2a2a4a;
-  --input-hover-border: #85ce61;
-  --input-focus-border: #85ce61;
-  --input-disabled-bg: #2a2a4a;
-  --input-text: #e0e0e0;
-  --input-placeholder: #a0a0a0;
+  /* ---- 输入框 ---- */
+  --input-bg: var(--bg-primary);
+  --input-border: var(--border-color);
+  --input-hover-border: var(--primary);
+  --input-focus-border: var(--primary);
+  --input-disabled-bg: var(--neutral-200);
+  --input-text: var(--text-primary);
+  --input-placeholder: var(--text-secondary);
 
-  /* 分页 */
-  --pagination-bg: #1a1a2e;
-  --pagination-border: #2a2a4a;
-  --pagination-active-bg: #67c23a;
-  --pagination-active-text: #ffffff;
-  --pagination-hover-text: #85ce61;
-  --pagination-disabled-text: #a0a0a0;
+  /* ---- 分页 ---- */
+  --pagination-bg: var(--bg-primary);
+  --pagination-border: var(--border-color);
+  --pagination-active-bg: var(--primary);
+  --pagination-active-text: var(--text-inverse);
+  --pagination-hover-text: var(--primary);
+  --pagination-disabled-text: var(--text-secondary);
 
-  /* 下拉框 */
-  --select-bg: #16213e;
-  --select-hover-bg: #1e3a1e;
-  --select-selected-bg: #1e3a1e;
-  --select-selected-text: #68d391;
-  --select-text: #e0e0e0;
+  /* ---- 下拉框 ---- */
+  --select-bg: var(--bg-card);
+  --select-hover-bg: var(--primary-bg);
+  --select-selected-bg: var(--primary-bg);
+  --select-selected-text: var(--primary-dark);
+  --select-text: var(--text-primary);
 
-  /* 日期选择器 */
-  --datepicker-bg: #16213e;
-  --datepicker-hover-text: #85ce61;
-  --datepicker-selected-bg: #67c23a;
-  --datepicker-selected-text: #ffffff;
-  --datepicker-range-bg: #1e3a1e;
-  --datepicker-today-text: #85ce61;
-  --datepicker-disabled-text: #a0a0a0;
+  /* ---- 日期选择器 ---- */
+  --datepicker-bg: var(--bg-card);
+  --datepicker-hover-text: var(--primary);
+  --datepicker-selected-bg: var(--primary);
+  --datepicker-selected-text: var(--text-inverse);
+  --datepicker-range-bg: var(--primary-bg);
+  --datepicker-today-text: var(--primary);
+  --datepicker-disabled-text: var(--text-secondary);
 
-  /* 表格 */
-  --table-header-bg: #1a1a2e;
-  --table-row-bg: #16213e;
-  --table-row-striped-bg: #1a1a2e;
-  --table-row-hover-bg: rgba(133, 206, 97, 0.08);
-  --table-border: #2a2a4a;
-  --table-text: #e0e0e0;
+  /* ---- 表格 ---- */
+  --table-header-bg: var(--bg-primary);
+  --table-row-bg: var(--bg-card);
+  --table-row-striped-bg: var(--bg-primary);
+  --table-row-hover-bg: rgba(var(--primary-rgb), 0.08);
+  --table-border: var(--border-color);
+  --table-text: var(--text-primary);
 
   /* ==================== 第 3 层：Element Plus 覆盖 ==================== */
   --el-color-primary: var(--color-primary);
@@ -619,7 +318,9 @@ html.dark {
 /* ============================================================
    全局基础样式
    ============================================================ */
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -637,7 +338,6 @@ body {
     color 0.3s;
 }
 
-/* 滚动条样式 */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -650,4 +350,55 @@ body {
 
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* ==================== 图标语义色彩 ==================== */
+
+/* 主色 — 全部/总数/新增 */
+.stat-all .stat-icon,
+.stat-total .stat-icon,
+.icon-primary {
+  color: var(--color-primary);
+}
+
+/* 成功 — 已启用/已启售/已完成/待派送 */
+.stat-sold .stat-icon,
+.stat-enabled .stat-icon,
+.stat-on-sale .stat-icon,
+.stat-confirmed .stat-icon,
+.stat-completed .stat-icon,
+.icon-success {
+  color: var(--color-success);
+}
+
+/* 危险 — 已取消/已停售/已禁用 */
+.stat-cancelled .stat-icon,
+.stat-discontinued .stat-icon,
+.stat-disabled .stat-icon,
+.stat-off-sale .stat-icon,
+.icon-danger {
+  color: var(--color-danger);
+}
+
+/* 警告 — 待接单/派送中/已退款 */
+.stat-pending .stat-icon,
+.stat-delivering .stat-icon,
+.stat-refunded .stat-icon,
+.icon-warning {
+  color: var(--color-warning);
+}
+
+/* 信息 — 用户/搜索/刷新 */
+.icon-info {
+  color: var(--color-info);
+}
+
+/* 弱化 — 图片占位 */
+.icon-placeholder {
+  color: var(--text-disabled);
+}
+
+/* 反色 — 有色按钮上的图标（绿底白字、红底白字等） */
+.icon-inverse {
+  color: var(--text-inverse);
 }

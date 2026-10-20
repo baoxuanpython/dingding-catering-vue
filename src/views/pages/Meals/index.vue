@@ -10,7 +10,9 @@
         }"
         @click="handleStatusFilter(undefined)"
       >
-        <div class="stat-icon">🍽️</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><KnifeFork /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ displayCount }}</span>
           <span class="stat-label">{{
@@ -24,7 +26,9 @@
         :class="{ 'stat-active': activeStatus === 1 && !isCustomQuery }"
         @click="handleStatusFilter(1)"
       >
-        <div class="stat-icon">✅</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><CircleCheck /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ dishStatistics.sold }}</span>
           <span class="stat-label">已启售</span>
@@ -36,7 +40,9 @@
         :class="{ 'stat-active': activeStatus === 0 && !isCustomQuery }"
         @click="handleStatusFilter(0)"
       >
-        <div class="stat-icon">⏸️</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><CircleClose /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ dishStatistics.discontinued }}</span>
           <span class="stat-label">已停售</span>
@@ -150,7 +156,9 @@
             >
               <template #error>
                 <div class="image-error">
-                  <el-icon :size="24"><PictureFilled /></el-icon>
+                  <el-icon :size="24" class="icon-placeholder"
+                    ><PictureFilled
+                  /></el-icon>
                 </div>
               </template>
             </el-image>
@@ -281,7 +289,14 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { Search, RefreshLeft, PictureFilled } from "@element-plus/icons-vue";
+import {
+  Search,
+  RefreshLeft,
+  PictureFilled,
+  KnifeFork,
+  CircleCheck,
+  CircleClose,
+} from "@element-plus/icons-vue";
 import DishFormDialog from "./components/DishFormDialog.vue";
 import {
   getDishPage,

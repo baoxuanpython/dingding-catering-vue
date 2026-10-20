@@ -8,14 +8,21 @@ import {
   deleteSetmeals,
   updateSetmealStatus,
   getCategoryList,
+  getFlavorList,
 } from "../api/comboApi";
-import type { SetmealVO, SetmealPageQuery, SetmealForm } from "../types/combo";
+import type {
+  SetmealVO,
+  SetmealPageQuery,
+  SetmealForm,
+  FlavorListItem,
+} from "../types/combo";
 
 export function useCombos() {
   const loading = ref(false);
   const submitLoading = ref(false);
   const comboList = ref<SetmealVO[]>([]);
   const categoryList = ref<{ id: number; name: string }[]>([]);
+  const flavorList = ref<FlavorListItem[]>([]);
   const selectedIds = ref<number[]>([]);
 
   const statistics = reactive({
@@ -152,6 +159,15 @@ export function useCombos() {
     }
   }
 
+  async function fetchFlavors() {
+    try {
+      const res = await getFlavorList();
+      flavorList.value = res || [];
+    } catch (error) {
+      console.error("获取口味列表失败:", error);
+    }
+  }
+
   function handleSearch() {
     pagination.page = 1;
     hasQueried.value = true;
@@ -181,6 +197,9 @@ export function useCombos() {
     formData.description = "";
     formData.status = 1;
     formData.setmealDishes = [];
+    formData.createEmployeeName = undefined;
+    formData.updateEmployeeName = undefined;
+    formData.updateTime = undefined;
     isEdit.value = false;
     isDetail.value = false;
   }
@@ -204,6 +223,9 @@ export function useCombos() {
         description: res.description,
         status: res.status,
         setmealDishes: res.setmealDishes || [],
+        createEmployeeName: res.createEmployeeName,
+        updateEmployeeName: res.updateEmployeeName,
+        updateTime: res.updateTime,
       });
       dialogVisible.value = true;
     } catch (error) {
@@ -225,6 +247,9 @@ export function useCombos() {
         description: res.description,
         status: res.status,
         setmealDishes: res.setmealDishes || [],
+        createEmployeeName: res.createEmployeeName,
+        updateEmployeeName: res.updateEmployeeName,
+        updateTime: res.updateTime,
       });
       dialogVisible.value = true;
     } catch (error) {
@@ -385,6 +410,7 @@ export function useCombos() {
     submitLoading,
     comboList,
     categoryList,
+    flavorList,
     selectedIds,
     statistics,
     searchForm,
@@ -403,6 +429,7 @@ export function useCombos() {
     fetchStatistics,
     fetchCombos,
     fetchCategories,
+    fetchFlavors,
     handleSearch,
     handleReset,
     handleSelectionChange,

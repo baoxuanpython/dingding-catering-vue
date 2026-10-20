@@ -107,22 +107,18 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item
-                  command="light"
-                  :disabled="themeMode === 'light'"
+                  v-for="theme in themeStore.THEMES"
+                  :key="theme.name"
+                  :command="theme.name"
+                  :disabled="activeThemeName === theme.name"
                 >
-                  <el-icon><Sunny /></el-icon> 浅色模式
-                </el-dropdown-item>
-                <el-dropdown-item
-                  command="dark"
-                  :disabled="themeMode === 'dark'"
-                >
-                  <el-icon><Moon /></el-icon> 深色模式
-                </el-dropdown-item>
-                <el-dropdown-item
-                  command="auto"
-                  :disabled="themeMode === 'auto'"
-                >
-                  <el-icon><Monitor /></el-icon> 跟随系统
+                  <el-icon
+                    ><Sunny
+                      v-if="
+                        theme.name === 'light' || theme.name === 'warm'
+                      " /><Moon v-else
+                  /></el-icon>
+                  {{ theme.label }}模式
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -160,7 +156,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { useThemeStore, type ThemeMode } from "@/stores/theme";
+import { useThemeStore, type ThemeName } from "@/stores/theme";
 import { useUserStore } from "@/stores/user";
 import { useShopStore } from "@/stores/shop";
 import {
@@ -176,7 +172,6 @@ import {
   Bell,
   Sunny,
   Moon,
-  Monitor,
   Food,
   Loading,
   CoffeeCup,
@@ -189,7 +184,7 @@ const shopStore = useShopStore();
 
 const isCollapse = ref(false);
 const activeMenu = computed(() => route.path);
-const themeMode = computed(() => themeStore.themeMode);
+const activeThemeName = computed(() => themeStore.activeThemeName);
 const isDark = computed(() => themeStore.isDark);
 const shopStatus = computed(() => shopStore.shopStatus);
 const loading = computed(() => shopStore.loading);
@@ -211,8 +206,8 @@ const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value;
 };
 
-const handleThemeChange = (mode: ThemeMode) => {
-  themeStore.applyTheme(mode);
+const handleThemeChange = (name: ThemeName) => {
+  themeStore.applyTheme(name);
 };
 
 const handleUserCommand = (command: string) => {

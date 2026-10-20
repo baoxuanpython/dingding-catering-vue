@@ -2,7 +2,7 @@
   <div class="page-container">
     <div class="stats-row">
       <div
-        class="stat-card"
+        class="stat-card stat-total"
         :class="{
           'stat-custom': isSearching,
           'stat-active': !isSearching && activeStatIndex === 0,

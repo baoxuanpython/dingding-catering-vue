@@ -112,7 +112,7 @@
             @click="addFlavor"
             style="margin-top: 8px"
           >
-            <el-icon><Plus /></el-icon> 添加口味
+            <el-icon class="icon-primary"><Plus /></el-icon> 添加口味
           </el-button>
         </div>
       </el-form-item>

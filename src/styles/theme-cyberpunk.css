@@ -1,0 +1,112 @@
+/* 叮叮餐饮后台管理系统 — 赛博朋克主题（霓虹都市风 | html.cyberpunk 激活） */
+
+/* ============================================================
+   第 1 层：基础色板
+   ============================================================ */
+html.cyberpunk {
+  /* 背景色系 */
+  --bg-primary: #0d0a1a;
+  --bg-card: #150f24;
+  --bg-card-hover: #1d1530;
+  --bg-overlay: rgba(13, 10, 26, 0.85);
+
+  /* 文字色系 */
+  --text-primary: #f5f0ff;
+  --text-secondary: #b8b0c8;
+  --text-disabled: #605870;
+  --text-inverse: #0d0a1a;
+
+  /* 边框色 */
+  --border-color: #2a2040;
+  --border-light: #1d1530;
+  --border-dark: #3d3058;
+
+  /* 主色 — 品红霓虹 */
+  --primary: #ff2d95;
+  --primary-light: #ff5eb8;
+  --primary-lighter: #ff8fd1;
+  --primary-dark: #cc0066;
+  --primary-darker: #99004d;
+  --primary-bg: rgba(255, 45, 149, 0.12);
+
+  /* 危险色 */
+  --danger: #ff1744;
+  --danger-light: #ff5252;
+  --danger-dark: #b2102f;
+  --danger-bg: rgba(255, 23, 68, 0.12);
+
+  /* 警告色 */
+  --warning: #ffe600;
+  --warning-light: #ffee33;
+  --warning-dark: #ccb800;
+  --warning-bg: rgba(255, 230, 0, 0.12);
+
+  /* 信息色 */
+  --info: #00f0ff;
+  --info-light: #33f5ff;
+  --info-dark: #009faa;
+  --info-bg: rgba(0, 240, 255, 0.12);
+
+  /* 成功色（独立于主色） */
+  --success: #39ff14;
+  --success-light: #66ff47;
+  --success-dark: #2bcc0f;
+  --success-bg: rgba(57, 255, 20, 0.12);
+
+  /* 纯白（微暖白，不刺眼） */
+  --white: #f5f0ff;
+
+  /* 辅助色 */
+  --accent-lime: #ffe600;
+  --accent-mint: #00f0ff;
+  --accent-moss: #7fff00;
+  --accent-teal: #006064;
+  --accent-purple: #7c4dff;
+
+  /* 中性色（冷灰蓝紫底） */
+  --neutral-100: #1a0d26;
+  --neutral-200: #261a36;
+  --neutral-300: #3d2d52;
+  --neutral-400: #55406e;
+  --neutral-500: #6e558a;
+  --neutral-600: #8a6fa6;
+  --neutral-700: #a68cc2;
+  --neutral-800: #c2aade;
+  --neutral-900: #d8c8ee;
+
+  /* ==================== 阴影 / 渐变（全霓虹化） ==================== */
+  --shadow: 0 2px 8px rgba(0, 240, 255, 0.15);
+  --shadow-light: 0 1px 4px rgba(255, 45, 149, 0.1);
+  --shadow-heavy: 0 8px 32px rgba(255, 45, 149, 0.3);
+  --shadow-glow:
+    0 0 20px rgba(255, 45, 149, 0.4), 0 0 40px rgba(0, 240, 255, 0.2);
+  --shadow-glow-strong:
+    0 0 30px rgba(255, 45, 149, 0.6), 0 0 60px rgba(0, 240, 255, 0.3);
+
+  --gradient-primary: linear-gradient(135deg, #ff2d95 0%, #00f0ff 100%);
+  --gradient-light: linear-gradient(135deg, #ff5eb8 0%, #33f5ff 100%);
+  --gradient-card: linear-gradient(
+    180deg,
+    rgba(255, 45, 149, 0.08) 0%,
+    rgba(0, 240, 255, 0.04) 100%
+  );
+
+  /* ==================== RGB 分量（用于 rgba() 透明度控制） ==================== */
+  --primary-rgb: 255, 45, 149;
+  --primary-light-rgb: 255, 94, 184;
+  --primary-dark-rgb: 204, 0, 102;
+  --danger-rgb: 255, 23, 68;
+  --danger-light-rgb: 255, 82, 82;
+  --warning-rgb: 255, 230, 0;
+  --info-rgb: 0, 240, 255;
+  --success-rgb: 57, 255, 20;
+  --black-rgb: 0, 0, 0;
+  --white-rgb: 245, 240, 255;
+  --accent-lime-rgb: 255, 230, 0;
+  --accent-mint-rgb: 0, 240, 255;
+  --accent-moss-rgb: 127, 255, 0;
+  --accent-teal-rgb: 0, 96, 100;
+  --accent-purple-rgb: 124, 77, 255;
+  --neutral-500-rgb: 110, 85, 138;
+  --bg-primary-rgb: 13, 10, 26;
+}

@@ -133,8 +133,14 @@ const authErrorCodes = [
 // 响应拦截器
 request.interceptors.response.use(
   (response) => {
-    const res = response.data;
     const config = response.config as CustomAxiosRequestConfig;
+
+    // Blob 响应（如文件导出）：直接返回原始数据，不解析 JSON
+    if (config.headers?.responseType === "blob") {
+      return response.data;
+    }
+
+    const res = response.data;
 
     // code 优先级最高：无论 HTTP 状态如何，都以 code 为准
     if (res.code === ErrorCode.SUCCESS) {

@@ -2,7 +2,7 @@
   <el-dialog
     v-model="visible"
     :title="dialogTitle"
-    width="900px"
+    width="960px"
     destroy-on-close
     class="form-dialog"
   >
@@ -56,6 +56,16 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item label="启售状态">
+          <el-switch
+            v-model="formData.status"
+            :active-value="1"
+            :inactive-value="0"
+            active-text="启售"
+            inactive-text="停售"
+          />
+        </el-form-item>
+
         <el-form-item label="套餐价格" prop="price">
           <el-input-number
             v-model="formData.price"
@@ -90,68 +100,133 @@
               @click="showDishSelector = true"
               class="add-btn"
             >
-              <el-icon><Plus /></el-icon> 添加菜品
+              <el-icon class="icon-inverse"><Plus /></el-icon> 添加菜品
             </el-button>
 
-            <el-table
+            <div
               v-if="formData.setmealDishes.length > 0"
-              :data="formData.setmealDishes"
-              border
-              class="dish-table"
-              size="small"
-              style="margin-top: 12px"
+              class="dish-card-list"
             >
-              <el-table-column prop="name" label="菜品名称" min-width="150" />
-              <el-table-column
-                prop="price"
-                label="单价"
-                width="100"
-                align="center"
+              <div
+                v-for="(dish, index) in formData.setmealDishes"
+                :key="dish.dishId + '-' + index"
+                class="dish-card"
               >
-                <template #default="{ row }">
-                  ¥{{ row.price.toFixed(2) }}
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="copies"
-                label="份数"
-                width="180"
-                align="center"
-              >
-                <template #default="{ row }">
-                  <el-input-number
-                    v-model="row.copies"
-                    :min="1"
-                    :max="99"
-                    size="small"
-                    controls-position="right"
-                    :disabled="isDetailMode"
-                  />
-                </template>
-              </el-table-column>
-              <el-table-column label="小计" width="100" align="center">
-                <template #default="{ row }">
-                  ¥{{ (row.price * row.copies).toFixed(2) }}
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="操作"
-                width="80"
-                align="center"
-                v-if="!isDetailMode"
-              >
-                <template #default="{ $index }">
-                  <el-button
-                    type="danger"
-                    size="small"
-                    @click="removeDish($index)"
-                    class="batch-delete-btn"
+                <div class="dish-card-header">
+                  <div class="dish-info">
+                    <span class="dish-name">{{ dish.name }}</span>
+                    <span class="dish-unit-price"
+                      >¥{{ dish.price.toFixed(2) }}/份</span
+                    >
+                  </div>
+                  <div class="dish-controls">
+                    <el-input-number
+                      v-model="dish.copies"
+                      :min="1"
+                      :max="99"
+                      size="small"
+                      controls-position="right"
+                      :disabled="isDetailMode"
+                      class="copies-input"
+                    />
+                    <span class="dish-subtotal"
+                      >小计 ¥{{ (dish.price * dish.copies).toFixed(2) }}</span
+                    >
+                    <el-button
+                      v-if="!isDetailMode"
+                      type="danger"
+                      size="small"
+                      @click="removeDish(index)"
+                      class="remove-dish-btn"
+                    >
+                      删除
+                    </el-button>
+                  </div>
+                </div>
+
+                <!-- 口味区域 -->
+                <div class="flavor-section">
+                  <div
+                    v-if="
+                      dish.setmealDishFlavors &&
+                      dish.setmealDishFlavors.length > 0
+                    "
+                    class="flavor-tags"
                   >
-                    删除
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+                    <el-tag
+                      v-for="(flavor, fi) in dish.setmealDishFlavors"
+                      :key="fi"
+                      :closable="!isDetailMode"
+                      size="small"
+                      type="info"
+                      class="flavor-tag"
+                      @close="removeFlavor(index, fi)"
+                    >
+                      {{ getFlavorLabel(flavor.flavorId) }}：{{
+                        flavor.flavorValue
+                      }}
+                    </el-tag>
+                  </div>
+
+                  <div
+                    v-if="!isDetailMode && flavorList.length > 0"
+                    class="flavor-add"
+                  >
+                    <template v-if="expandedFlavorIndex === index">
+                      <el-select
+                        v-model="flavorForm.flavorId"
+                        placeholder="选择口味类型"
+                        size="small"
+                        class="flavor-type-select"
+                        @change="onFlavorTypeChange"
+                      >
+                        <el-option
+                          v-for="fl in availableFlavorTypes(index)"
+                          :key="fl.id"
+                          :label="fl.flavorName"
+                          :value="fl.id"
+                        />
+                      </el-select>
+                      <el-select
+                        v-model="flavorForm.flavorValue"
+                        placeholder="口味值"
+                        size="small"
+                        class="flavor-value-select"
+                      >
+                        <el-option
+                          v-for="val in flavorValueOptions"
+                          :key="val"
+                          :label="val"
+                          :value="val"
+                        />
+                      </el-select>
+                      <el-button
+                        class="confirm-btn"
+                        :disabled="
+                          !flavorForm.flavorId || !flavorForm.flavorValue
+                        "
+                        @click="confirmAddFlavor(index)"
+                      >
+                        确定
+                      </el-button>
+                      <el-button
+                        class="cancel-btn"
+                        @click="expandedFlavorIndex = -1"
+                      >
+                        取消
+                      </el-button>
+                    </template>
+                    <el-button
+                      v-else
+                      class="add-btn"
+                      @click="startAddFlavor(index)"
+                    >
+                      <el-icon class="icon-inverse"><Plus /></el-icon> 添加口味
+                    </el-button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <el-empty
               v-else
@@ -171,6 +246,21 @@
             show-word-limit
           />
         </el-form-item>
+
+        <!-- 详情模式：展示创建人/更新人 -->
+        <template v-if="isDetailMode">
+          <el-form-item label="创建人">
+            <span class="detail-text">{{
+              formData.createEmployeeName || "-"
+            }}</span>
+          </el-form-item>
+          <el-form-item label="最后修改">
+            <span class="detail-text"
+              >{{ formData.updateEmployeeName || "-" }} ·
+              {{ formatTime(formData.updateTime) }}</span
+            >
+          </el-form-item>
+        </template>
       </el-form>
     </div>
 
@@ -211,7 +301,7 @@
             style="width: 200px"
           >
             <template #prefix>
-              <el-icon><Search /></el-icon>
+              <el-icon class="icon-info"><Search /></el-icon>
             </template>
           </el-input>
           <el-select
@@ -279,8 +369,10 @@
       </div>
 
       <template #footer>
-        <el-button @click="showDishSelector = false">取消</el-button>
-        <el-button type="primary" @click="confirmAddDishes">确定</el-button>
+        <el-button class="cancel-btn" @click="showDishSelector = false"
+          >取消</el-button
+        >
+        <el-button class="submit-btn" @click="confirmAddDishes">确定</el-button>
       </template>
     </el-dialog>
   </el-dialog>
@@ -291,7 +383,12 @@ import { computed, ref, watch, reactive } from "vue";
 import { Plus, Search } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules, UploadProps } from "element-plus";
-import type { SetmealForm, SetmealDishItem } from "../types/combo";
+import type {
+  SetmealForm,
+  SetmealDishItem,
+  SetMealDishFlavor,
+  FlavorListItem,
+} from "../types/combo";
 import request from "@/utils/request";
 
 const props = defineProps<{
@@ -301,6 +398,7 @@ const props = defineProps<{
   submitLoading: boolean;
   formData: SetmealForm;
   categoryList: { id: number; name: string }[];
+  flavorList: FlavorListItem[];
 }>();
 
 const emit = defineEmits<{
@@ -363,6 +461,77 @@ const savedAmount = computed(() => {
   return Math.max(0, originalPrice.value - props.formData.price);
 });
 
+// --- 口味相关 ---
+const expandedFlavorIndex = ref(-1);
+const flavorForm = reactive({
+  flavorId: undefined as number | undefined,
+  flavorValue: "",
+});
+
+const flavorValueOptions = computed(() => {
+  if (!flavorForm.flavorId) return [];
+  const flavor = props.flavorList.find((f) => f.id === flavorForm.flavorId);
+  if (!flavor) return [];
+  return flavor.valueList.split(",").map((v) => v.trim());
+});
+
+function availableFlavorTypes(dishIndex: number) {
+  const dish = props.formData.setmealDishes[dishIndex];
+  const usedIds = new Set(
+    (dish.setmealDishFlavors || []).map((f) => f.flavorId),
+  );
+  return props.flavorList.filter((f) => !usedIds.has(f.id));
+}
+
+function getFlavorLabel(flavorId: number): string {
+  const flavor = props.flavorList.find((f) => f.id === flavorId);
+  return flavor?.flavorName || "口味";
+}
+
+function startAddFlavor(index: number) {
+  expandedFlavorIndex.value = index;
+  flavorForm.flavorId = undefined;
+  flavorForm.flavorValue = "";
+}
+
+function onFlavorTypeChange() {
+  flavorForm.flavorValue = "";
+}
+
+function confirmAddFlavor(dishIndex: number) {
+  if (!flavorForm.flavorId || !flavorForm.flavorValue) return;
+  const dish = props.formData.setmealDishes[dishIndex];
+  if (!dish.setmealDishFlavors) {
+    dish.setmealDishFlavors = [];
+  }
+  dish.setmealDishFlavors.push({
+    id: 0,
+    setmealDishId: 0,
+    flavorId: flavorForm.flavorId,
+    flavorValue: flavorForm.flavorValue,
+    flavorName: getFlavorLabel(flavorForm.flavorId),
+    valueList:
+      props.flavorList.find((f) => f.id === flavorForm.flavorId)?.valueList ||
+      "",
+  } as SetMealDishFlavor);
+  expandedFlavorIndex.value = -1;
+  flavorForm.flavorId = undefined;
+  flavorForm.flavorValue = "";
+}
+
+function removeFlavor(dishIndex: number, flavorIndex: number) {
+  const dish = props.formData.setmealDishes[dishIndex];
+  if (dish.setmealDishFlavors) {
+    dish.setmealDishFlavors.splice(flavorIndex, 1);
+  }
+}
+
+function formatTime(time?: string): string {
+  if (!time) return "-";
+  return time.replace("T", " ").substring(0, 19);
+}
+
+// --- 图片上传 ---
 const showDishSelector = ref(false);
 const dishLoading = ref(false);
 const availableDishes = ref<any[]>([]);
@@ -382,6 +551,7 @@ watch(
   (val) => {
     if (val) {
       initPreview();
+      expandedFlavorIndex.value = -1;
       if (formRef.value) {
         formRef.value.clearValidate();
       }
@@ -528,6 +698,7 @@ function confirmAddDishes() {
       name: dish.name,
       price: dish.price,
       copies: 1,
+      setmealDishFlavors: [],
     });
   });
 
@@ -563,11 +734,9 @@ watch(
 <style scoped lang="scss">
 @use "@/styles/common-page.scss";
 
-/* 套餐表单弹窗特有样式 */
-
-/* 让公共样式在对话框内生效 */
 .form-dialog-content {
-  :deep(.add-btn) {
+  :deep(.add-btn),
+  :deep(.confirm-btn) {
     height: 36px;
     border-radius: 8px;
     font-weight: 500;
@@ -583,31 +752,41 @@ watch(
       transform: translateY(-2px);
     }
   }
+}
 
-  :deep(.batch-delete-btn) {
-    height: 28px;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    background: var(--btn-danger-bg);
-    color: var(--btn-danger-text);
-    border: 1px solid var(--btn-danger-border);
-    box-shadow: var(--btn-danger-shadow);
+:deep(.cancel-btn) {
+  height: 36px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: var(--btn-reset-bg);
+  color: var(--btn-reset-text);
+  border: 1px solid var(--btn-reset-border);
+  box-shadow: var(--btn-reset-shadow);
 
-    &:hover:not(:disabled) {
-      background: var(--btn-danger-hover);
-      box-shadow: var(--btn-danger-shadow-hover);
-      transform: translateY(0px);
-    }
+  &:hover {
+    background: var(--btn-reset-hover);
+    color: var(--btn-reset-text);
+    border-color: var(--btn-reset-border);
+    box-shadow: var(--btn-reset-shadow-hover);
+    transform: translateY(-1px);
+  }
+}
 
-    &:disabled {
-      background: var(--btn-danger-disabled);
-      color: var(--btn-danger-text);
-      border: 1px solid var(--btn-danger-border);
-      box-shadow: none;
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
+:deep(.submit-btn) {
+  height: 36px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: var(--btn-confirm-shadow);
+  background: var(--btn-confirm-bg);
+  color: var(--btn-confirm-text);
+
+  &:hover {
+    background: var(--btn-confirm-hover);
+    box-shadow: var(--btn-confirm-shadow-hover);
+    transform: translateY(-2px);
   }
 }
 
@@ -622,7 +801,11 @@ watch(
   gap: 16px;
   padding: 16px 24px;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--color-primary-bg) 0%, transparent 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-bg) 0%,
+    transparent 100%
+  );
   border-radius: 12px;
   border: 1px solid var(--border-color);
 }
@@ -670,31 +853,126 @@ watch(
   opacity: 0.5;
 }
 
-html.dark .combo-price .price-value {
-  background: linear-gradient(
-    135deg,
-    var(--color-primary) 0%,
-    var(--color-primary-dark) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 .dish-section {
   width: 100%;
 }
 
-.add-dish-btn {
-  border-radius: 8px;
-  font-weight: 500;
+.dish-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
 }
 
-.dish-table {
-  :deep(.el-table__cell) {
-    text-align: center;
-    vertical-align: middle;
+.dish-card {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: var(--color-primary);
   }
+}
+
+.dish-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dish-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .dish-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 14px;
+  }
+
+  .dish-unit-price {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+}
+
+.dish-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .copies-input {
+    width: 120px;
+  }
+
+  .dish-subtotal {
+    font-weight: 600;
+    color: var(--color-primary);
+    font-size: 14px;
+    min-width: 80px;
+  }
+}
+
+.remove-dish-btn {
+  height: 28px;
+  border-radius: 6px;
+  font-weight: 500;
+  background: var(--btn-danger-bg);
+  color: var(--btn-danger-text);
+  border: 1px solid var(--btn-danger-border);
+
+  &:hover {
+    background: var(--btn-danger-hover);
+  }
+}
+
+.flavor-section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.flavor-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.flavor-tag {
+  cursor: default;
+}
+
+.flavor-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .flavor-type-select {
+    width: 160px;
+  }
+
+  .flavor-value-select {
+    width: 140px;
+  }
+
+  .confirm-btn,
+  .cancel-btn,
+  .add-btn {
+    height: 32px;
+    font-size: 13px;
+  }
+}
+
+.detail-text {
+  color: var(--text-secondary);
+  font-size: 14px;
 }
 
 .selector-content {

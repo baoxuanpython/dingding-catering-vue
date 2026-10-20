@@ -6,7 +6,7 @@
 
     <div class="stats-row">
       <div
-        class="stat-card"
+        class="stat-card stat-total"
         :class="{
           'stat-active': activeStat === 'total' && !isStatCustom,
           'stat-custom': isStatCustom,
@@ -23,7 +23,7 @@
       </div>
 
       <div
-        class="stat-card"
+        class="stat-card stat-on-sale"
         :class="{ 'stat-active': activeStat === 'onSale' }"
         @click="handleStatClick('onSale')"
       >
@@ -37,7 +37,7 @@
       </div>
 
       <div
-        class="stat-card"
+        class="stat-card stat-off-sale"
         :class="{ 'stat-active': activeStat === 'offSale' }"
         @click="handleStatClick('offSale')"
       >
@@ -81,6 +81,7 @@
       :submit-loading="submitLoading"
       :form-data="formData"
       :category-list="categoryList"
+      :flavor-list="flavorList"
       @submit="handleSubmit"
     />
   </div>
@@ -99,6 +100,7 @@ const {
   submitLoading,
   comboList,
   categoryList,
+  flavorList,
   selectedIds,
   statistics,
   searchForm,
@@ -114,6 +116,7 @@ const {
   fetchStatistics,
   fetchCombos,
   fetchCategories,
+  fetchFlavors,
   handleSearch,
   handleReset,
   handleSelectionChange,
@@ -138,6 +141,7 @@ function handleCurrentChange() {
 
 onMounted(() => {
   fetchCategories();
+  fetchFlavors();
   fetchStatistics();
   fetchCombos();
 });

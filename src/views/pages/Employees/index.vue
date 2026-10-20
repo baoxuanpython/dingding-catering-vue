@@ -10,7 +10,9 @@
         }"
         @click="handleStatusFilter(undefined)"
       >
-        <div class="stat-icon">👥</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><UserFilled /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ displayCount }}</span>
           <span class="stat-label">{{
@@ -24,7 +26,9 @@
         :class="{ 'stat-active': activeStatus === 1 && !isCustomQuery }"
         @click="handleStatusFilter(1)"
       >
-        <div class="stat-icon">✅</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><CircleCheck /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ statistics.enabled }}</span>
           <span class="stat-label">启用中</span>
@@ -36,7 +40,9 @@
         :class="{ 'stat-active': activeStatus === 0 && !isCustomQuery }"
         @click="handleStatusFilter(0)"
       >
-        <div class="stat-icon">⛔</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><CircleClose /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ statistics.disabled }}</span>
           <span class="stat-label">已禁用</span>
@@ -238,7 +244,15 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
-import { Search, RefreshLeft, Plus, Delete } from "@element-plus/icons-vue";
+import {
+  Search,
+  RefreshLeft,
+  Plus,
+  Delete,
+  UserFilled,
+  CircleCheck,
+  CircleClose,
+} from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import EmployeeFormDialog from "./components/EmployeeFormDialog.vue";
 import EmployeeDetailDialog from "./components/EmployeeDetailDialog.vue";

@@ -117,7 +117,7 @@
     .stat-value {
       color: var(--stat-card-active-text);
       font-size: 32px;
-      text-shadow: 0 2px 8px rgba(103, 194, 58, 0.3);
+      text-shadow: 0 2px 8px rgba(var(--primary-dark-rgb), 0.3);
     }
 
     .stat-label {
@@ -138,7 +138,8 @@
 }
 
 @keyframes statPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: var(--stat-card-active-shadow);
   }
   50% {
@@ -157,11 +158,11 @@
     .stat-value {
       color: var(--stat-card-custom-text);
       font-size: 32px;
-      text-shadow: 0 2px 8px rgba(64, 158, 255, 0.3);
+      text-shadow: 0 2px 8px rgba(var(--info-rgb), 0.3);
     }
 
     .stat-label {
-      color: #725eff;
+      color: var(--color-custom-purple);
       font-weight: 600;
       opacity: 1;
     }
@@ -169,7 +170,7 @@
     .stat-arrow {
       opacity: 1;
       transform: translateX(6px);
-      color: #409eff;
+      color: var(--color-info);
     }
 
     // 自定义查询状态动画
@@ -178,7 +179,8 @@
 }
 
 @keyframes statCustomPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: var(--stat-card-custom-shadow);
   }
   50% {
@@ -247,11 +249,11 @@
     font-weight: 500;
     transition: all 0.3s ease;
     border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 6px rgba(var(--black-rgb), 0.15);
 
     &:active {
       transform: translateY(1px);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 3px rgba(var(--black-rgb), 0.1);
     }
   }
 
@@ -355,7 +357,7 @@
   border: none;
   background: var(--btn-confirm-bg);
   color: var(--btn-confirm-text);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(var(--black-rgb), 0.15);
 
   &:hover {
     background: var(--btn-confirm-hover);
@@ -365,7 +367,7 @@
 
   &:active {
     transform: translateY(1px);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(var(--black-rgb), 0.1);
   }
 }
 
@@ -416,7 +418,7 @@
 
       &:hover {
         color: var(--action-confirm-hover);
-        background-color: rgba(103, 194, 58, 0.12);
+        background-color: rgba(var(--primary-dark-rgb), 0.12);
       }
     }
 
@@ -425,7 +427,7 @@
 
       &:hover {
         color: var(--action-reject-hover);
-        background-color: rgba(245, 108, 108, 0.12);
+        background-color: rgba(var(--danger-rgb), 0.12);
       }
     }
 
@@ -434,7 +436,7 @@
 
       &:hover {
         color: var(--action-delivery-hover);
-        background-color: rgba(64, 158, 255, 0.12);
+        background-color: rgba(var(--info-rgb), 0.12);
       }
     }
 
@@ -443,7 +445,7 @@
 
       &:hover {
         color: var(--action-cancel-hover);
-        background-color: rgba(230, 162, 60, 0.12);
+        background-color: rgba(var(--warning-rgb), 0.12);
       }
     }
 
@@ -452,7 +454,7 @@
 
       &:hover {
         color: var(--action-detail-hover);
-        background-color: rgba(144, 147, 153, 0.12);
+        background-color: rgba(var(--neutral-500-rgb), 0.12);
       }
     }
   }
@@ -599,8 +601,14 @@
   background-color: var(--bg-card) !important;
 }
 
-.el-dialog .el-form-item .el-input-number .el-input-number__decrease.is-disabled,
-.el-dialog .el-form-item .el-input-number .el-input-number__increase.is-disabled {
+.el-dialog
+  .el-form-item
+  .el-input-number
+  .el-input-number__decrease.is-disabled,
+.el-dialog
+  .el-form-item
+  .el-input-number
+  .el-input-number__increase.is-disabled {
   color: var(--text-secondary) !important;
   cursor: not-allowed;
 }
@@ -688,14 +696,14 @@
       border: 1px solid var(--color-primary) !important;
       border-radius: 8px;
       font-weight: 500;
-      box-shadow: 0 2px 6px rgba(103, 194, 58, 0.1);
+      box-shadow: 0 2px 6px rgba(var(--primary-dark-rgb), 0.1);
       transition: all 0.3s ease;
 
       &:hover {
         background: var(--color-primary-bg) !important;
         color: var(--color-primary) !important;
         border-color: var(--color-primary) !important;
-        box-shadow: 0 4px 12px rgba(103, 194, 58, 0.2);
+        box-shadow: 0 4px 12px rgba(var(--primary-dark-rgb), 0.2);
         transform: translateY(-1px);
       }
     }
@@ -1049,7 +1057,7 @@
 .el-table {
   --el-table-border-color: var(--border-color);
   --el-table-header-bg-color: var(--bg-primary);
-  --el-table-row-hover-bg-color: rgba(103, 194, 58, 0.04);
+  --el-table-row-hover-bg-color: rgba(var(--primary-dark-rgb), 0.04);
   --el-table-tr-bg-color: var(--bg-card);
   --el-table-expanded-row-bg-color: var(--bg-card);
   background-color: var(--bg-card);
@@ -1093,7 +1101,7 @@
 }
 
 .el-table__body tr:hover > td.el-table__cell {
-  background-color: rgba(103, 194, 58, 0.08) !important;
+  background-color: rgba(var(--primary-dark-rgb), 0.08) !important;
 }
 
 /* 表格单元格水平垂直居中 */
@@ -1244,7 +1252,7 @@
 
 /* ---------- 5. 图片预览弹窗深色主题 ---------- */
 .el-image-viewer__wrapper {
-  background-color: rgba(0, 0, 0, 0.8) !important;
+  background-color: rgba(var(--black-rgb), 0.8) !important;
 }
 
 /* ==================== 口味标签样式 ==================== */
@@ -1284,7 +1292,11 @@
 }
 
 .tab-wrapper :deep(.el-tabs__active-bar) {
-  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );
   height: 3px;
   border-radius: 2px;
 }
@@ -1463,22 +1475,34 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--color-primary-bg) 0%, transparent 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-bg) 0%,
+      transparent 100%
+    );
     border-radius: 8px;
     z-index: -1;
     opacity: 0.6;
   }
 }
 
-/* 深色主题下的价格渐变 */
-html.dark .price-gradient {
-  background: linear-gradient(135deg, #85ce61 0%, #67c23a 100%);
+/* 价格渐变（多主题适配） */
+.price-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-light) 0%,
+    var(--color-primary) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 
   &::before {
-    background: linear-gradient(135deg, var(--color-primary-bg) 0%, transparent 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-bg) 0%,
+      transparent 100%
+    );
   }
 }
 
@@ -1510,7 +1534,6 @@ html.dark .price-gradient {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
     font-weight: 600;
     font-size: 14px;
     flex-shrink: 0;
@@ -1602,7 +1625,7 @@ html.dark .price-gradient {
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(var(--black-rgb), 0.15);
   }
 
   &:active {
@@ -1618,7 +1641,7 @@ html.dark .price-gradient {
     transition: background 0.2s;
 
     &:hover {
-      background: rgba(103, 194, 58, 0.04);
+      background: rgba(var(--primary-dark-rgb), 0.04);
     }
   }
 }
@@ -1725,12 +1748,6 @@ html.dark .price-gradient {
   border-radius: 6px;
   border-left: 3px solid var(--color-primary);
   flex-wrap: wrap;
-
-  /* 兼容不支持 color-mix 的浏览器 */
-  @supports not (background: color-mix(in srgb, red 50%, blue)) {
-    background: var(--bg-card);
-    opacity: 0.7;
-  }
 }
 
 /* ---------- 12. 操作按钮组 ---------- */

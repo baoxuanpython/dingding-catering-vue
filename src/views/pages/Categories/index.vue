@@ -4,7 +4,7 @@
     <div class="stats-row">
       <!-- 分类总数 -->
       <div
-        class="stat-card"
+        class="stat-card stat-total"
         :class="
           isSearching
             ? 'stat-custom'
@@ -14,7 +14,9 @@
         "
         @click="handleStatClick(0)"
       >
-        <span class="stat-icon">📂</span>
+        <div class="stat-icon">
+          <el-icon :size="32"><Folder /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ stats.total }}</span>
           <span class="stat-label">{{
@@ -24,11 +26,13 @@
       </div>
       <!-- 已启用 -->
       <div
-        class="stat-card"
+        class="stat-card stat-enabled"
         :class="!isSearching && activeStatIndex === 1 ? 'stat-active' : ''"
         @click="handleStatClick(1)"
       >
-        <span class="stat-icon">✅</span>
+        <div class="stat-icon">
+          <el-icon :size="32"><CircleCheck /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ stats.enabled }}</span>
           <span class="stat-label">已启用</span>
@@ -36,11 +40,13 @@
       </div>
       <!-- 已禁用 -->
       <div
-        class="stat-card"
+        class="stat-card stat-disabled"
         :class="!isSearching && activeStatIndex === 2 ? 'stat-active' : ''"
         @click="handleStatClick(2)"
       >
-        <span class="stat-icon">⏸️</span>
+        <div class="stat-icon">
+          <el-icon :size="32"><CircleClose /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ stats.disabled }}</span>
           <span class="stat-label">已禁用</span>
@@ -94,6 +100,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import type { TabsPaneContext } from "element-plus";
+import { Folder, CircleCheck, CircleClose } from "@element-plus/icons-vue";
 import CategorySearchBar from "./components/CategorySearchBar.vue";
 import CategoryTable from "./components/CategoryTable.vue";
 import CategoryEditForm from "./components/CategoryEditForm.vue";

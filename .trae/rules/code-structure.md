@@ -10,7 +10,7 @@ alwaysApply: true
 
 ### 一、项目整体目录结构
 
-```
+```scss
 dingding-catering-vue/
 ├── public/                    # 静态资源（不参与构建）
 │   └── favicon.ico
@@ -86,7 +86,7 @@ dingding-catering-vue/
 
 每个业务页面使用**完整结构（方案 C）**，按功能分组：
 
-```
+```scss
 PageName/
 ├── index.vue              # 主页面组件（必须）
 ├── components/            # 页面级子组件（按需创建）
@@ -338,7 +338,7 @@ export default request;
 
 ### 九、示例：完整的 Meals 页面结构
 
-```
+```scss
 src/views/pages/Meals/
 ├── index.vue                      # 主页面
 ├── components/

@@ -1,7 +1,0 @@
-请读取以下文件，恢复教学上下文：
-1. USER-PROFILE.md
-2. MISSION.md  
-3. learning-records/ 目录下所有文件
-4. NOTES.md（如果存在）
-
-读取后告诉我当前进度，然后继续教学。

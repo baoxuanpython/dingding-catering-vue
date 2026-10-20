@@ -79,9 +79,18 @@ export interface SetmealForm {
   description: string;
   status: number;
   setmealDishes: SetmealDishItem[];
+  createEmployeeName?: string;
+  updateEmployeeName?: string;
+  updateTime?: string;
 }
 
 export interface PageResult<T> {
   total: number;
   records: T[];
+}
+
+export interface FlavorListItem {
+  id: number;
+  flavorName: string;
+  valueList: string;
 }

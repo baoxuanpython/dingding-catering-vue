@@ -10,7 +10,9 @@
         }"
         @click="handleStatusFilter(undefined)"
       >
-        <div class="stat-icon">📊</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><TrendCharts /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ displayCount }}</span>
           <span class="stat-label">{{
@@ -24,7 +26,9 @@
         :class="{ 'stat-active': activeStatus === 2 && !isCustomQuery }"
         @click="handleStatusFilter(2)"
       >
-        <div class="stat-icon">📋</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><Document /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ statistics.toBeConfirmed }}</span>
           <span class="stat-label">待接单</span>
@@ -36,7 +40,9 @@
         :class="{ 'stat-active': activeStatus === 3 && !isCustomQuery }"
         @click="handleStatusFilter(3)"
       >
-        <div class="stat-icon">✅</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><CircleCheck /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ statistics.confirmed }}</span>
           <span class="stat-label">待派送</span>
@@ -48,7 +54,9 @@
         :class="{ 'stat-active': activeStatus === 4 && !isCustomQuery }"
         @click="handleStatusFilter(4)"
       >
-        <div class="stat-icon">🚚</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><Van /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ statistics.deliveryInProgress }}</span>
           <span class="stat-label">派送中</span>
@@ -60,7 +68,9 @@
         :class="{ 'stat-active': activeStatus === 5 && !isCustomQuery }"
         @click="handleStatusFilter(5)"
       >
-        <div class="stat-icon">🎉</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><SuccessFilled /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ statistics.completed }}</span>
           <span class="stat-label">已完成</span>
@@ -72,7 +82,9 @@
         :class="{ 'stat-active': activeStatus === 6 && !isCustomQuery }"
         @click="handleStatusFilter(6)"
       >
-        <div class="stat-icon">❌</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><CircleClose /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ statistics.cancelled }}</span>
           <span class="stat-label">已取消</span>
@@ -84,7 +96,9 @@
         :class="{ 'stat-active': activeStatus === 7 && !isCustomQuery }"
         @click="handleStatusFilter(7)"
       >
-        <div class="stat-icon">💰</div>
+        <div class="stat-icon">
+          <el-icon :size="32"><Money /></el-icon>
+        </div>
         <div class="stat-content">
           <span class="stat-value">{{ statistics.refunded }}</span>
           <span class="stat-label">已退款</span>
@@ -192,7 +206,7 @@
           <template #default="{ row }">
             <div class="user-cell">
               <el-avatar :size="28" class="user-avatar">
-                <el-icon :size="14"><User /></el-icon>
+                <el-icon :size="14" class="icon-info"><User /></el-icon>
               </el-avatar>
               <span>{{ row.userName }}</span>
             </div>
@@ -336,7 +350,18 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { Search, Refresh, User } from "@element-plus/icons-vue";
+import {
+  Search,
+  Refresh,
+  User,
+  TrendCharts,
+  Document,
+  CircleCheck,
+  Van,
+  SuccessFilled,
+  CircleClose,
+  Money,
+} from "@element-plus/icons-vue";
 import OrderDetailDialog from "./components/OrderDetailDialog.vue";
 import RejectDialog from "./components/RejectDialog.vue";
 import CancelDialog from "./components/CancelDialog.vue";

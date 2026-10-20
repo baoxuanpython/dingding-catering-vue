@@ -32,7 +32,9 @@
           >
             <template #error>
               <div class="image-error">
-                <el-icon :size="24"><PictureFilled /></el-icon>
+                <el-icon :size="24" class="icon-placeholder"
+                  ><PictureFilled
+                /></el-icon>
               </div>
             </template>
           </el-image>
@@ -47,7 +49,12 @@
         show-overflow-tooltip
       >
         <template #default="{ row }">
-          <span class="item-name">{{ row.name }}</span>
+          <div class="combo-name-cell">
+            <span class="item-name">{{ row.name }}</span>
+            <span class="dish-count-badge"
+              >{{ row.setmealDishes?.length || 0 }}个菜品</span
+            >
+          </div>
         </template>
       </el-table-column>
 
@@ -97,9 +104,14 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="更新时间" width="170" resizable align="center">
+      <el-table-column label="最后修改" width="200" resizable align="center">
         <template #default="{ row }">
-          <span class="time-text">{{ formatTime(row.updateTime) }}</span>
+          <div class="modify-cell">
+            <span class="modify-employee">{{
+              row.updateEmployeeName || "-"
+            }}</span>
+            <span class="modify-time">{{ formatTime(row.updateTime) }}</span>
+          </div>
         </template>
       </el-table-column>
 
@@ -212,5 +224,36 @@ function handleCurrentChange() {
 <style scoped lang="scss">
 @use "@/styles/common-page.scss";
 
-/* 套餐表格特有样式（如有） */
+.combo-name-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.dish-count-badge {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.modify-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+
+.modify-employee {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.modify-time {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
 </style>

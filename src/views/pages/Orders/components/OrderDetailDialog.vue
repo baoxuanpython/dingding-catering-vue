@@ -141,12 +141,16 @@
                 >
                   <template #error>
                     <div class="image-error">
-                      <el-icon :size="20"><PictureFilled /></el-icon>
+                      <el-icon :size="20" class="icon-placeholder"
+                        ><PictureFilled
+                      /></el-icon>
                     </div>
                   </template>
                 </el-image>
                 <div v-else class="setmeal-image-placeholder">
-                  <el-icon :size="20"><PictureFilled /></el-icon>
+                  <el-icon :size="20" class="icon-placeholder"
+                    ><PictureFilled
+                  /></el-icon>
                 </div>
                 <div class="setmeal-info">
                   <span class="setmeal-name">{{ item.name }}</span>
@@ -213,12 +217,16 @@
               >
                 <template #error>
                   <div class="image-error">
-                    <el-icon :size="20"><PictureFilled /></el-icon>
+                    <el-icon :size="20" class="icon-placeholder"
+                      ><PictureFilled
+                    /></el-icon>
                   </div>
                 </template>
               </el-image>
               <div v-else class="dish-image-placeholder">
-                <el-icon :size="20"><PictureFilled /></el-icon>
+                <el-icon :size="20" class="icon-placeholder"
+                  ><PictureFilled
+                /></el-icon>
               </div>
               <div class="dish-info">
                 <span class="dish-name">{{ item.name }}</span>

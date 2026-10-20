@@ -4,12 +4,12 @@
     <svg width="0" height="0" style="position: absolute">
       <defs>
         <linearGradient id="gradient-lime" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#cddc39" />
-          <stop offset="100%" stop-color="#8bc34a" />
+          <stop offset="0%" stop-color="var(--accent-lime)" />
+          <stop offset="100%" stop-color="var(--accent-moss)" />
         </linearGradient>
         <linearGradient id="gradient-mint" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#00bcd4" />
-          <stop offset="100%" stop-color="#26a69a" />
+          <stop offset="0%" stop-color="var(--accent-mint)" />
+          <stop offset="100%" stop-color="var(--accent-teal)" />
         </linearGradient>
         <linearGradient
           id="gradient-primary"
@@ -18,12 +18,12 @@
           x2="100%"
           y2="100%"
         >
-          <stop offset="0%" stop-color="#4caf50" />
-          <stop offset="100%" stop-color="#81c784" />
+          <stop offset="0%" stop-color="var(--color-primary)" />
+          <stop offset="100%" stop-color="var(--color-primary-light)" />
         </linearGradient>
         <linearGradient id="gradient-rose" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#f44336" />
-          <stop offset="100%" stop-color="#e57373" />
+          <stop offset="0%" stop-color="var(--color-danger)" />
+          <stop offset="100%" stop-color="var(--color-danger-light)" />
         </linearGradient>
       </defs>
     </svg>
@@ -363,7 +363,7 @@ const orderOverview = reactive<OrderOverview>({
   allOrders: 0,
   completedOrders: 0,
   cancelledOrders: 0,
-  refunded: 0
+  refunded: 0,
 });
 
 const today = new Date();

@@ -8,6 +8,9 @@ import App from "./App.vue";
 import router from "./router";
 import { useThemeStore } from "./stores/theme";
 import { registerGlobalErrorHandlers } from "./utils/errorHandler";
+import "./styles/theme-light.css";
+import "./styles/theme-dark.css";
+import "./styles/theme-cyberpunk.css";
 import "./styles/theme.css";
 import "./styles/common-page.scss";
 

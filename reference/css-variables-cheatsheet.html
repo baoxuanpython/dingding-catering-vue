@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS 变量速查表 — 叮叮餐饮</title>
+<style>
+:root{--tbg:#1a1a2e;--tcard:#16213e;--tt:#e0e0e0;--tt2:#a0a0a0;--tbd:#2a2a4a;--tcode:#1e2a4a;--tpri:#85ce61;--tpad:40px}
+html.light{--tbg:#fafafa;--tcard:#fff;--tt:#333;--tt2:#666;--tbd:#e0e0e0;--tcode:#f5f5f5;--tpri:#4caf50;--tpad:40px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,system-ui,sans-serif;background:var(--tbg);color:var(--tt);padding:var(--tpad) 20px}
+.c{max-width:1200px;margin:0 auto}
+.h{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+h1{font-size:28px;border-bottom:3px solid var(--tpri);padding-bottom:12px;flex:1}
+.tabs{display:flex;border-bottom:2px solid var(--tbd);flex-wrap:wrap}
+.tab{padding:10px 20px;cursor:pointer;font-size:14px;font-weight:600;color:var(--tt2);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tab:hover{color:var(--tpri)}
+.tab.active{color:var(--tpri);border-bottom-color:var(--tpri)}
+.panel{display:none;padding-top:20px}
+.panel.active{display:block}
+h2{font-size:18px;margin:28px 0 12px;color:var(--tpri)}
+h2:first-child{margin-top:0}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th,td{border:1px solid var(--tbd);padding:6px 10px;text-align:left;vertical-align:middle}
+th{background:var(--tcode);font-weight:600;font-size:12px}
+td code{background:var(--tcode);padding:2px 6px;border-radius:3px;font-size:12px}
+td{word-break:break-all}
+.cs{display:inline-block;width:14px;height:14px;border-radius:2px;vertical-align:-2px;margin-right:4px;border:1px solid rgba(128,128,128,.3)}
+.ft{margin-top:40px;padding-top:16px;border-top:1px solid var(--tbd);color:var(--tt2);font-size:13px;display:flex;gap:20px;flex-wrap:wrap}
+.ft a{color:var(--tpri)}
+@media print{body{padding:0}.tabs{display:none}.panel{display:block!important;page-break-before:always}}
+</style>
+</head>
+<body>
+<div class="c">
+<div class="h"><h1>CSS 变量速查表</h1><span style="color:var(--tt2)">3 个主题 · 2026-10-20</span></div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('compare')">对比视图</button>
+  <button class="tab" onclick="switchTab('cyberpunk')">cyberpunk</button>
+  <button class="tab" onclick="switchTab('dark')">dark（默认）</button>
+  <button class="tab" onclick="switchTab('light')">light</button>
+  <button class="tab" onclick="switchTab('common')">公共层</button>
+</div>
+
+<div id="tab-compare" class="panel active">
+<h2>背景 / 文字 / 边框</h2>
+<table>
+<tr><th>变量名</th><th>cyberpunk</th><th>dark（默认）</th><th>light</th></tr>
+<tr><td><code>--bg-primary</code></td><td>页面背景</td><td><span class="cs" style="background:#0d0a1a"></span>#0d0a1a</td><td><span class="cs" style="background:#1a1a2e"></span>#1a1a2e</td><td><span class="cs" style="background:#f0f7f4"></span>#f0f7f4</td></tr><tr><td><code>--bg-card</code></td><td>卡片背景</td><td><span class="cs" style="background:#150f24"></span>#150f24</td><td><span class="cs" style="background:#16213e"></span>#16213e</td><td><span class="cs" style="background:#ffffff"></span>#ffffff</td></tr><tr><td><code>--bg-card-hover</code></td><td>卡片悬停</td><td><span class="cs" style="background:#1d1530"></span>#1d1530</td><td><span class="cs" style="background:#1e2a4a"></span>#1e2a4a</td><td><span class="cs" style="background:#f8fdf9"></span>#f8fdf9</td></tr><tr><td><code>--bg-overlay</code></td><td>遮罩层</td><td>rgba(13, 10, 26, 0.85)</td><td>rgba(0, 0, 0, 0.7)</td><td>rgba(0, 0, 0, 0.5)</td></tr><tr><td><code>--text-primary</code></td><td>主文字</td><td><span class="cs" style="background:#f5f0ff"></span>#f5f0ff</td><td><span class="cs" style="background:#e0e0e0"></span>#e0e0e0</td><td><span class="cs" style="background:#1a3a2a"></span>#1a3a2a</td></tr><tr><td><code>--text-secondary</code></td><td>辅助文字</td><td><span class="cs" style="background:#b8b0c8"></span>#b8b0c8</td><td><span class="cs" style="background:#a0a0a0"></span>#a0a0a0</td><td><span class="cs" style="background:#6b8f71"></span>#6b8f71</td></tr><tr><td><code>--text-disabled</code></td><td>禁用文字</td><td><span class="cs" style="background:#605870"></span>#605870</td><td><span class="cs" style="background:#616161"></span>#616161</td><td><span class="cs" style="background:#bdbdbd"></span>#bdbdbd</td></tr><tr><td><code>--text-inverse</code></td><td>反色文字</td><td><span class="cs" style="background:#0d0a1a"></span>#0d0a1a</td><td><span class="cs" style="background:#ffffff"></span>#ffffff</td><td><span class="cs" style="background:#ffffff"></span>#ffffff</td></tr><tr><td><code>--border-color</code></td><td>边框</td><td><span class="cs" style="background:#2a2040"></span>#2a2040</td><td><span class="cs" style="background:#2a2a4a"></span>#2a2a4a</td><td><span class="cs" style="background:#c8e6c9"></span>#c8e6c9</td></tr><tr><td><code>--border-light</code></td><td>浅边框</td><td><span class="cs" style="background:#1d1530"></span>#1d1530</td><td><span class="cs" style="background:#3a3a5a"></span>#3a3a5a</td><td><span class="cs" style="background:#e8f5e9"></span>#e8f5e9</td></tr><tr><td><code>--border-dark</code></td><td>深边框</td><td><span class="cs" style="background:#3d3058"></span>#3d3058</td><td><span class="cs" style="background:#1a1a3a"></span>#1a1a3a</td><td><span class="cs" style="background:#a5d6a7"></span>#a5d6a7</td></tr></table>
+<h2>语义色</h2>
+<table>
+<tr><th>变量名</th><th>cyberpunk</th><th>dark（默认）</th><th>light</th></tr>
+<tr><td><code>--primary</code></td><td>主色</td><td><span class="cs" style="background:#ff2d95"></span>#ff2d95</td><td><span class="cs" style="background:#85ce61"></span>#85ce61</td><td><span class="cs" style="background:#4caf50"></span>#4caf50</td></tr><tr><td><code>--primary-light</code></td><td>主浅</td><td><span class="cs" style="background:#ff5eb8"></span>#ff5eb8</td><td><span class="cs" style="background:#a8e063"></span>#a8e063</td><td><span class="cs" style="background:#81c784"></span>#81c784</td></tr><tr><td><code>--primary-lighter</code></td><td>主更浅</td><td><span class="cs" style="background:#ff8fd1"></span>#ff8fd1</td><td><span class="cs" style="background:#c8e6c9"></span>#c8e6c9</td><td><span class="cs" style="background:#a5d6a7"></span>#a5d6a7</td></tr><tr><td><code>--primary-dark</code></td><td>主深</td><td><span class="cs" style="background:#cc0066"></span>#cc0066</td><td><span class="cs" style="background:#67c23a"></span>#67c23a</td><td><span class="cs" style="background:#388e3c"></span>#388e3c</td></tr><tr><td><code>--primary-darker</code></td><td>主更深</td><td><span class="cs" style="background:#99004d"></span>#99004d</td><td><span class="cs" style="background:#529b2e"></span>#529b2e</td><td><span class="cs" style="background:#2e7d32"></span>#2e7d32</td></tr><tr><td><code>--primary-bg</code></td><td>主背景</td><td>rgba(255, 45, 149, 0.12)</td><td><span class="cs" style="background:#1e3a1e"></span>#1e3a1e</td><td><span class="cs" style="background:#e8f5e9"></span>#e8f5e9</td></tr><tr><td><code>--danger</code></td><td>危险</td><td><span class="cs" style="background:#ff1744"></span>#ff1744</td><td><span class="cs" style="background:#f56c6c"></span>#f56c6c</td><td><span class="cs" style="background:#f44336"></span>#f44336</td></tr><tr><td><code>--danger-light</code></td><td>危浅</td><td><span class="cs" style="background:#ff5252"></span>#ff5252</td><td><span class="cs" style="background:#f78989"></span>#f78989</td><td><span class="cs" style="background:#ef5350"></span>#ef5350</td></tr><tr><td><code>--danger-dark</code></td><td>危深</td><td><span class="cs" style="background:#b2102f"></span>#b2102f</td><td><span class="cs" style="background:#e04040"></span>#e04040</td><td><span class="cs" style="background:#d32f2f"></span>#d32f2f</td></tr><tr><td><code>--danger-bg</code></td><td>危背景</td><td>rgba(255, 23, 68, 0.12)</td><td><span class="cs" style="background:#3d1f1f"></span>#3d1f1f</td><td><span class="cs" style="background:#ffebee"></span>#ffebee</td></tr><tr><td><code>--warning</code></td><td>警告</td><td><span class="cs" style="background:#ffe600"></span>#ffe600</td><td><span class="cs" style="background:#e6a23c"></span>#e6a23c</td><td><span class="cs" style="background:#ff9800"></span>#ff9800</td></tr><tr><td><code>--warning-light</code></td><td>警浅</td><td><span class="cs" style="background:#ffee33"></span>#ffee33</td><td><span class="cs" style="background:#ebb563"></span>#ebb563</td><td><span class="cs" style="background:#ffa726"></span>#ffa726</td></tr><tr><td><code>--warning-dark</code></td><td>警深</td><td><span class="cs" style="background:#ccb800"></span>#ccb800</td><td><span class="cs" style="background:#cf9236"></span>#cf9236</td><td><span class="cs" style="background:#f57c00"></span>#f57c00</td></tr><tr><td><code>--warning-bg</code></td><td>警背景</td><td>rgba(255, 230, 0, 0.12)</td><td><span class="cs" style="background:#3d2e1f"></span>#3d2e1f</td><td><span class="cs" style="background:#fff3e0"></span>#fff3e0</td></tr><tr><td><code>--info</code></td><td>信息</td><td><span class="cs" style="background:#00f0ff"></span>#00f0ff</td><td><span class="cs" style="background:#409eff"></span>#409eff</td><td><span class="cs" style="background:#2196f3"></span>#2196f3</td></tr><tr><td><code>--info-light</code></td><td>信浅</td><td><span class="cs" style="background:#33f5ff"></span>#33f5ff</td><td><span class="cs" style="background:#79bbff"></span>#79bbff</td><td><span class="cs" style="background:#42a5f5"></span>#42a5f5</td></tr><tr><td><code>--info-dark</code></td><td>信深</td><td><span class="cs" style="background:#009faa"></span>#009faa</td><td><span class="cs" style="background:#337ecc"></span>#337ecc</td><td><span class="cs" style="background:#1976d2"></span>#1976d2</td></tr><tr><td><code>--info-bg</code></td><td>信背景</td><td>rgba(0, 240, 255, 0.12)</td><td><span class="cs" style="background:#1e3a4a"></span>#1e3a4a</td><td><span class="cs" style="background:#e3f2fd"></span>#e3f2fd</td></tr><tr><td><code>--success</code></td><td>成功</td><td><span class="cs" style="background:#39ff14"></span>#39ff14</td><td><span class="cs" style="background:#67c23a"></span>#67c23a</td><td><span class="cs" style="background:#43a047"></span>#43a047</td></tr><tr><td><code>--success-light</code></td><td>成浅</td><td><span class="cs" style="background:#66ff47"></span>#66ff47</td><td><span class="cs" style="background:#85ce61"></span>#85ce61</td><td><span class="cs" style="background:#66bb6a"></span>#66bb6a</td></tr><tr><td><code>--success-dark</code></td><td>成深</td><td><span class="cs" style="background:#2bcc0f"></span>#2bcc0f</td><td><span class="cs" style="background:#529b2e"></span>#529b2e</td><td><span class="cs" style="background:#2e7d32"></span>#2e7d32</td></tr><tr><td><code>--success-bg</code></td><td>成背景</td><td>rgba(57, 255, 20, 0.12)</td><td><span class="cs" style="background:#1e3a1e"></span>#1e3a1e</td><td><span class="cs" style="background:#e8f5e9"></span>#e8f5e9</td></tr><tr><td><code>--white</code></td><td>纯白</td><td><span class="cs" style="background:#f5f0ff"></span>#f5f0ff</td><td><span class="cs" style="background:#ffffff"></span>#ffffff</td><td><span class="cs" style="background:#ffffff"></span>#ffffff</td></tr></table>
+<h2>辅助色</h2>
+<table>
+<tr><th>变量名</th><th>cyberpunk</th><th>dark（默认）</th><th>light</th></tr>
+<tr><td><code>--accent-lime</code></td><td><span class="cs" style="background:#ffe600"></span>#ffe600</td><td><span class="cs" style="background:#cddc39"></span>#cddc39</td><td><span class="cs" style="background:#cddc39"></span>#cddc39</td></tr><tr><td><code>--accent-mint</code></td><td><span class="cs" style="background:#00f0ff"></span>#00f0ff</td><td><span class="cs" style="background:#00bcd4"></span>#00bcd4</td><td><span class="cs" style="background:#00bcd4"></span>#00bcd4</td></tr><tr><td><code>--accent-moss</code></td><td><span class="cs" style="background:#7fff00"></span>#7fff00</td><td><span class="cs" style="background:#8bc34a"></span>#8bc34a</td><td><span class="cs" style="background:#8bc34a"></span>#8bc34a</td></tr><tr><td><code>--accent-teal</code></td><td><span class="cs" style="background:#006064"></span>#006064</td><td><span class="cs" style="background:#26a69a"></span>#26a69a</td><td><span class="cs" style="background:#26a69a"></span>#26a69a</td></tr><tr><td><code>--accent-purple</code></td><td><span class="cs" style="background:#7c4dff"></span>#7c4dff</td><td><span class="cs" style="background:#b4a0ff"></span>#b4a0ff</td><td><span class="cs" style="background:#725eff"></span>#725eff</td></tr></table>
+<h2>中性色阶</h2>
+<table>
+<tr><th>变量名</th><th>cyberpunk</th><th>dark（默认）</th><th>light</th></tr>
+<tr><td><code>--neutral-100</code></td><td><span class="cs" style="background:#1a0d26"></span>#1a0d26</td><td><span class="cs" style="background:#212121"></span>#212121</td><td><span class="cs" style="background:#f5f5f5"></span>#f5f5f5</td></tr><tr><td><code>--neutral-200</code></td><td><span class="cs" style="background:#261a36"></span>#261a36</td><td><span class="cs" style="background:#424242"></span>#424242</td><td><span class="cs" style="background:#eeeeee"></span>#eeeeee</td></tr><tr><td><code>--neutral-300</code></td><td><span class="cs" style="background:#3d2d52"></span>#3d2d52</td><td><span class="cs" style="background:#616161"></span>#616161</td><td><span class="cs" style="background:#e0e0e0"></span>#e0e0e0</td></tr><tr><td><code>--neutral-400</code></td><td><span class="cs" style="background:#55406e"></span>#55406e</td><td><span class="cs" style="background:#757575"></span>#757575</td><td><span class="cs" style="background:#bdbdbd"></span>#bdbdbd</td></tr><tr><td><code>--neutral-500</code></td><td><span class="cs" style="background:#6e558a"></span>#6e558a</td><td><span class="cs" style="background:#9e9e9e"></span>#9e9e9e</td><td><span class="cs" style="background:#9e9e9e"></span>#9e9e9e</td></tr><tr><td><code>--neutral-600</code></td><td><span class="cs" style="background:#8a6fa6"></span>#8a6fa6</td><td><span class="cs" style="background:#bdbdbd"></span>#bdbdbd</td><td><span class="cs" style="background:#757575"></span>#757575</td></tr><tr><td><code>--neutral-700</code></td><td><span class="cs" style="background:#a68cc2"></span>#a68cc2</td><td><span class="cs" style="background:#e0e0e0"></span>#e0e0e0</td><td><span class="cs" style="background:#616161"></span>#616161</td></tr><tr><td><code>--neutral-800</code></td><td><span class="cs" style="background:#c2aade"></span>#c2aade</td><td><span class="cs" style="background:#eeeeee"></span>#eeeeee</td><td><span class="cs" style="background:#424242"></span>#424242</td></tr><tr><td><code>--neutral-900</code></td><td><span class="cs" style="background:#d8c8ee"></span>#d8c8ee</td><td><span class="cs" style="background:#f5f5f5"></span>#f5f5f5</td><td><span class="cs" style="background:#212121"></span>#212121</td></tr></table>
+<h2>阴影 / 渐变</h2>
+<table>
+<tr><th>变量名</th><th>cyberpunk</th><th>dark（默认）</th><th>light</th></tr>
+<tr><td><code>--shadow</code></td><td>0 2px 8px rgba(0, 240, 255, 0.15)</td><td>0 2px 12px 0 rgba(0, 0, 0, 0.3)</td><td>0 4px 20px 0 rgba(76, 175, 80, 0.15)</td></tr><tr><td><code>--shadow-light</code></td><td>0 1px 4px rgba(255, 45, 149, 0.1)</td><td>0 2px 8px 0 rgba(0, 0, 0, 0.2)</td><td>0 2px 12px 0 rgba(76, 175, 80, 0.08)</td></tr><tr><td><code>--shadow-heavy</code></td><td>0 8px 32px rgba(255, 45, 149, 0.3)</td><td>0 8px 32px 0 rgba(0, 0, 0, 0.4)</td><td>0 8px 32px 0 rgba(76, 175, 80, 0.2)</td></tr><tr><td><code>--shadow-glow</code></td><td>0 0 20px rgba(255, 45, 149, 0.4), 0 0 40px rgba(0, 240, 255, 0.2)</td><td>0 0 20px rgba(133, 206, 97, 0.15)</td><td>0 0 20px rgba(76, 175, 80, 0.3)</td></tr><tr><td><code>--shadow-glow-strong</code></td><td>0 0 30px rgba(255, 45, 149, 0.6), 0 0 60px rgba(0, 240, 255, 0.3)</td><td>0 0 30px rgba(133, 206, 97, 0.25)</td><td>0 0 30px rgba(76, 175, 80, 0.4)</td></tr><tr><td><code>--gradient-primary</code></td><td>linear-gradient(135deg, #ff2d95 0%, #00f0ff 100%)</td><td>linear-gradient(135deg, #67c23a 0%, #85ce61 100%)</td><td>linear-gradient(135deg, #4caf50 0%, #81c784 100%)</td></tr><tr><td><code>--gradient-light</code></td><td>linear-gradient(135deg, #ff5eb8 0%, #33f5ff 100%)</td><td>linear-gradient(135deg, #1e3a1e 0%, #1a1a2e 100%)</td><td>linear-gradient(135deg, #e8f5e9 0%, #f0f7f4 100%)</td></tr><tr><td><code>--gradient-card</code></td><td>—</td><td>linear-gradient(135deg, #16213e 0%, #1e2a4a 100%)</td><td>linear-gradient(135deg, #ffffff 0%, #f8fdf9 100%)</td></tr></table>
+<h2>RGB 分量</h2>
+<table>
+<tr><th>变量名</th><th>cyberpunk</th><th>dark（默认）</th><th>light</th></tr>
+<tr><td><code>--primary-rgb</code></td><td>255, 45, 149</td><td>133, 206, 97</td><td>76, 175, 80</td></tr><tr><td><code>--primary-light-rgb</code></td><td>255, 94, 184</td><td>168, 224, 99</td><td>129, 199, 132</td></tr><tr><td><code>--primary-dark-rgb</code></td><td>204, 0, 102</td><td>103, 194, 58</td><td>56, 142, 60</td></tr><tr><td><code>--danger-rgb</code></td><td>255, 23, 68</td><td>245, 108, 108</td><td>244, 67, 54</td></tr><tr><td><code>--danger-light-rgb</code></td><td>255, 82, 82</td><td>247, 137, 137</td><td>239, 83, 80</td></tr><tr><td><code>--warning-rgb</code></td><td>255, 230, 0</td><td>230, 162, 60</td><td>255, 152, 0</td></tr><tr><td><code>--info-rgb</code></td><td>0, 240, 255</td><td>64, 158, 255</td><td>33, 150, 243</td></tr><tr><td><code>--success-rgb</code></td><td>57, 255, 20</td><td>103, 194, 58</td><td>67, 160, 71</td></tr><tr><td><code>--black-rgb</code></td><td>0, 0, 0</td><td>0, 0, 0</td><td>0, 0, 0</td></tr><tr><td><code>--white-rgb</code></td><td>245, 240, 255</td><td>255, 255, 255</td><td>255, 255, 255</td></tr><tr><td><code>--accent-lime-rgb</code></td><td>255, 230, 0</td><td>205, 220, 57</td><td>205, 220, 57</td></tr><tr><td><code>--accent-mint-rgb</code></td><td>0, 240, 255</td><td>0, 188, 212</td><td>0, 188, 212</td></tr><tr><td><code>--accent-moss-rgb</code></td><td>127, 255, 0</td><td>139, 195, 74</td><td>139, 195, 74</td></tr><tr><td><code>--accent-teal-rgb</code></td><td>0, 96, 100</td><td>38, 166, 154</td><td>38, 166, 154</td></tr><tr><td><code>--accent-purple-rgb</code></td><td>124, 77, 255</td><td>180, 160, 255</td><td>114, 94, 255</td></tr><tr><td><code>--neutral-500-rgb</code></td><td>110, 85, 138</td><td>158, 158, 158</td><td>158, 158, 158</td></tr><tr><td><code>--bg-primary-rgb</code></td><td>13, 10, 26</td><td>26, 26, 46</td><td>240, 247, 244</td></tr></table>
+
+</div>
+
+
+<div id="tab-cyberpunk" class="panel">
+<p style="color:var(--tt2);margin-bottom:16px">选择器：<code>html.cyberpunk</code> · 通过 class 激活</p>
+<h2>背景 / 文字 / 边框</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--bg-primary</code></td><td><span class="cs" style="background:#0d0a1a"></span>#0d0a1a</td></tr>
+<tr><td><code>--bg-card</code></td><td><span class="cs" style="background:#150f24"></span>#150f24</td></tr>
+<tr><td><code>--bg-card-hover</code></td><td><span class="cs" style="background:#1d1530"></span>#1d1530</td></tr>
+<tr><td><code>--bg-overlay</code></td><td>rgba(13, 10, 26, 0.85)</td></tr>
+<tr><td><code>--text-primary</code></td><td><span class="cs" style="background:#f5f0ff"></span>#f5f0ff</td></tr>
+<tr><td><code>--text-secondary</code></td><td><span class="cs" style="background:#b8b0c8"></span>#b8b0c8</td></tr>
+<tr><td><code>--text-disabled</code></td><td><span class="cs" style="background:#605870"></span>#605870</td></tr>
+<tr><td><code>--text-inverse</code></td><td><span class="cs" style="background:#0d0a1a"></span>#0d0a1a</td></tr>
+<tr><td><code>--border-color</code></td><td><span class="cs" style="background:#2a2040"></span>#2a2040</td></tr>
+<tr><td><code>--border-light</code></td><td><span class="cs" style="background:#1d1530"></span>#1d1530</td></tr>
+<tr><td><code>--border-dark</code></td><td><span class="cs" style="background:#3d3058"></span>#3d3058</td></tr>
+</table>
+
+<h2>语义色</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--primary</code></td><td><span class="cs" style="background:#ff2d95"></span>#ff2d95</td></tr>
+<tr><td><code>--primary-light</code></td><td><span class="cs" style="background:#ff5eb8"></span>#ff5eb8</td></tr>
+<tr><td><code>--primary-lighter</code></td><td><span class="cs" style="background:#ff8fd1"></span>#ff8fd1</td></tr>
+<tr><td><code>--primary-dark</code></td><td><span class="cs" style="background:#cc0066"></span>#cc0066</td></tr>
+<tr><td><code>--primary-darker</code></td><td><span class="cs" style="background:#99004d"></span>#99004d</td></tr>
+<tr><td><code>--primary-bg</code></td><td>rgba(255, 45, 149, 0.12)</td></tr>
+<tr><td><code>--danger</code></td><td><span class="cs" style="background:#ff1744"></span>#ff1744</td></tr>
+<tr><td><code>--danger-light</code></td><td><span class="cs" style="background:#ff5252"></span>#ff5252</td></tr>
+<tr><td><code>--danger-dark</code></td><td><span class="cs" style="background:#b2102f"></span>#b2102f</td></tr>
+<tr><td><code>--danger-bg</code></td><td>rgba(255, 23, 68, 0.12)</td></tr>
+<tr><td><code>--warning</code></td><td><span class="cs" style="background:#ffe600"></span>#ffe600</td></tr>
+<tr><td><code>--warning-light</code></td><td><span class="cs" style="background:#ffee33"></span>#ffee33</td></tr>
+<tr><td><code>--warning-dark</code></td><td><span class="cs" style="background:#ccb800"></span>#ccb800</td></tr>
+<tr><td><code>--warning-bg</code></td><td>rgba(255, 230, 0, 0.12)</td></tr>
+<tr><td><code>--info</code></td><td><span class="cs" style="background:#00f0ff"></span>#00f0ff</td></tr>
+<tr><td><code>--info-light</code></td><td><span class="cs" style="background:#33f5ff"></span>#33f5ff</td></tr>
+<tr><td><code>--info-dark</code></td><td><span class="cs" style="background:#009faa"></span>#009faa</td></tr>
+<tr><td><code>--info-bg</code></td><td>rgba(0, 240, 255, 0.12)</td></tr>
+<tr><td><code>--success</code></td><td><span class="cs" style="background:#39ff14"></span>#39ff14</td></tr>
+<tr><td><code>--success-light</code></td><td><span class="cs" style="background:#66ff47"></span>#66ff47</td></tr>
+<tr><td><code>--success-dark</code></td><td><span class="cs" style="background:#2bcc0f"></span>#2bcc0f</td></tr>
+<tr><td><code>--success-bg</code></td><td>rgba(57, 255, 20, 0.12)</td></tr>
+<tr><td><code>--white</code></td><td><span class="cs" style="background:#f5f0ff"></span>#f5f0ff</td></tr>
+</table>
+
+<h2>辅助色</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--accent-lime</code></td><td><span class="cs" style="background:#ffe600"></span>#ffe600</td></tr>
+<tr><td><code>--accent-mint</code></td><td><span class="cs" style="background:#00f0ff"></span>#00f0ff</td></tr>
+<tr><td><code>--accent-moss</code></td><td><span class="cs" style="background:#7fff00"></span>#7fff00</td></tr>
+<tr><td><code>--accent-teal</code></td><td><span class="cs" style="background:#006064"></span>#006064</td></tr>
+<tr><td><code>--accent-purple</code></td><td><span class="cs" style="background:#7c4dff"></span>#7c4dff</td></tr>
+</table>
+
+<h2>中性色阶</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--neutral-100</code></td><td><span class="cs" style="background:#1a0d26"></span>#1a0d26</td></tr>
+<tr><td><code>--neutral-200</code></td><td><span class="cs" style="background:#261a36"></span>#261a36</td></tr>
+<tr><td><code>--neutral-300</code></td><td><span class="cs" style="background:#3d2d52"></span>#3d2d52</td></tr>
+<tr><td><code>--neutral-400</code></td><td><span class="cs" style="background:#55406e"></span>#55406e</td></tr>
+<tr><td><code>--neutral-500</code></td><td><span class="cs" style="background:#6e558a"></span>#6e558a</td></tr>
+<tr><td><code>--neutral-600</code></td><td><span class="cs" style="background:#8a6fa6"></span>#8a6fa6</td></tr>
+<tr><td><code>--neutral-700</code></td><td><span class="cs" style="background:#a68cc2"></span>#a68cc2</td></tr>
+<tr><td><code>--neutral-800</code></td><td><span class="cs" style="background:#c2aade"></span>#c2aade</td></tr>
+<tr><td><code>--neutral-900</code></td><td><span class="cs" style="background:#d8c8ee"></span>#d8c8ee</td></tr>
+</table>
+
+<h2>阴影 / 渐变</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--shadow</code></td><td>0 2px 8px rgba(0, 240, 255, 0.15)</td></tr>
+<tr><td><code>--shadow-light</code></td><td>0 1px 4px rgba(255, 45, 149, 0.1)</td></tr>
+<tr><td><code>--shadow-heavy</code></td><td>0 8px 32px rgba(255, 45, 149, 0.3)</td></tr>
+<tr><td><code>--shadow-glow</code></td><td>0 0 20px rgba(255, 45, 149, 0.4), 0 0 40px rgba(0, 240, 255, 0.2)</td></tr>
+<tr><td><code>--shadow-glow-strong</code></td><td>0 0 30px rgba(255, 45, 149, 0.6), 0 0 60px rgba(0, 240, 255, 0.3)</td></tr>
+<tr><td><code>--gradient-primary</code></td><td>linear-gradient(135deg, #ff2d95 0%, #00f0ff 100%)</td></tr>
+<tr><td><code>--gradient-light</code></td><td>linear-gradient(135deg, #ff5eb8 0%, #33f5ff 100%)</td></tr>
+<tr><td><code>--gradient-card</code></td><td>—</td></tr>
+</table>
+
+<h2>RGB 分量</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--primary-rgb</code></td><td>255, 45, 149</td></tr>
+<tr><td><code>--primary-light-rgb</code></td><td>255, 94, 184</td></tr>
+<tr><td><code>--primary-dark-rgb</code></td><td>204, 0, 102</td></tr>
+<tr><td><code>--danger-rgb</code></td><td>255, 23, 68</td></tr>
+<tr><td><code>--danger-light-rgb</code></td><td>255, 82, 82</td></tr>
+<tr><td><code>--warning-rgb</code></td><td>255, 230, 0</td></tr>
+<tr><td><code>--info-rgb</code></td><td>0, 240, 255</td></tr>
+<tr><td><code>--success-rgb</code></td><td>57, 255, 20</td></tr>
+<tr><td><code>--black-rgb</code></td><td>0, 0, 0</td></tr>
+<tr><td><code>--white-rgb</code></td><td>245, 240, 255</td></tr>
+<tr><td><code>--accent-lime-rgb</code></td><td>255, 230, 0</td></tr>
+<tr><td><code>--accent-mint-rgb</code></td><td>0, 240, 255</td></tr>
+<tr><td><code>--accent-moss-rgb</code></td><td>127, 255, 0</td></tr>
+<tr><td><code>--accent-teal-rgb</code></td><td>0, 96, 100</td></tr>
+<tr><td><code>--accent-purple-rgb</code></td><td>124, 77, 255</td></tr>
+<tr><td><code>--neutral-500-rgb</code></td><td>110, 85, 138</td></tr>
+<tr><td><code>--bg-primary-rgb</code></td><td>13, 10, 26</td></tr>
+</table>
+
+</div>
+
+<div id="tab-dark" class="panel">
+<p style="color:var(--tt2);margin-bottom:16px">选择器：<code>:root</code> · 默认主题</p>
+<h2>背景 / 文字 / 边框</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--bg-primary</code></td><td><span class="cs" style="background:#1a1a2e"></span>#1a1a2e</td></tr>
+<tr><td><code>--bg-card</code></td><td><span class="cs" style="background:#16213e"></span>#16213e</td></tr>
+<tr><td><code>--bg-card-hover</code></td><td><span class="cs" style="background:#1e2a4a"></span>#1e2a4a</td></tr>
+<tr><td><code>--bg-overlay</code></td><td>rgba(0, 0, 0, 0.7)</td></tr>
+<tr><td><code>--text-primary</code></td><td><span class="cs" style="background:#e0e0e0"></span>#e0e0e0</td></tr>
+<tr><td><code>--text-secondary</code></td><td><span class="cs" style="background:#a0a0a0"></span>#a0a0a0</td></tr>
+<tr><td><code>--text-disabled</code></td><td><span class="cs" style="background:#616161"></span>#616161</td></tr>
+<tr><td><code>--text-inverse</code></td><td><span class="cs" style="background:#ffffff"></span>#ffffff</td></tr>
+<tr><td><code>--border-color</code></td><td><span class="cs" style="background:#2a2a4a"></span>#2a2a4a</td></tr>
+<tr><td><code>--border-light</code></td><td><span class="cs" style="background:#3a3a5a"></span>#3a3a5a</td></tr>
+<tr><td><code>--border-dark</code></td><td><span class="cs" style="background:#1a1a3a"></span>#1a1a3a</td></tr>
+</table>
+
+<h2>语义色</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--primary</code></td><td><span class="cs" style="background:#85ce61"></span>#85ce61</td></tr>
+<tr><td><code>--primary-light</code></td><td><span class="cs" style="background:#a8e063"></span>#a8e063</td></tr>
+<tr><td><code>--primary-lighter</code></td><td><span class="cs" style="background:#c8e6c9"></span>#c8e6c9</td></tr>
+<tr><td><code>--primary-dark</code></td><td><span class="cs" style="background:#67c23a"></span>#67c23a</td></tr>
+<tr><td><code>--primary-darker</code></td><td><span class="cs" style="background:#529b2e"></span>#529b2e</td></tr>
+<tr><td><code>--primary-bg</code></td><td><span class="cs" style="background:#1e3a1e"></span>#1e3a1e</td></tr>
+<tr><td><code>--danger</code></td><td><span class="cs" style="background:#f56c6c"></span>#f56c6c</td></tr>
+<tr><td><code>--danger-light</code></td><td><span class="cs" style="background:#f78989"></span>#f78989</td></tr>
+<tr><td><code>--danger-dark</code></td><td><span class="cs" style="background:#e04040"></span>#e04040</td></tr>
+<tr><td><code>--danger-bg</code></td><td><span class="cs" style="background:#3d1f1f"></span>#3d1f1f</td></tr>
+<tr><td><code>--warning</code></td><td><span class="cs" style="background:#e6a23c"></span>#e6a23c</td></tr>
+<tr><td><code>--warning-light</code></td><td><span class="cs" style="background:#ebb563"></span>#ebb563</td></tr>
+<tr><td><code>--warning-dark</code></td><td><span class="cs" style="background:#cf9236"></span>#cf9236</td></tr>
+<tr><td><code>--warning-bg</code></td><td><span class="cs" style="background:#3d2e1f"></span>#3d2e1f</td></tr>
+<tr><td><code>--info</code></td><td><span class="cs" style="background:#409eff"></span>#409eff</td></tr>
+<tr><td><code>--info-light</code></td><td><span class="cs" style="background:#79bbff"></span>#79bbff</td></tr>
+<tr><td><code>--info-dark</code></td><td><span class="cs" style="background:#337ecc"></span>#337ecc</td></tr>
+<tr><td><code>--info-bg</code></td><td><span class="cs" style="background:#1e3a4a"></span>#1e3a4a</td></tr>
+<tr><td><code>--success</code></td><td><span class="cs" style="background:#67c23a"></span>#67c23a</td></tr>
+<tr><td><code>--success-light</code></td><td><span class="cs" style="background:#85ce61"></span>#85ce61</td></tr>
+<tr><td><code>--success-dark</code></td><td><span class="cs" style="background:#529b2e"></span>#529b2e</td></tr>
+<tr><td><code>--success-bg</code></td><td><span class="cs" style="background:#1e3a1e"></span>#1e3a1e</td></tr>
+<tr><td><code>--white</code></td><td><span class="cs" style="background:#ffffff"></span>#ffffff</td></tr>
+</table>
+
+<h2>辅助色</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--accent-lime</code></td><td><span class="cs" style="background:#cddc39"></span>#cddc39</td></tr>
+<tr><td><code>--accent-mint</code></td><td><span class="cs" style="background:#00bcd4"></span>#00bcd4</td></tr>
+<tr><td><code>--accent-moss</code></td><td><span class="cs" style="background:#8bc34a"></span>#8bc34a</td></tr>
+<tr><td><code>--accent-teal</code></td><td><span class="cs" style="background:#26a69a"></span>#26a69a</td></tr>
+<tr><td><code>--accent-purple</code></td><td><span class="cs" style="background:#b4a0ff"></span>#b4a0ff</td></tr>
+</table>
+
+<h2>中性色阶</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--neutral-100</code></td><td><span class="cs" style="background:#212121"></span>#212121</td></tr>
+<tr><td><code>--neutral-200</code></td><td><span class="cs" style="background:#424242"></span>#424242</td></tr>
+<tr><td><code>--neutral-300</code></td><td><span class="cs" style="background:#616161"></span>#616161</td></tr>
+<tr><td><code>--neutral-400</code></td><td><span class="cs" style="background:#757575"></span>#757575</td></tr>
+<tr><td><code>--neutral-500</code></td><td><span class="cs" style="background:#9e9e9e"></span>#9e9e9e</td></tr>
+<tr><td><code>--neutral-600</code></td><td><span class="cs" style="background:#bdbdbd"></span>#bdbdbd</td></tr>
+<tr><td><code>--neutral-700</code></td><td><span class="cs" style="background:#e0e0e0"></span>#e0e0e0</td></tr>
+<tr><td><code>--neutral-800</code></td><td><span class="cs" style="background:#eeeeee"></span>#eeeeee</td></tr>
+<tr><td><code>--neutral-900</code></td><td><span class="cs" style="background:#f5f5f5"></span>#f5f5f5</td></tr>
+</table>
+
+<h2>阴影 / 渐变</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--shadow</code></td><td>0 2px 12px 0 rgba(0, 0, 0, 0.3)</td></tr>
+<tr><td><code>--shadow-light</code></td><td>0 2px 8px 0 rgba(0, 0, 0, 0.2)</td></tr>
+<tr><td><code>--shadow-heavy</code></td><td>0 8px 32px 0 rgba(0, 0, 0, 0.4)</td></tr>
+<tr><td><code>--shadow-glow</code></td><td>0 0 20px rgba(133, 206, 97, 0.15)</td></tr>
+<tr><td><code>--shadow-glow-strong</code></td><td>0 0 30px rgba(133, 206, 97, 0.25)</td></tr>
+<tr><td><code>--gradient-primary</code></td><td>linear-gradient(135deg, #67c23a 0%, #85ce61 100%)</td></tr>
+<tr><td><code>--gradient-light</code></td><td>linear-gradient(135deg, #1e3a1e 0%, #1a1a2e 100%)</td></tr>
+<tr><td><code>--gradient-card</code></td><td>linear-gradient(135deg, #16213e 0%, #1e2a4a 100%)</td></tr>
+</table>
+
+<h2>RGB 分量</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--primary-rgb</code></td><td>133, 206, 97</td></tr>
+<tr><td><code>--primary-light-rgb</code></td><td>168, 224, 99</td></tr>
+<tr><td><code>--primary-dark-rgb</code></td><td>103, 194, 58</td></tr>
+<tr><td><code>--danger-rgb</code></td><td>245, 108, 108</td></tr>
+<tr><td><code>--danger-light-rgb</code></td><td>247, 137, 137</td></tr>
+<tr><td><code>--warning-rgb</code></td><td>230, 162, 60</td></tr>
+<tr><td><code>--info-rgb</code></td><td>64, 158, 255</td></tr>
+<tr><td><code>--success-rgb</code></td><td>103, 194, 58</td></tr>
+<tr><td><code>--black-rgb</code></td><td>0, 0, 0</td></tr>
+<tr><td><code>--white-rgb</code></td><td>255, 255, 255</td></tr>
+<tr><td><code>--accent-lime-rgb</code></td><td>205, 220, 57</td></tr>
+<tr><td><code>--accent-mint-rgb</code></td><td>0, 188, 212</td></tr>
+<tr><td><code>--accent-moss-rgb</code></td><td>139, 195, 74</td></tr>
+<tr><td><code>--accent-teal-rgb</code></td><td>38, 166, 154</td></tr>
+<tr><td><code>--accent-purple-rgb</code></td><td>180, 160, 255</td></tr>
+<tr><td><code>--neutral-500-rgb</code></td><td>158, 158, 158</td></tr>
+<tr><td><code>--bg-primary-rgb</code></td><td>26, 26, 46</td></tr>
+</table>
+
+</div>
+
+<div id="tab-light" class="panel">
+<p style="color:var(--tt2);margin-bottom:16px">选择器：<code>html.light</code> · 通过 class 激活</p>
+<h2>背景 / 文字 / 边框</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--bg-primary</code></td><td><span class="cs" style="background:#f0f7f4"></span>#f0f7f4</td></tr>
+<tr><td><code>--bg-card</code></td><td><span class="cs" style="background:#ffffff"></span>#ffffff</td></tr>
+<tr><td><code>--bg-card-hover</code></td><td><span class="cs" style="background:#f8fdf9"></span>#f8fdf9</td></tr>
+<tr><td><code>--bg-overlay</code></td><td>rgba(0, 0, 0, 0.5)</td></tr>
+<tr><td><code>--text-primary</code></td><td><span class="cs" style="background:#1a3a2a"></span>#1a3a2a</td></tr>
+<tr><td><code>--text-secondary</code></td><td><span class="cs" style="background:#6b8f71"></span>#6b8f71</td></tr>
+<tr><td><code>--text-disabled</code></td><td><span class="cs" style="background:#bdbdbd"></span>#bdbdbd</td></tr>
+<tr><td><code>--text-inverse</code></td><td><span class="cs" style="background:#ffffff"></span>#ffffff</td></tr>
+<tr><td><code>--border-color</code></td><td><span class="cs" style="background:#c8e6c9"></span>#c8e6c9</td></tr>
+<tr><td><code>--border-light</code></td><td><span class="cs" style="background:#e8f5e9"></span>#e8f5e9</td></tr>
+<tr><td><code>--border-dark</code></td><td><span class="cs" style="background:#a5d6a7"></span>#a5d6a7</td></tr>
+</table>
+
+<h2>语义色</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--primary</code></td><td><span class="cs" style="background:#4caf50"></span>#4caf50</td></tr>
+<tr><td><code>--primary-light</code></td><td><span class="cs" style="background:#81c784"></span>#81c784</td></tr>
+<tr><td><code>--primary-lighter</code></td><td><span class="cs" style="background:#a5d6a7"></span>#a5d6a7</td></tr>
+<tr><td><code>--primary-dark</code></td><td><span class="cs" style="background:#388e3c"></span>#388e3c</td></tr>
+<tr><td><code>--primary-darker</code></td><td><span class="cs" style="background:#2e7d32"></span>#2e7d32</td></tr>
+<tr><td><code>--primary-bg</code></td><td><span class="cs" style="background:#e8f5e9"></span>#e8f5e9</td></tr>
+<tr><td><code>--danger</code></td><td><span class="cs" style="background:#f44336"></span>#f44336</td></tr>
+<tr><td><code>--danger-light</code></td><td><span class="cs" style="background:#ef5350"></span>#ef5350</td></tr>
+<tr><td><code>--danger-dark</code></td><td><span class="cs" style="background:#d32f2f"></span>#d32f2f</td></tr>
+<tr><td><code>--danger-bg</code></td><td><span class="cs" style="background:#ffebee"></span>#ffebee</td></tr>
+<tr><td><code>--warning</code></td><td><span class="cs" style="background:#ff9800"></span>#ff9800</td></tr>
+<tr><td><code>--warning-light</code></td><td><span class="cs" style="background:#ffa726"></span>#ffa726</td></tr>
+<tr><td><code>--warning-dark</code></td><td><span class="cs" style="background:#f57c00"></span>#f57c00</td></tr>
+<tr><td><code>--warning-bg</code></td><td><span class="cs" style="background:#fff3e0"></span>#fff3e0</td></tr>
+<tr><td><code>--info</code></td><td><span class="cs" style="background:#2196f3"></span>#2196f3</td></tr>
+<tr><td><code>--info-light</code></td><td><span class="cs" style="background:#42a5f5"></span>#42a5f5</td></tr>
+<tr><td><code>--info-dark</code></td><td><span class="cs" style="background:#1976d2"></span>#1976d2</td></tr>
+<tr><td><code>--info-bg</code></td><td><span class="cs" style="background:#e3f2fd"></span>#e3f2fd</td></tr>
+<tr><td><code>--success</code></td><td><span class="cs" style="background:#43a047"></span>#43a047</td></tr>
+<tr><td><code>--success-light</code></td><td><span class="cs" style="background:#66bb6a"></span>#66bb6a</td></tr>
+<tr><td><code>--success-dark</code></td><td><span class="cs" style="background:#2e7d32"></span>#2e7d32</td></tr>
+<tr><td><code>--success-bg</code></td><td><span class="cs" style="background:#e8f5e9"></span>#e8f5e9</td></tr>
+<tr><td><code>--white</code></td><td><span class="cs" style="background:#ffffff"></span>#ffffff</td></tr>
+</table>
+
+<h2>辅助色</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--accent-lime</code></td><td><span class="cs" style="background:#cddc39"></span>#cddc39</td></tr>
+<tr><td><code>--accent-mint</code></td><td><span class="cs" style="background:#00bcd4"></span>#00bcd4</td></tr>
+<tr><td><code>--accent-moss</code></td><td><span class="cs" style="background:#8bc34a"></span>#8bc34a</td></tr>
+<tr><td><code>--accent-teal</code></td><td><span class="cs" style="background:#26a69a"></span>#26a69a</td></tr>
+<tr><td><code>--accent-purple</code></td><td><span class="cs" style="background:#725eff"></span>#725eff</td></tr>
+</table>
+
+<h2>中性色阶</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--neutral-100</code></td><td><span class="cs" style="background:#f5f5f5"></span>#f5f5f5</td></tr>
+<tr><td><code>--neutral-200</code></td><td><span class="cs" style="background:#eeeeee"></span>#eeeeee</td></tr>
+<tr><td><code>--neutral-300</code></td><td><span class="cs" style="background:#e0e0e0"></span>#e0e0e0</td></tr>
+<tr><td><code>--neutral-400</code></td><td><span class="cs" style="background:#bdbdbd"></span>#bdbdbd</td></tr>
+<tr><td><code>--neutral-500</code></td><td><span class="cs" style="background:#9e9e9e"></span>#9e9e9e</td></tr>
+<tr><td><code>--neutral-600</code></td><td><span class="cs" style="background:#757575"></span>#757575</td></tr>
+<tr><td><code>--neutral-700</code></td><td><span class="cs" style="background:#616161"></span>#616161</td></tr>
+<tr><td><code>--neutral-800</code></td><td><span class="cs" style="background:#424242"></span>#424242</td></tr>
+<tr><td><code>--neutral-900</code></td><td><span class="cs" style="background:#212121"></span>#212121</td></tr>
+</table>
+
+<h2>阴影 / 渐变</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--shadow</code></td><td>0 4px 20px 0 rgba(76, 175, 80, 0.15)</td></tr>
+<tr><td><code>--shadow-light</code></td><td>0 2px 12px 0 rgba(76, 175, 80, 0.08)</td></tr>
+<tr><td><code>--shadow-heavy</code></td><td>0 8px 32px 0 rgba(76, 175, 80, 0.2)</td></tr>
+<tr><td><code>--shadow-glow</code></td><td>0 0 20px rgba(76, 175, 80, 0.3)</td></tr>
+<tr><td><code>--shadow-glow-strong</code></td><td>0 0 30px rgba(76, 175, 80, 0.4)</td></tr>
+<tr><td><code>--gradient-primary</code></td><td>linear-gradient(135deg, #4caf50 0%, #81c784 100%)</td></tr>
+<tr><td><code>--gradient-light</code></td><td>linear-gradient(135deg, #e8f5e9 0%, #f0f7f4 100%)</td></tr>
+<tr><td><code>--gradient-card</code></td><td>linear-gradient(135deg, #ffffff 0%, #f8fdf9 100%)</td></tr>
+</table>
+
+<h2>RGB 分量</h2>
+<table>
+<tr><th>变量名</th><th>值</th></tr>
+<tr><td><code>--primary-rgb</code></td><td>76, 175, 80</td></tr>
+<tr><td><code>--primary-light-rgb</code></td><td>129, 199, 132</td></tr>
+<tr><td><code>--primary-dark-rgb</code></td><td>56, 142, 60</td></tr>
+<tr><td><code>--danger-rgb</code></td><td>244, 67, 54</td></tr>
+<tr><td><code>--danger-light-rgb</code></td><td>239, 83, 80</td></tr>
+<tr><td><code>--warning-rgb</code></td><td>255, 152, 0</td></tr>
+<tr><td><code>--info-rgb</code></td><td>33, 150, 243</td></tr>
+<tr><td><code>--success-rgb</code></td><td>67, 160, 71</td></tr>
+<tr><td><code>--black-rgb</code></td><td>0, 0, 0</td></tr>
+<tr><td><code>--white-rgb</code></td><td>255, 255, 255</td></tr>
+<tr><td><code>--accent-lime-rgb</code></td><td>205, 220, 57</td></tr>
+<tr><td><code>--accent-mint-rgb</code></td><td>0, 188, 212</td></tr>
+<tr><td><code>--accent-moss-rgb</code></td><td>139, 195, 74</td></tr>
+<tr><td><code>--accent-teal-rgb</code></td><td>38, 166, 154</td></tr>
+<tr><td><code>--accent-purple-rgb</code></td><td>114, 94, 255</td></tr>
+<tr><td><code>--neutral-500-rgb</code></td><td>158, 158, 158</td></tr>
+<tr><td><code>--bg-primary-rgb</code></td><td>240, 247, 244</td></tr>
+</table>
+
+</div>
+
+<div id="tab-common" class="panel">
+<h2>语义别名</h2>
+<table><tr><th>变量名</th><th>引用链（cyberpunk / dark（默认） / light）</th></tr>
+<tr><td><code>--color-primary</code></td><td><code>var(--primary)</code> → <span class="cs" style="background:#ff2d95"></span>#ff2d95 / <span class="cs" style="background:#85ce61"></span>#85ce61 / <span class="cs" style="background:#4caf50"></span>#4caf50</td></tr>
+<tr><td><code>--color-primary-light</code></td><td><code>var(--primary-light)</code> → <span class="cs" style="background:#ff5eb8"></span>#ff5eb8 / <span class="cs" style="background:#a8e063"></span>#a8e063 / <span class="cs" style="background:#81c784"></span>#81c784</td></tr>
+<tr><td><code>--color-primary-lighter</code></td><td><code>var(--primary-lighter)</code> → <span class="cs" style="background:#ff8fd1"></span>#ff8fd1 / <span class="cs" style="background:#c8e6c9"></span>#c8e6c9 / <span class="cs" style="background:#a5d6a7"></span>#a5d6a7</td></tr>
+<tr><td><code>--color-primary-dark</code></td><td><code>var(--primary-dark)</code> → <span class="cs" style="background:#cc0066"></span>#cc0066 / <span class="cs" style="background:#67c23a"></span>#67c23a / <span class="cs" style="background:#388e3c"></span>#388e3c</td></tr>
+<tr><td><code>--color-primary-darker</code></td><td><code>var(--primary-darker)</code> → <span class="cs" style="background:#99004d"></span>#99004d / <span class="cs" style="background:#529b2e"></span>#529b2e / <span class="cs" style="background:#2e7d32"></span>#2e7d32</td></tr>
+<tr><td><code>--color-primary-bg</code></td><td><code>var(--primary-bg)</code> → rgba(255, 45, 149, 0.12) / <span class="cs" style="background:#1e3a1e"></span>#1e3a1e / <span class="cs" style="background:#e8f5e9"></span>#e8f5e9</td></tr>
+<tr><td><code>--color-danger</code></td><td><code>var(--danger)</code> → <span class="cs" style="background:#ff1744"></span>#ff1744 / <span class="cs" style="background:#f56c6c"></span>#f56c6c / <span class="cs" style="background:#f44336"></span>#f44336</td></tr>
+<tr><td><code>--color-danger-light</code></td><td><code>var(--danger-light)</code> → <span class="cs" style="background:#ff5252"></span>#ff5252 / <span class="cs" style="background:#f78989"></span>#f78989 / <span class="cs" style="background:#ef5350"></span>#ef5350</td></tr>
+<tr><td><code>--color-danger-dark</code></td><td><code>var(--danger-dark)</code> → <span class="cs" style="background:#b2102f"></span>#b2102f / <span class="cs" style="background:#e04040"></span>#e04040 / <span class="cs" style="background:#d32f2f"></span>#d32f2f</td></tr>
+<tr><td><code>--color-danger-bg</code></td><td><code>var(--danger-bg)</code> → rgba(255, 23, 68, 0.12) / <span class="cs" style="background:#3d1f1f"></span>#3d1f1f / <span class="cs" style="background:#ffebee"></span>#ffebee</td></tr>
+<tr><td><code>--color-warning</code></td><td><code>var(--warning)</code> → <span class="cs" style="background:#ffe600"></span>#ffe600 / <span class="cs" style="background:#e6a23c"></span>#e6a23c / <span class="cs" style="background:#ff9800"></span>#ff9800</td></tr>
+<tr><td><code>--color-warning-light</code></td><td><code>var(--warning-light)</code> → <span class="cs" style="background:#ffee33"></span>#ffee33 / <span class="cs" style="background:#ebb563"></span>#ebb563 / <span class="cs" style="background:#ffa726"></span>#ffa726</td></tr>
+<tr><td><code>--color-warning-dark</code></td><td><code>var(--warning-dark)</code> → <span class="cs" style="background:#ccb800"></span>#ccb800 / <span class="cs" style="background:#cf9236"></span>#cf9236 / <span class="cs" style="background:#f57c00"></span>#f57c00</td></tr>
+<tr><td><code>--color-warning-bg</code></td><td><code>var(--warning-bg)</code> → rgba(255, 230, 0, 0.12) / <span class="cs" style="background:#3d2e1f"></span>#3d2e1f / <span class="cs" style="background:#fff3e0"></span>#fff3e0</td></tr>
+<tr><td><code>--color-info</code></td><td><code>var(--info)</code> → <span class="cs" style="background:#00f0ff"></span>#00f0ff / <span class="cs" style="background:#409eff"></span>#409eff / <span class="cs" style="background:#2196f3"></span>#2196f3</td></tr>
+<tr><td><code>--color-info-light</code></td><td><code>var(--info-light)</code> → <span class="cs" style="background:#33f5ff"></span>#33f5ff / <span class="cs" style="background:#79bbff"></span>#79bbff / <span class="cs" style="background:#42a5f5"></span>#42a5f5</td></tr>
+<tr><td><code>--color-info-dark</code></td><td><code>var(--info-dark)</code> → <span class="cs" style="background:#009faa"></span>#009faa / <span class="cs" style="background:#337ecc"></span>#337ecc / <span class="cs" style="background:#1976d2"></span>#1976d2</td></tr>
+<tr><td><code>--color-info-bg</code></td><td><code>var(--info-bg)</code> → rgba(0, 240, 255, 0.12) / <span class="cs" style="background:#1e3a4a"></span>#1e3a4a / <span class="cs" style="background:#e3f2fd"></span>#e3f2fd</td></tr>
+<tr><td><code>--color-success</code></td><td><code>var(--success)</code> → <span class="cs" style="background:#39ff14"></span>#39ff14 / <span class="cs" style="background:#67c23a"></span>#67c23a / <span class="cs" style="background:#43a047"></span>#43a047</td></tr>
+<tr><td><code>--color-success-light</code></td><td><code>var(--success-light)</code> → <span class="cs" style="background:#66ff47"></span>#66ff47 / <span class="cs" style="background:#85ce61"></span>#85ce61 / <span class="cs" style="background:#66bb6a"></span>#66bb6a</td></tr>
+<tr><td><code>--color-success-dark</code></td><td><code>var(--success-dark)</code> → <span class="cs" style="background:#2bcc0f"></span>#2bcc0f / <span class="cs" style="background:#529b2e"></span>#529b2e / <span class="cs" style="background:#2e7d32"></span>#2e7d32</td></tr>
+<tr><td><code>--color-success-bg</code></td><td><code>var(--success-bg)</code> → rgba(57, 255, 20, 0.12) / <span class="cs" style="background:#1e3a1e"></span>#1e3a1e / <span class="cs" style="background:#e8f5e9"></span>#e8f5e9</td></tr>
+<tr><td><code>--color-custom-purple</code></td><td><code>var(--accent-purple)</code> → <span class="cs" style="background:#7c4dff"></span>#7c4dff / <span class="cs" style="background:#b4a0ff"></span>#b4a0ff / <span class="cs" style="background:#725eff"></span>#725eff</td></tr>
+<tr><td><code>--color-white</code></td><td><code>var(--white)</code> → <span class="cs" style="background:#f5f0ff"></span>#f5f0ff / <span class="cs" style="background:#ffffff"></span>#ffffff / <span class="cs" style="background:#ffffff"></span>#ffffff</td></tr>
+</table>
+
+<h2>组件变量</h2>
+<p style="color:var(--tt2)">均定义在 theme.css，通过 var() 引用基础变量，所有主题自动生效。</p>
+<table><tr><th>组件</th><th>核心变量</th><th>说明</th></tr><tr><td>按钮·确认</td><td><code>--btn-confirm-bg</code></td><td>渐变主色</td></tr>
+<tr><td>按钮·危险</td><td><code>--btn-danger-bg</code></td><td>渐变危险色</td></tr>
+<tr><td>按钮·警告</td><td><code>--btn-warning-bg</code></td><td>渐变警告色</td></tr>
+<tr><td>按钮·重置</td><td><code>--btn-reset-bg</code></td><td>中性色阶</td></tr>
+<tr><td>按钮·派送</td><td><code>--btn-delivery-bg</code></td><td>信息色</td></tr>
+<tr><td>标签</td><td><code>--tag-info-bg</code></td><td>5 语义 × 3 属性</td></tr>
+<tr><td>操作按钮</td><td><code>--action-confirm-bg</code></td><td>6 操作 × 2 状态</td></tr>
+<tr><td>统计卡片</td><td><code>--stat-card-bg</code></td><td>4 状态 + 自定义</td></tr>
+<tr><td>表格</td><td><code>--table-header-bg</code></td><td>6 变量</td></tr>
+<tr><td>输入框</td><td><code>--input-bg</code></td><td>8 变量</td></tr>
+<tr><td>弹窗</td><td><code>--dialog-bg</code></td><td>5 变量</td></tr>
+<tr><td>分页</td><td><code>--pagination-bg</code></td><td>6 变量</td></tr>
+<tr><td>下拉</td><td><code>--select-bg</code></td><td>5 变量</td></tr>
+<tr><td>日期</td><td><code>--datepicker-bg</code></td><td>7 变量</td></tr>
+<tr><td>加载</td><td><code>--loading-bg</code></td><td>2 变量</td></tr>
+<tr><td>开关</td><td><code>--switch-on-bg</code></td><td>2 变量 × 2 状态</td></tr>
+<tr><td>复选框</td><td><code>--checkbox-bg</code></td><td>1 变量</td></tr></table>
+
+<h2>Element Plus 覆盖</h2>
+<table><tr><th>变量名</th><th>值</th></tr><tr><td><code>--el-color-primary</code></td><td><code>var(--color-primary)</code></td></tr>
+<tr><td><code>--el-color-primary-light-3</code></td><td><code>var(--color-primary-light)</code></td></tr>
+<tr><td><code>--el-color-primary-dark-2</code></td><td><code>var(--color-primary-dark)</code></td></tr>
+<tr><td><code>--el-menu-active-color</code></td><td><code>var(--color-primary)</code></td></tr>
+<tr><td><code>--el-menu-hover-bg-color</code></td><td><code>var(--color-primary-bg)</code></td></tr>
+<tr><td><code>--el-bg-color</code></td><td><code>var(--bg-card)</code></td></tr>
+<tr><td><code>--el-bg-color-page</code></td><td><code>var(--bg-primary)</code></td></tr>
+<tr><td><code>--el-text-color-primary</code></td><td><code>var(--text-primary)</code></td></tr>
+<tr><td><code>--el-text-color-regular</code></td><td><code>var(--text-secondary)</code></td></tr>
+<tr><td><code>--el-border-color</code></td><td><code>var(--border-color)</code></td></tr>
+<tr><td><code>--el-border-color-light</code></td><td><code>var(--border-light)</code></td></tr></table>
+
+<h2>常用写法</h2>
+<table><tr><th>需求</th><th>写法</th></tr><tr><td>主色文字</td><td><code>color: var(--color-primary)</code></td></tr>
+<tr><td>红色错误提示</td><td><code>color: var(--color-danger)</code></td></tr>
+<tr><td>主色 15% 透明背景</td><td><code>background: rgba(var(--primary-rgb), 0.15)</code></td></tr>
+<tr><td>红色 30% 透明阴影</td><td><code>box-shadow: 0 4px 12px rgba(var(--danger-rgb), 0.3)</code></td></tr>
+<tr><td>黑色 5% 遮罩</td><td><code>background: rgba(var(--black-rgb), 0.05)</code></td></tr>
+<tr><td>白色 80% 透明前景</td><td><code>color: rgba(var(--white-rgb), 0.8)</code></td></tr>
+<tr><td>灰底卡片</td><td><code>background: var(--bg-card)</code></td></tr>
+<tr><td>品牌渐变按钮</td><td><code>background: var(--btn-confirm-bg)</code></td></tr></table>
+</div>
+
+<footer class="ft">
+  <span>生成：<code>npm run gen:cheatsheet</code></span>
+  <span>校验：<code>npm run validate:theme</code></span>
+  <span>规则：<code>.trae/rules/style-guide.md</code></span>
+</footer>
+</div>
+
+<script>
+function switchTab(n){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelector('.tab[onclick="switchTab(\''+n+'\')"]').classList.add('active');
+  document.getElementById('tab-'+n).classList.add('active');
+}
+</script>
+</body>
+</html>
