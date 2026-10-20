@@ -112,7 +112,7 @@ function handleClose() {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 员工表单弹窗特有样式 */
 .dialog-footer {

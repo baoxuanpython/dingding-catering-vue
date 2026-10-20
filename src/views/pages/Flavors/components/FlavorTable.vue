@@ -121,7 +121,7 @@ defineEmits<{
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 口味表格特有样式 */
 .value-tag-item {

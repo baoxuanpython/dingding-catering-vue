@@ -553,7 +553,7 @@ async function handleConfirm(row: OrderVO) {
       cancelButtonText: "取消",
       type: "success",
     });
-    await confirmOrder({ id: row.id });
+    await confirmOrder({ id: row.id, status: 3 });
     ElMessage.success("接单成功");
     fetchOrders();
     fetchStatistics();
@@ -665,7 +665,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 订单页面特有样式（如有） */
 </style>

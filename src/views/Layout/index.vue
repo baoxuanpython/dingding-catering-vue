@@ -226,6 +226,6 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-@import "@/styles/layout.scss";
+<style lang="scss" scoped>
+@use "@/styles/layout.scss";
 </style>

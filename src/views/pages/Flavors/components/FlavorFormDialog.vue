@@ -138,7 +138,7 @@ function handleSubmit() {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 口味表单弹窗特有样式 */
 .flavor-form {

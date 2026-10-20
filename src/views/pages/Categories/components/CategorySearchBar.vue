@@ -45,7 +45,7 @@ const handleReset = () => {
 </script>
 
 <style scoped>
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 分类搜索栏特有样式（如有） */
 </style>

@@ -334,7 +334,7 @@ import type {
 const userStore = useUserStore();
 const shopStore = useShopStore();
 
-const userName = ref(userStore.userInfo?.username || "管理员");
+const userName = ref(userStore.userInfo?.name || "管理员");
 const todayDate = ref("");
 const shopStatus = computed(() => shopStore.shopStatus);
 
@@ -359,9 +359,11 @@ const dishOverview = reactive<DishOverview>({
 const orderOverview = reactive<OrderOverview>({
   waitingOrders: 0,
   deliveredOrders: 0,
+  deliveryInProgress: 0,
   allOrders: 0,
   completedOrders: 0,
   cancelledOrders: 0,
+  refunded: 0
 });
 
 const today = new Date();
@@ -439,8 +441,8 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/common-page.scss";
-@import "@/styles/workbench.scss";
+@use "@/styles/common-page.scss";
+@use "@/styles/workbench.scss";
 
 .workbench-page {
   padding: 24px;

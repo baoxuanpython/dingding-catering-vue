@@ -553,7 +553,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 员工页面特有样式（如有） */
 </style>

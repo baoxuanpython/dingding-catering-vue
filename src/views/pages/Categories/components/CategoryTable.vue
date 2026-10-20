@@ -72,7 +72,7 @@ const handleStatusChange = (id: number, enabled: boolean | string | number) => {
 </script>
 
 <style scoped>
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 分类表格特有样式 */
 .category-table {

@@ -73,7 +73,7 @@ function maskIdNumber(idNumber?: string): string {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 员工详情弹窗特有样式 */
 .detail-grid {

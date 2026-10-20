@@ -383,7 +383,7 @@ function parseFlavorPairs(
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 订单详情弹窗特有样式 */
 .detail-dialog {

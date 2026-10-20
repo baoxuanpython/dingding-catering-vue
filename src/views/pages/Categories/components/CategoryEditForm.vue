@@ -137,7 +137,7 @@ async function handleSubmit() {
 </script>
 
 <style scoped>
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 分类编辑表单特有样式 */
 .category-form {

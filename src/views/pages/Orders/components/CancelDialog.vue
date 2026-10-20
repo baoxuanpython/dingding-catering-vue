@@ -55,7 +55,7 @@ function handleConfirm() {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 取消弹窗特有样式 */
 .cancel-dialog {

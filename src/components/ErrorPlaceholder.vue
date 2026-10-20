@@ -46,5 +46,5 @@ const handleRetry = () => {
 </script>
 
 <style scoped>
-@import "@/styles/error-placeholder.scss";
+@use "@/styles/error-placeholder.scss";
 </style>

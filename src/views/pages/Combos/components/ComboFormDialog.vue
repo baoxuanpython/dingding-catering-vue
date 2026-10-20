@@ -561,7 +561,7 @@ watch(
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/common-page.scss";
+@use "@/styles/common-page.scss";
 
 /* 套餐表单弹窗特有样式 */
 
@@ -573,7 +573,7 @@ watch(
     font-weight: 500;
     transition: all 0.3s ease;
     border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--btn-confirm-shadow);
     background: var(--btn-confirm-bg);
     color: var(--btn-confirm-text);
 
@@ -671,7 +671,11 @@ watch(
 }
 
 html.dark .combo-price .price-value {
-  background: linear-gradient(135deg, #85ce61 0%, #67c23a 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
