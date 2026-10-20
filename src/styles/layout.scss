@@ -30,7 +30,7 @@
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid var(--el-border-color-light);
-  background: linear-gradient(135deg, var(--primary-bg) 0%, transparent 100%);
+  background: linear-gradient(135deg, var(--color-primary-bg) 0%, transparent 100%);
   position: relative;
   overflow: hidden;
 }
@@ -42,7 +42,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--color-primary) 0%, transparent 70%);
   opacity: 0.05;
   animation: logoPulse 4s ease-in-out infinite;
 }
@@ -67,8 +67,8 @@
   justify-content: center;
   background: linear-gradient(
     135deg,
-    var(--primary) 0%,
-    var(--primary-dark) 100%
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
   );
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(103, 194, 58, 0.3);
@@ -107,8 +107,8 @@
   font-weight: 700;
   background: linear-gradient(
     135deg,
-    var(--primary) 0%,
-    var(--primary-dark) 100%
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -148,8 +148,8 @@
   height: 100%;
   background: linear-gradient(
     180deg,
-    var(--primary) 0%,
-    var(--primary-dark) 100%
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
   );
   transform: scaleY(0);
   transition: transform 0.3s;
@@ -160,8 +160,8 @@
 }
 
 .sidebar-menu .el-menu-item.is-active {
-  background: linear-gradient(135deg, var(--primary-bg) 0%, transparent 100%);
-  color: var(--primary);
+  background: linear-gradient(135deg, var(--color-primary-bg) 0%, transparent 100%);
+  color: var(--color-primary);
   font-weight: 600;
 }
 
@@ -170,7 +170,7 @@
 }
 
 .sidebar-menu .el-menu-item:hover {
-  background: var(--primary-bg);
+  background: var(--color-primary-bg);
   transform: translateX(4px);
 }
 
@@ -220,7 +220,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--primary-bg) 0%, transparent 100%);
+  background: linear-gradient(135deg, var(--color-primary-bg) 0%, transparent 100%);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -255,8 +255,8 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--primary);
-  box-shadow: 0 0 8px var(--primary);
+  background: var(--color-primary);
+  box-shadow: 0 0 8px var(--color-primary);
   animation: statusPulse 2s ease-in-out infinite;
   transition: all 0.3s;
 }
@@ -269,7 +269,7 @@
 
 .status-loading {
   position: absolute;
-  color: var(--primary);
+  color: var(--color-primary);
   animation: spin 1s linear infinite;
 }
 
@@ -290,11 +290,11 @@
   0%,
   100% {
     opacity: 1;
-    box-shadow: 0 0 8px var(--primary);
+    box-shadow: 0 0 8px var(--color-primary);
   }
   50% {
     opacity: 0.6;
-    box-shadow: 0 0 12px var(--primary);
+    box-shadow: 0 0 12px var(--color-primary);
   }
 }
 
@@ -319,7 +319,7 @@
 
 .status-text {
   font-size: 13px;
-  color: var(--primary);
+  color: var(--color-primary);
   font-weight: 600;
   transition: color 0.3s;
 }
@@ -397,8 +397,8 @@
 }
 
 .user-avatar {
-  background: var(--primary-bg);
-  color: var(--primary);
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
 .username {

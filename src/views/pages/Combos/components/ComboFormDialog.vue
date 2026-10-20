@@ -622,7 +622,7 @@ watch(
   gap: 16px;
   padding: 16px 24px;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--primary-bg) 0%, transparent 100%);
+  background: linear-gradient(135deg, var(--color-primary-bg) 0%, transparent 100%);
   border-radius: 12px;
   border: 1px solid var(--border-color);
 }
@@ -652,8 +652,8 @@ watch(
 .combo-price .price-value {
   background: linear-gradient(
     135deg,
-    var(--primary) 0%,
-    var(--primary-dark) 100%
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -661,7 +661,7 @@ watch(
 }
 
 .saved-amount .price-value {
-  color: var(--danger);
+  color: var(--color-danger);
 }
 
 .price-divider {
@@ -673,8 +673,8 @@ watch(
 html.dark .combo-price .price-value {
   background: linear-gradient(
     135deg,
-    var(--primary) 0%,
-    var(--primary-dark) 100%
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

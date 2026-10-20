@@ -433,7 +433,7 @@ function parseFlavorPairs(
 }
 
 .cancel-text {
-  color: var(--danger, #f56c6c);
+  color: var(--color-danger);
 }
 
 /* 套餐列表 */
@@ -455,7 +455,7 @@ function parseFlavorPairs(
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: var(--primary-bg);
+  background: var(--color-primary-bg);
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -474,7 +474,7 @@ function parseFlavorPairs(
   transition: all 0.3s;
 
   &:hover {
-    border-color: var(--primary);
+    border-color: var(--color-primary);
     transform: scale(1.05);
   }
 
@@ -511,7 +511,7 @@ function parseFlavorPairs(
 .setmeal-price {
   font-size: 16px;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--color-primary);
 }
 
 .setmeal-quantity {
@@ -534,7 +534,7 @@ function parseFlavorPairs(
   padding: 8px 12px;
   background: color-mix(in srgb, var(--bg-card) 70%, transparent);
   border-radius: 6px;
-  border-left: 3px solid var(--primary);
+  border-left: 3px solid var(--color-primary);
   flex-wrap: wrap;
 
   /* 兼容不支持 color-mix 的浏览器 */
@@ -587,7 +587,7 @@ function parseFlavorPairs(
   transition: all 0.3s;
 
   &:hover {
-    border-color: var(--primary);
+    border-color: var(--color-primary);
     transform: scale(1.05);
   }
 
@@ -625,8 +625,8 @@ function parseFlavorPairs(
   }
 
   .flavor-value {
-    color: var(--primary);
-    background: var(--primary-bg);
+    color: var(--color-primary);
+    background: var(--color-primary-bg);
     padding: 1px 6px;
     border-radius: 4px;
   }
@@ -642,7 +642,7 @@ function parseFlavorPairs(
 .dish-price {
   font-size: 14px;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--color-primary);
 }
 
 .dish-quantity {
