@@ -49,7 +49,7 @@
   color: var(--text-secondary) !important;
 }
 
-/* 动态背�?*/
+/* 动态背景 */
 .bg-animation {
   position: absolute;
   inset: 0;
@@ -564,7 +564,11 @@
 
 /* 深色模式 */
 .login-container.is-dark .brand-panel::before {
-  background: linear-gradient(135deg, var(--color-primary-dark) 0%, #1a3a1a 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark) 0%,
+    #1a3a1a 100%
+  );
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
@@ -573,7 +577,7 @@
   border-color: var(--border-color);
 }
 
-/* 响应�?*/
+/* 响应式 */
 /* 基于高度的渐进式隐藏 */
 @media (max-height: 700px) {
   .feature-grid {
