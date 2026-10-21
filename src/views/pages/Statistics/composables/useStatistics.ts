@@ -115,7 +115,7 @@ export function useStatistics() {
   watch(
     () => customDateRange.value,
     (val) => {
-      if (timeRange.value === "custom" && val[0] && val[1]) {
+      if (timeRange.value === "custom" && val && val[0] && val[1]) {
         fetchAll();
       }
     },

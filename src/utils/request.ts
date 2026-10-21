@@ -11,6 +11,7 @@ interface CustomAxiosRequestConfig {
   timeout?: number;
   baseURL?: string;
   headers?: Record<string, any>;
+  responseType?: string;
   showError?: boolean;
 }
 
@@ -136,7 +137,7 @@ request.interceptors.response.use(
     const config = response.config as CustomAxiosRequestConfig;
 
     // Blob 响应（如文件导出）：直接返回原始数据，不解析 JSON
-    if (config.headers?.responseType === "blob") {
+    if (config.responseType === "blob") {
       return response.data;
     }
 

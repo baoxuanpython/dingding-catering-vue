@@ -1,27 +1,27 @@
 <template>
-  <div class="page-container statistics-page">
+  <div class="page-container">
     <div class="toolbar">
-      <div class="time-range-group">
+      <div class="btn-group">
         <el-button
-          :type="timeRange === 'today' ? 'primary' : ''"
+          :class="timeRange === 'today' ? 'btn-primary' : 'btn-reset'"
           @click="timeRange = 'today'"
         >
           今天
         </el-button>
         <el-button
-          :type="timeRange === 'yesterday' ? 'primary' : ''"
+          :class="timeRange === 'yesterday' ? 'btn-primary' : 'btn-reset'"
           @click="timeRange = 'yesterday'"
         >
           昨天
         </el-button>
         <el-button
-          :type="timeRange === 'week' ? 'primary' : ''"
+          :class="timeRange === 'week' ? 'btn-primary' : 'btn-reset'"
           @click="timeRange = 'week'"
         >
           本周
         </el-button>
         <el-button
-          :type="timeRange === 'month' ? 'primary' : ''"
+          :class="timeRange === 'month' ? 'btn-primary' : 'btn-reset'"
           @click="timeRange = 'month'"
         >
           本月
@@ -39,30 +39,30 @@
         />
       </div>
       <el-button type="primary" @click="showExportDialog = true">
-        <el-icon class="icon-primary"><Download /></el-icon>
+        <el-icon ><Download /></el-icon>
         导出报表
       </el-button>
     </div>
 
     <div class="charts-grid" v-loading="loading">
-      <div class="panel chart-panel">
-        <div class="chart-header">
-          <span class="chart-title">营业额统计</span>
+      <div class="panel panel--chart">
+        <div class="panel-header">
+          <span class="panel-title">营业额统计</span>
         </div>
         <div ref="turnoverChartRef" class="chart-body"></div>
       </div>
 
-      <div class="panel chart-panel">
-        <div class="chart-header">
-          <span class="chart-title">订单统计</span>
+      <div class="panel panel--chart">
+        <div class="panel-header">
+          <span class="panel-title">订单统计</span>
           <div class="order-summary" v-if="orderData">
-            <span class="summary-item">
+            <span class="panel-total">
               订单总数 <strong>{{ orderData.totalOrderCount }}</strong>
             </span>
-            <span class="summary-item">
+            <span class="panel-total">
               有效订单 <strong>{{ orderData.validOrderCount }}</strong>
             </span>
-            <span class="summary-item">
+            <span class="panel-total">
               完成率
               <strong>{{
                 formatPercent(orderData.orderCompletionRate)
@@ -73,44 +73,62 @@
         <div ref="orderChartRef" class="chart-body"></div>
       </div>
 
-      <div class="panel chart-panel">
-        <div class="chart-header">
-          <span class="chart-title">用户统计</span>
+      <div class="panel panel--chart">
+        <div class="panel-header">
+          <span class="panel-title">用户统计</span>
         </div>
         <div ref="userChartRef" class="chart-body"></div>
       </div>
 
-      <div class="panel chart-panel">
-        <div class="chart-header">
-          <span class="chart-title">销量 Top10</span>
+      <div class="panel panel--chart">
+        <div class="panel-header">
+          <span class="panel-title">销量 Top10</span>
         </div>
         <div ref="top10ChartRef" class="chart-body"></div>
       </div>
     </div>
 
-    <el-dialog v-model="showExportDialog" title="导出运营报表" width="480px">
-      <el-radio-group v-model="exportRange" class="export-range-group">
-        <el-radio value="today">今天</el-radio>
-        <el-radio value="yesterday">昨天</el-radio>
-        <el-radio value="week">本周</el-radio>
-        <el-radio value="month">本月</el-radio>
-        <el-radio value="custom">自定义</el-radio>
-      </el-radio-group>
-      <div v-if="exportRange === 'custom'" class="export-custom-range">
-        <el-date-picker
-          v-model="exportCustomDate"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          format="YYYY-MM-DD"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
+    <el-dialog
+      v-model="showExportDialog"
+      title="导出运营报表"
+      width="480px"
+      class="form-dialog"
+    >
+      <div class="dialog-form">
+        <div class="dialog-form-item">
+          <label class="dialog-label">时间范围</label>
+          <el-select
+            v-model="exportRange"
+            placeholder="请选择时间范围"
+            style="width: 100%"
+          >
+            <el-option label="今天" value="today" />
+            <el-option label="昨天" value="yesterday" />
+            <el-option label="本周" value="week" />
+            <el-option label="本月" value="month" />
+            <el-option label="自定义" value="custom" />
+          </el-select>
+        </div>
+        <div v-if="exportRange === 'custom'" class="dialog-form-item">
+          <label class="dialog-label">自定义日期</label>
+          <el-date-picker
+            v-model="exportCustomDate"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD"
+            style="width: 100%"
+          />
+        </div>
       </div>
       <template #footer>
-        <el-button @click="showExportDialog = false">取消</el-button>
+        <el-button class="reset-btn" @click="showExportDialog = false"
+          >取消</el-button
+        >
         <el-button
+          class="submit-btn"
           type="primary"
           @click="handleExport"
           :loading="exportLoading"
@@ -179,6 +197,114 @@ function getCssVar(name: string): string {
     .trim();
 }
 
+// ==================== 图表工具函数 ====================
+
+/**
+ * 安全分割字符串，处理 null/undefined/空值
+ */
+function safeSplit(
+  str: string | null | undefined,
+  defaultValue: string[] = [],
+): string[] {
+  if (!str || typeof str !== "string") return defaultValue;
+  const result = str.split(",").filter((s) => s.trim() !== "");
+  return result.length > 0 ? result : defaultValue;
+}
+
+/**
+ * 解析图表数据，提取公共逻辑
+ */
+function parseChartData(data: any) {
+  if (!data) return { valid: false };
+  const isHourMode = data.hourList !== null;
+  const xAxisData = isHourMode
+    ? safeSplit(data.hourList)
+    : safeSplit(data.dateList);
+  return { isHourMode, xAxisData, valid: true };
+}
+
+/**
+ * 获取当前主题的颜色配置（用于主题切换时更新）
+ */
+function getThemeColors() {
+  return {
+    textPrimary: getCssVar("--text-primary"),
+    textSecondary: getCssVar("--text-secondary"),
+    axisLine: getCssVar("--border-color"),
+    splitLine: getCssVar("--border-color-light"),
+    tooltipBg: getCssVar("--bg-card"),
+    tooltipBorder: getCssVar("--border-color"),
+    tooltipText: getCssVar("--text-primary"),
+  };
+}
+
+/**
+ * 格式化数字为千分位显示
+ */
+function formatNumber(value: number): string {
+  return value.toLocaleString("zh-CN");
+}
+
+/**
+ * 格式化时间标签：纯数字（0-23）添加"点"后缀，其他保持原样
+ */
+function formatTimeLabel(label: string | number): string {
+  const str = String(label);
+  const num = Number(str);
+  if (!isNaN(num) && num >= 0 && num <= 23) {
+    return `${num}点`;
+  }
+  return str;
+}
+
+/**
+ * 显示空状态图表配置
+ */
+function showEmptyChart(title?: string) {
+  return {
+    title: {
+      text: title || "暂无数据",
+      left: "center",
+      top: "40%",
+      textStyle: {
+        fontSize: 16,
+        color: getCssVar("--text-disabled"),
+        fontWeight: "normal",
+      },
+    },
+    xAxis: { show: false },
+    yAxis: { show: false },
+    series: [],
+  };
+}
+
+// ==================== 增强的基础图表配置 ====================
+
+function getChartBaseOptions() {
+  return {
+    tooltip: {
+      trigger: "axis" as const,
+      backgroundColor: getCssVar("--bg-card"),
+      borderColor: getCssVar("--border-color"),
+      borderWidth: 1,
+      padding: [8, 12],
+      textStyle: {
+        color: getCssVar("--text-primary"),
+        fontSize: 12,
+      },
+      extraCssText: "border-radius: 8px;",
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      top: 40,
+      containLabel: true,
+    },
+    animationDurationUpdate: 600,
+  };
+}
+
 // --- 导出 ---
 const showExportDialog = ref(false);
 const exportRange = ref<TimeRange>("today");
@@ -199,23 +325,37 @@ function formatPercent(rate: number): string {
   return `${(rate * 100).toFixed(1)}%`;
 }
 
-// --- 图表配置 ---
-
-const chartBaseOptions = {
-  tooltip: { trigger: "axis" as const },
-  grid: { left: "3%", right: "4%", bottom: "3%", top: 10, containLabel: true },
-};
+// --- 图表配置构建函数 ---
 
 function buildTurnoverOption(data: typeof turnoverData.value) {
-  if (!data) return {};
-  const dates = data.dateList.split(",");
-  const values = data.turnoverList.split(",").map(Number);
-  const primary = getCssVar("--color-primary") || "#85ce61";
+  const { xAxisData, valid } = parseChartData(data);
+  if (!valid || !data) return showEmptyChart("营业额统计");
+
+  const values = safeSplit(data.turnoverList).map(Number);
+  const baseOpts = getChartBaseOptions();
+  const primary = getCssVar("--color-primary");
   const primaryRgb = getCssVar("--primary-rgb") || "133,206,97";
+
   return {
-    ...chartBaseOptions,
-    xAxis: { type: "category", data: dates },
-    yAxis: { type: "value", axisLabel: { formatter: "¥{value}" } },
+    ...baseOpts,
+    tooltip: {
+      ...baseOpts.tooltip,
+      formatter: (params: any) => {
+        const p = Array.isArray(params) ? params[0] : params;
+        const timeLabel = formatTimeLabel(p.name);
+        return `<div style="display:flex;justify-content:space-between;align-items:center;min-width:120px;">
+          <span>${timeLabel}</span>
+          <span style="margin-left:16px;font-weight:600;">¥${formatNumber(p.value)}</span>
+        </div>`;
+      },
+    },
+    xAxis: { type: "category", data: xAxisData },
+    yAxis: {
+      type: "value",
+      axisLabel: {
+        formatter: (value: number) => `¥${formatNumber(value)}`,
+      },
+    },
     series: [
       {
         type: "line",
@@ -235,17 +375,63 @@ function buildTurnoverOption(data: typeof turnoverData.value) {
 }
 
 function buildOrderOption(data: typeof orderData.value) {
-  if (!data) return {};
-  const dates = data.dateList.split(",");
-  const totalList = data.orderCountList.split(",").map(Number);
-  const validList = data.validOrderCountList.split(",").map(Number);
-  const info = getCssVar("--color-info") || "#409eff";
-  const success = getCssVar("--color-success") || "#67c23a";
+  const { xAxisData, valid } = parseChartData(data);
+  if (!valid || !data) return showEmptyChart("订单统计");
+
+  const totalList = safeSplit(data.orderCountList).map(Number);
+  const validList = safeSplit(data.validOrderCountList).map(Number);
+  const baseOpts = getChartBaseOptions();
+  const info = getCssVar("--color-info");
+  const success = getCssVar("--color-success");
+
   return {
-    ...chartBaseOptions,
-    legend: { data: ["全部订单", "有效订单"], top: 0 },
-    xAxis: { type: "category", data: dates },
-    yAxis: { type: "value" },
+    ...baseOpts,
+    legend: {
+      data: ["全部订单", "有效订单"],
+      right: 0,
+      top: "center",
+      orient: "vertical",
+      icon: "roundRect",
+      itemWidth: 14,
+      itemHeight: 7,
+      textStyle: {
+        color: getCssVar("--text-secondary"),
+        fontSize: 12,
+      },
+    },
+    tooltip: {
+      ...baseOpts.tooltip,
+      formatter: (params: any[]) => {
+        if (!Array.isArray(params)) params = [params];
+        const timeLabel = formatTimeLabel(params[0].name);
+        let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-weight:600;">${timeLabel}</span>
+        </div>`;
+        params.forEach((p) => {
+          const color = p.color;
+          const value = formatNumber(p.value);
+          html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+            <span>${p.marker}${p.seriesName}：</span>
+            <span style="color:${color};margin-left:16px;font-weight:600;">${value} 单</span>
+          </div>`;
+        });
+        return html;
+      },
+    },
+    grid: {
+      left: "3%",
+      right: "15%",
+      bottom: "3%",
+      top: 40,
+      containLabel: true,
+    },
+    xAxis: { type: "category", data: xAxisData },
+    yAxis: {
+      type: "value",
+      axisLabel: {
+        formatter: (value: number) => `${formatNumber(value)} 单`,
+      },
+    },
     series: [
       {
         name: "全部订单",
@@ -268,17 +454,63 @@ function buildOrderOption(data: typeof orderData.value) {
 }
 
 function buildUserOption(data: typeof userData.value) {
-  if (!data) return {};
-  const dates = data.dateList.split(",");
-  const totalList = data.totalUserList.split(",").map(Number);
-  const newList = data.newUserList.split(",").map(Number);
-  const warning = getCssVar("--color-warning") || "#e6a23c";
-  const info = getCssVar("--color-info") || "#409eff";
+  const { xAxisData, valid } = parseChartData(data);
+  if (!valid || !data) return showEmptyChart("用户统计");
+
+  const totalList = safeSplit(data.totalUserList).map(Number);
+  const newList = safeSplit(data.newUserList).map(Number);
+  const baseOpts = getChartBaseOptions();
+  const warning = getCssVar("--color-warning");
+  const info = getCssVar("--color-info");
+
   return {
-    ...chartBaseOptions,
-    legend: { data: ["累计用户", "新增用户"], top: 0 },
-    xAxis: { type: "category", data: dates },
-    yAxis: { type: "value" },
+    ...baseOpts,
+    legend: {
+      data: ["累计用户", "新增用户"],
+      right: 0,
+      top: "center",
+      orient: "vertical",
+      icon: "roundRect",
+      itemWidth: 14,
+      itemHeight: 7,
+      textStyle: {
+        color: getCssVar("--text-secondary"),
+        fontSize: 12,
+      },
+    },
+    tooltip: {
+      ...baseOpts.tooltip,
+      formatter: (params: any[]) => {
+        if (!Array.isArray(params)) params = [params];
+        const timeLabel = formatTimeLabel(params[0].name);
+        let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-weight:600;">${timeLabel}</span>
+        </div>`;
+        params.forEach((p) => {
+          const color = p.color;
+          const value = formatNumber(p.value);
+          html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+            <span>${p.marker}${p.seriesName}：</span>
+            <span style="color:${color};margin-left:16px;font-weight:600;">${value} 人</span>
+          </div>`;
+        });
+        return html;
+      },
+    },
+    grid: {
+      left: "3%",
+      right: "15%",
+      bottom: "3%",
+      top: 40,
+      containLabel: true,
+    },
+    xAxis: { type: "category", data: xAxisData },
+    yAxis: {
+      type: "value",
+      axisLabel: {
+        formatter: (value: number) => `${formatNumber(value)} 人`,
+      },
+    },
     series: [
       {
         name: "累计用户",
@@ -300,21 +532,40 @@ function buildUserOption(data: typeof userData.value) {
 }
 
 function buildTop10Option(data: typeof top10Data.value) {
-  if (!data) return {};
-  const names = data.nameList.split(",");
-  const values = data.numberList.split(",").map(Number);
-  const primary = getCssVar("--color-primary") || "#409eff";
-  const primaryLight = getCssVar("--color-primary-light") || "#85ce61";
+  if (!data) return showEmptyChart("销量 Top10");
+
+  const names = safeSplit(data.nameList);
+  const values = safeSplit(data.numberList).map(Number);
+  const baseOpts = getChartBaseOptions();
+  const primary = getCssVar("--color-primary");
+  const primaryLight = getCssVar("--color-primary-light");
+
   return {
-    tooltip: { trigger: "axis" as const, axisPointer: { type: "shadow" } },
+    ...baseOpts,
+    tooltip: {
+      ...baseOpts.tooltip,
+      axisPointer: { type: "shadow" as const },
+      formatter: (params: any) => {
+        const p = Array.isArray(params) ? params[0] : params;
+        return `<div style="display:flex;justify-content:space-between;align-items:center;min-width:140px;">
+          <span>${p.name}</span>
+          <span style="margin-left:16px;font-weight:600;color:${primary}">${formatNumber(p.value)} 份</span>
+        </div>`;
+      },
+    },
     grid: {
       left: "3%",
       right: "8%",
       bottom: "3%",
-      top: 10,
+      top: 40,
       containLabel: true,
     },
-    xAxis: { type: "value" },
+    xAxis: {
+      type: "value",
+      axisLabel: {
+        formatter: (value: number) => `${formatNumber(value)} 份`,
+      },
+    },
     yAxis: {
       type: "category",
       data: names.reverse(),
@@ -375,7 +626,91 @@ watch([turnoverData, orderData, userData, top10Data], () => {
 watch(
   () => themeStore.activeThemeName,
   () => {
-    nextTick(() => initOrUpdateCharts());
+    nextTick(() => {
+      const colors = getThemeColors();
+      const primary = getCssVar("--color-primary");
+      const primaryLight = getCssVar("--color-primary-light");
+      const info = getCssVar("--color-info");
+      const success = getCssVar("--color-success");
+      const warning = getCssVar("--color-warning");
+
+      if (turnoverChart) {
+        const primaryRgb = getCssVar("--primary-rgb") || "133,206,97";
+        turnoverChart.setOption({
+          tooltip: {
+            backgroundColor: colors.tooltipBg,
+            borderColor: colors.tooltipBorder,
+            textStyle: { color: colors.tooltipText },
+          },
+          textStyle: { color: colors.textPrimary },
+          series: [
+            {
+              lineStyle: { color: primary },
+              itemStyle: { color: primary },
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: `rgba(${primaryRgb},0.3)` },
+                  { offset: 1, color: `rgba(${primaryRgb},0.02)` },
+                ]),
+              },
+            },
+          ],
+        });
+      }
+
+      if (orderChart) {
+        orderChart.setOption({
+          tooltip: {
+            backgroundColor: colors.tooltipBg,
+            borderColor: colors.tooltipBorder,
+            textStyle: { color: colors.tooltipText },
+          },
+          textStyle: { color: colors.textPrimary },
+          legend: { textStyle: { color: colors.textSecondary } },
+          series: [
+            { lineStyle: { color: info }, itemStyle: { color: info } },
+            { lineStyle: { color: success }, itemStyle: { color: success } },
+          ],
+        });
+      }
+
+      if (userChart) {
+        userChart.setOption({
+          tooltip: {
+            backgroundColor: colors.tooltipBg,
+            borderColor: colors.tooltipBorder,
+            textStyle: { color: colors.tooltipText },
+          },
+          textStyle: { color: colors.textPrimary },
+          legend: { textStyle: { color: colors.textSecondary } },
+          series: [
+            { lineStyle: { color: warning }, itemStyle: { color: warning } },
+            { itemStyle: { color: info } },
+          ],
+        });
+      }
+
+      if (top10Chart) {
+        top10Chart.setOption({
+          tooltip: {
+            backgroundColor: colors.tooltipBg,
+            borderColor: colors.tooltipBorder,
+            textStyle: { color: colors.tooltipText },
+          },
+          textStyle: { color: colors.textPrimary },
+          series: [
+            {
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                  { offset: 0, color: primary },
+                  { offset: 1, color: primaryLight },
+                ]),
+              },
+            },
+          ],
+        });
+      }
+    });
   },
 );
 
@@ -466,32 +801,6 @@ async function handleExport() {
 </script>
 
 <style scoped>
-.statistics-page {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding: 16px 20px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-}
-
-.time-range-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
 .charts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -501,56 +810,13 @@ async function handleExport() {
   min-height: 0;
 }
 
-.chart-panel {
-  display: flex;
-  flex-direction: column;
-  min-height: 300px;
-}
-
-.chart-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px 0;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.chart-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
 .order-summary {
   display: flex;
   gap: 16px;
 }
 
-.summary-item {
-  font-size: 13px;
-  color: var(--text-secondary);
-}
-
-.summary-item strong {
-  color: var(--text-primary);
-  margin-left: 4px;
-}
-
 .chart-body {
   flex: 1;
   min-height: 220px;
-}
-
-.export-range-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 8px 0;
-}
-
-.export-custom-range {
-  margin-top: 12px;
-  padding-left: 24px;
 }
 </style>

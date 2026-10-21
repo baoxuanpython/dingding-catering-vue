@@ -7,11 +7,10 @@ export interface ThemeDef {
   cssClass: string | null;
 }
 
-export const THEMES: ThemeDef[] = [
-  { name: "dark", label: "深色", cssClass: null },
+export const THEMES: ThemeDef[] = [  
   { name: "light", label: "浅色", cssClass: "light" },
+  { name: "dark", label: "深色", cssClass: null },
   { name: "cyberpunk", label: "赛博朋克", cssClass: "cyberpunk" },
-  { name: "warm", label: "暖色", cssClass: "warm" },
 ];
 
 export type ThemeName = (typeof THEMES)[number]["name"];

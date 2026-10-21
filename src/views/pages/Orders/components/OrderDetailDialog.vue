@@ -544,12 +544,6 @@ function parseFlavorPairs(
   border-radius: 6px;
   border-left: 3px solid var(--color-primary);
   flex-wrap: wrap;
-
-  /* 兼容不支持 color-mix 的浏览器 */
-  @supports not (background: color-mix(in srgb, red 50%, blue)) {
-    background: var(--bg-card);
-    opacity: 0.7;
-  }
 }
 
 .setmeal-dish-item .dish-name {

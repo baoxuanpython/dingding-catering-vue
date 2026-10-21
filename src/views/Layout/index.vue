@@ -112,12 +112,11 @@
                   :command="theme.name"
                   :disabled="activeThemeName === theme.name"
                 >
-                  <el-icon
-                    ><Sunny
-                      v-if="
-                        theme.name === 'light' || theme.name === 'warm'
-                      " /><Moon v-else
-                  /></el-icon>
+                  <el-icon>
+                    <Sunny v-if="theme.name === 'light'" />
+                    <Monitor v-else-if="theme.name === 'cyberpunk'" />
+                    <Moon v-else />
+                  </el-icon>
                   {{ theme.label }}模式
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -172,6 +171,7 @@ import {
   Bell,
   Sunny,
   Moon,
+  Monitor,
   Food,
   Loading,
   CoffeeCup,
