@@ -88,7 +88,7 @@
         <div class="detail-grid">
           <div class="detail-item">
             <span class="detail-label">收货人</span>
-            <span class="detail-value">{{ orderDetail.consignee }}</span>
+            <span class="detail-value">{{ orderDetail.consignee || "-" }}</span>
           </div>
           <div class="detail-item">
             <span class="detail-label">联系电话</span>

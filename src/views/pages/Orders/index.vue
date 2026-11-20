@@ -202,13 +202,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="下单人" width="120" resizable align="center">
+        <el-table-column label="收货人" width="120" resizable align="center">
           <template #default="{ row }">
             <div class="user-cell">
               <el-avatar :size="28" class="user-avatar">
                 <el-icon :size="14" class="icon-info"><User /></el-icon>
               </el-avatar>
-              <span>{{ row.userName }}</span>
+              <span>{{ getConsigneeName(row) }}</span>
             </div>
           </template>
         </el-table-column>
@@ -439,6 +439,10 @@ function getStatusType(
 function formatTime(time?: string | null): string {
   if (!time) return "-";
   return time.replace("T", " ").substring(0, 19);
+}
+
+function getConsigneeName(row: OrderVO): string {
+  return row.consignee || row.userName || "-";
 }
 
 async function fetchOrders() {

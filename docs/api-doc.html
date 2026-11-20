@@ -4053,8 +4053,23 @@ interface Flavor {
               method: "GET",
               path: "/admin/report/export",
               contentType: null,
-              description: "导出运营报表为 Excel 文件。",
-              requestParams: [],
+              description: "导出指定时间范围内的运营报表为 Excel 文件。",
+              requestParams: [
+                {
+                  name: "begin",
+                  type: "string",
+                  required: "是",
+                  description: "开始日期（格式：yyyy-MM-dd）",
+                  location: "query",
+                },
+                {
+                  name: "end",
+                  type: "string",
+                  required: "是",
+                  description: "结束日期（格式：yyyy-MM-dd）",
+                  location: "query",
+                },
+              ],
               requestBody: null,
               responseBody: {
                 label: "Excel 文件流",
