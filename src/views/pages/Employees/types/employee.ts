@@ -38,9 +38,13 @@ export interface EmployeeForm {
   idNumber: string;
 }
 
-/** 修改密码表单 */
-export interface EditPasswordForm {
-  empId: number;
+/** 自助修改密码表单（目标账号由令牌解析，无需 empId） */
+export interface SelfPasswordForm {
   oldPassword: string;
+  newPassword: string;
+}
+
+/** 管理员修改指定员工密码表单 */
+export interface SetEmployeePasswordForm {
   newPassword: string;
 }

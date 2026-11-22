@@ -111,6 +111,7 @@ import { ref, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { useThemeStore } from "@/stores/theme";
+import { canAccessPath } from "@/router";
 import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 import {
@@ -153,8 +154,11 @@ const handleLogin = async () => {
     ElMessage.success("登录成功");
 
     // 检查是否有重定向路径（从 401 拦截器保存的）
-    const redirectPath = sessionStorage.getItem("redirectPath") || "/dashboard";
+    const savedPath = sessionStorage.getItem("redirectPath");
     sessionStorage.removeItem("redirectPath"); // 清除已使用的路径
+    // 校验目标路径对当前角色是否开放，无权访问时回退到工作台
+    const redirectPath =
+      savedPath && canAccessPath(savedPath) ? savedPath : "/dashboard";
     router.push(redirectPath);
   } catch (error) {
     // 错误已在响应拦截器中处理

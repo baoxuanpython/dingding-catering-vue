@@ -63,6 +63,15 @@
   --accent-teal: #26a69a;
   --accent-purple: #b4a0ff;
 
+  /* 快捷导航卡片配色（RGB 分量，深色主题下提高亮度） */
+  --nav-order-rgb: 64, 158, 255;
+  --nav-meal-rgb: 133, 206, 97;
+  --nav-combo-rgb: 230, 162, 60;
+  --nav-category-rgb: 180, 160, 255;
+  --nav-flavor-rgb: 0, 188, 212;
+  --nav-employee-rgb: 240, 98, 146;
+  --nav-statistics-rgb: 144, 164, 174;
+
   /* 中性色（反转：100=暗 → 900=亮） */
   --neutral-100: #212121;
   --neutral-200: #424242;

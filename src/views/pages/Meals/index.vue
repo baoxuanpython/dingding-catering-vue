@@ -268,7 +268,7 @@
           :page-sizes="[10, 20, 50, 100]"
           layout="total, sizes, prev, pager, next, jumper"
           background
-          @size-change="fetchDishes"
+          @size-change="handleSizeChange"
           @current-change="fetchDishes"
         />
       </div>
@@ -287,7 +287,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import {
   Search,
@@ -341,8 +341,10 @@ const activeStatus = ref<number | undefined>(undefined);
 // 是否是自定义混合查询（状态 + 其他条件）
 const isCustomQuery = ref(false);
 
-// "全部菜品"卡片显示的数量（正常是 totalDishes，混合查询时是 pagination.total）
-const displayCount = ref(0);
+// "全部菜品"卡片显示的数量：混合查询时为查询结果数，否则为全部菜品总数
+const displayCount = computed(() =>
+  isCustomQuery.value ? pagination.total : totalDishes.value,
+);
 
 const searchForm = reactive({
   name: "",
@@ -376,7 +378,6 @@ async function fetchDishStatistics() {
     const res = await getDishOverview();
     Object.assign(dishStatistics, res);
     totalDishes.value = dishStatistics.sold + dishStatistics.discontinued;
-    displayCount.value = totalDishes.value; // 同步更新显示数量
   } catch (error) {
     console.error("获取菜品统计失败:", error);
   }
@@ -396,11 +397,6 @@ async function fetchDishes() {
     dishList.value = res.records || [];
     pagination.total = res.total || 0;
 
-    // 如果是自定义查询，更新"全部菜品"卡片显示的数量为本次查询结果数
-    if (isCustomQuery.value) {
-      displayCount.value = pagination.total;
-    }
-
     // 当没有筛选条件时，更新全部菜品总数
     const hasFilter =
       searchForm.name ||
@@ -408,13 +404,17 @@ async function fetchDishes() {
       searchForm.status !== undefined;
     if (!hasFilter && pagination.page === 1) {
       totalDishes.value = res.total || 0;
-      displayCount.value = totalDishes.value; // 同步更新显示数量
     }
   } catch (error) {
     console.error("获取菜品列表失败:", error);
   } finally {
     loading.value = false;
   }
+}
+
+function handleSizeChange() {
+  pagination.page = 1;
+  fetchDishes();
 }
 
 async function fetchCategories() {
@@ -435,13 +435,11 @@ function handleStatusFilter(status: number | undefined) {
     // 清空其他查询条件
     searchForm.name = "";
     searchForm.categoryId = undefined;
-    displayCount.value = totalDishes.value; // 显示全部菜品数量
   } else {
     // 点击"全部菜品"卡片：查看全部
     activeStatus.value = undefined;
     searchForm.status = undefined;
     isCustomQuery.value = false;
-    displayCount.value = totalDishes.value; // 显示全部菜品数量
   }
 
   handleSearch();
@@ -460,22 +458,18 @@ function handleSearch() {
     // 混合查询：状态 + 其他条件
     isCustomQuery.value = true;
     activeStatus.value = undefined; // 不高亮状态卡片
-    // displayCount 会在 fetchDishes 成功后更新为 pagination.total
   } else if (hasStatus && !hasOtherConditions) {
     // 单独状态查询
     isCustomQuery.value = false;
     activeStatus.value = searchForm.status; // 高亮对应的状态卡片
-    displayCount.value = totalDishes.value; // 恢复显示全部菜品数量
   } else if (hasOtherConditions && !hasStatus) {
     // 只有其他条件，没有状态（也算自定义查询）
     isCustomQuery.value = true;
     activeStatus.value = undefined;
-    // displayCount 会在 fetchDishes 成功后更新为 pagination.total
   } else {
     // 没有任何查询条件（理论上不会走到这里，因为会走 reset）
     isCustomQuery.value = false;
     activeStatus.value = undefined;
-    displayCount.value = totalDishes.value;
   }
 
   pagination.page = 1;
@@ -488,7 +482,6 @@ function handleReset() {
   searchForm.status = undefined;
   activeStatus.value = undefined;
   isCustomQuery.value = false;
-  displayCount.value = totalDishes.value; // 恢复显示全部菜品数量
   pagination.page = 1;
   fetchDishes();
 }

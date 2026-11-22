@@ -26,6 +26,9 @@
           placeholder="请输入新密码"
           show-password
         />
+        <div class="rule-hint">
+          <span>{{ ruleHint }}</span>
+        </div>
       </el-form-item>
       <el-form-item label="确认密码" prop="confirmPassword">
         <el-input
@@ -46,6 +49,18 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
+import {
+  PASSWORD_MIN,
+  PASSWORD_MAX,
+  createNewPasswordRules,
+  createConfirmPasswordRules,
+} from "@/utils/password";
+
+interface PasswordFormData {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
 
 const props = defineProps<{
   modelValue: boolean;
@@ -56,12 +71,6 @@ const emit = defineEmits<{
   (e: "submit", data: PasswordFormData): void;
   (e: "reset"): void;
 }>();
-
-interface PasswordFormData {
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
 
 const visible = computed({
   get: () => props.modelValue,
@@ -76,35 +85,24 @@ const formData = ref<PasswordFormData>({
   confirmPassword: "",
 });
 
-const validateConfirmPassword = (
-  _rule: unknown,
-  value: string,
-  callback: (error?: Error) => void,
-) => {
-  if (value !== formData.value.newPassword) {
-    callback(new Error("两次输入的密码不一致"));
-  } else {
-    callback();
-  }
-};
+const ruleHint = `密码长度 ${PASSWORD_MIN}~${PASSWORD_MAX} 位，不能包含空格`;
 
 const formRules: FormRules = {
   oldPassword: [{ required: true, message: "请输入旧密码", trigger: "blur" }],
-  newPassword: [
-    { required: true, message: "请输入新密码", trigger: "blur" },
-    { min: 6, message: "密码长度不能少于6位", trigger: "blur" },
-  ],
-  confirmPassword: [
-    { required: true, message: "请再次输入新密码", trigger: "blur" },
-    { validator: validateConfirmPassword, trigger: "blur" },
-  ],
+  newPassword: createNewPasswordRules({
+    getOldPassword: () => formData.value.oldPassword,
+  }),
+  confirmPassword: createConfirmPasswordRules(() => formData.value.newPassword),
 };
 
 watch(
   () => props.modelValue,
   (val) => {
-    if (val && formRef.value) {
-      formRef.value.clearValidate();
+    if (val) {
+      formData.value.oldPassword = "";
+      formData.value.newPassword = "";
+      formData.value.confirmPassword = "";
+      formRef.value?.clearValidate();
     }
   },
 );

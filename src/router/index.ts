@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { ElMessage } from "element-plus";
+import { hasRole, ROLE_ADMIN } from "@/utils/permission";
 
 const routes = [
   {
@@ -54,7 +56,7 @@ const routes = [
         path: "employees",
         name: "Employees",
         component: () => import("../views/pages/Employees/index.vue"),
-        meta: { title: "员工管理", requiresAuth: true },
+        meta: { title: "员工管理", requiresAuth: true, roles: [ROLE_ADMIN] },
       },
       {
         path: "statistics",
@@ -71,7 +73,7 @@ const router = createRouter({
   routes,
 });
 
-// 路由守卫：校验 token
+// 路由守卫：校验 token 与角色
 router.beforeEach((to, _from, next) => {
   const token = localStorage.getItem("token");
   if (to.matched.some((record) => record.meta.requiresAuth)) {
@@ -81,9 +83,17 @@ router.beforeEach((to, _from, next) => {
         sessionStorage.setItem("redirectPath", to.fullPath);
       }
       next("/login");
-    } else {
-      next();
+      return;
     }
+
+    const roles = to.meta.roles as string[] | undefined;
+    if (!hasRole(roles)) {
+      ElMessage.warning("当前账号无权访问该页面");
+      next("/dashboard");
+      return;
+    }
+
+    next();
   } else {
     if (to.path === "/login" && token) {
       next("/dashboard");
@@ -94,3 +104,16 @@ router.beforeEach((to, _from, next) => {
 });
 
 export default router;
+
+/**
+ * 判断目标路径对当前登录账号是否可访问
+ * 用于登录后校验重定向路径，避免把员工导向仅管理员可进的页面
+ * 未匹配到任何路由时返回 false，防止跳到不存在的地址
+ */
+export function canAccessPath(path: string): boolean {
+  const resolved = router.resolve(path);
+  if (resolved.matched.length === 0) return false;
+  return resolved.matched.every((record) =>
+    hasRole(record.meta?.roles as string[] | undefined),
+  );
+}

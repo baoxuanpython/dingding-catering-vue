@@ -6,7 +6,8 @@ import type {
   EmployeeVO,
   EmployeePageQuery,
   EmployeeForm,
-  EditPasswordForm,
+  SelfPasswordForm,
+  SetEmployeePasswordForm,
 } from "../types/employee";
 
 /** 分页查询员工 */
@@ -37,9 +38,17 @@ export function getEmployeeById(id: number) {
   return request.get<EmployeeVO>(`/employee/${id}`);
 }
 
-/** 修改密码 */
-export function editPassword(data: EditPasswordForm) {
-  return request.put("/employee/editPassword", data);
+/** 自助修改密码（目标账号由令牌解析，任意已登录员工可调） */
+export function editSelfPassword(data: SelfPasswordForm) {
+  return request.put("/employee/password", data);
+}
+
+/** 管理员修改指定员工密码（仅 admin 可调，无需旧密码） */
+export function updateEmployeePassword(
+  id: number,
+  data: SetEmployeePasswordForm,
+) {
+  return request.put(`/employee/${id}/password`, data);
 }
 
 /** 批量删除员工 */

@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
 import { login as loginApi, logout as logoutApi } from "@/api/auth";
 import type { LoginResponse } from "@/api/auth";
+import { ADMIN_USERNAME, ROLE_ADMIN, ROLE_STAFF } from "@/utils/permission";
 import router from "@/router";
 
 export const useUserStore = defineStore("user", () => {
@@ -14,11 +15,23 @@ export const useUserStore = defineStore("user", () => {
     savedUserInfo ? JSON.parse(savedUserInfo) : null,
   );
 
+  // 优先采用后端下发的 role；老缓存没有 role 时按 userName 兜底
+  const role = computed(() => {
+    const info = userInfo.value;
+    if (!info) return "";
+    return (
+      info.role || (info.userName === ADMIN_USERNAME ? ROLE_ADMIN : ROLE_STAFF)
+    );
+  });
+  const isAdmin = computed(() => role.value === ROLE_ADMIN);
+
   const login = async (username: string, password: string) => {
     const res = await loginApi({ username, password });
     token.value = res.token;
-    // 根据 userName 判断角色：admin 为管理员，其他为员工
-    res.role = res.userName === "admin" ? "admin" : "user";
+    // 后端未下发 role 时兜底判定，避免老接口环境下管理员权限丢失
+    if (!res.role) {
+      res.role = res.userName === ADMIN_USERNAME ? ROLE_ADMIN : ROLE_STAFF;
+    }
     userInfo.value = res;
     localStorage.setItem("token", res.token);
     localStorage.setItem("userInfo", JSON.stringify(res));
@@ -46,5 +59,5 @@ export const useUserStore = defineStore("user", () => {
     router.push("/login");
   };
 
-  return { token, userInfo, login, logout };
+  return { token, userInfo, role, isAdmin, login, logout };
 });

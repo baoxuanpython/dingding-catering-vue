@@ -10,7 +10,7 @@ export interface LoginResponse {
   name: string; // 姓名
   token: string; // JWT 令牌
   userName: string; // 用户名（后端返回 userName 驼峰）
-  role: "admin" | "user"; // 角色：根据 userName === 'admin' 判断
+  role?: "admin" | "user"; // 角色（后端下发；缺失时前端按 userName 兜底）
 }
 
 /**

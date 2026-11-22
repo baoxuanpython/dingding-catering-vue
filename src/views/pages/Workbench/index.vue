@@ -49,13 +49,41 @@
             }}</span>
           </div>
           <el-switch
-            v-model="shopStatus"
+            :model-value="shopStatus"
             :active-value="1"
             :inactive-value="0"
+            :loading="shopLoading"
             @change="handleShopStatusChange"
             class="shop-switch"
           />
         </div>
+      </div>
+    </div>
+
+    <!-- 快捷导航 - 主要业务入口 -->
+    <div class="section-title">
+      <span class="title-bar"></span>
+      <span>快捷导航</span>
+    </div>
+    <div class="nav-grid">
+      <div
+        v-for="item in navItems"
+        :key="item.key"
+        class="nav-card"
+        :class="`nav-card--${item.key}`"
+        @click="goTo(item.path)"
+      >
+        <div class="nav-card-icon">
+          <el-icon :size="22"><component :is="item.icon" /></el-icon>
+        </div>
+        <div class="nav-card-body">
+          <div class="nav-card-title">{{ item.title }}</div>
+          <div class="nav-card-desc">{{ item.desc }}</div>
+        </div>
+        <div v-if="item.value !== undefined" class="nav-card-value">
+          {{ item.value }}<span class="nav-card-unit">{{ item.unit }}</span>
+        </div>
+        <el-icon class="nav-card-arrow"><ArrowRight /></el-icon>
       </div>
     </div>
 
@@ -140,7 +168,10 @@
           <span class="panel-total">总计 {{ orderOverview.allOrders }} 单</span>
         </div>
         <div class="order-stats">
-          <div class="order-stat-item waiting">
+          <div
+            class="order-stat-item waiting"
+            @click="goToOrders(OrderStatus.TO_BE_CONFIRMED)"
+          >
             <div class="order-stat-ring">
               <svg class="ring-svg" viewBox="0 0 100 100">
                 <circle class="ring-bg" cx="50" cy="50" r="40" />
@@ -162,7 +193,10 @@
             </div>
             <span class="order-stat-label">待接单</span>
           </div>
-          <div class="order-stat-item delivering">
+          <div
+            class="order-stat-item delivering"
+            @click="goToOrders(OrderStatus.CONFIRMED)"
+          >
             <div class="order-stat-ring">
               <svg class="ring-svg" viewBox="0 0 100 100">
                 <circle class="ring-bg" cx="50" cy="50" r="40" />
@@ -186,7 +220,10 @@
             </div>
             <span class="order-stat-label">待派送</span>
           </div>
-          <div class="order-stat-item completed">
+          <div
+            class="order-stat-item completed"
+            @click="goToOrders(OrderStatus.COMPLETED)"
+          >
             <div class="order-stat-ring">
               <svg class="ring-svg" viewBox="0 0 100 100">
                 <circle class="ring-bg" cx="50" cy="50" r="40" />
@@ -210,7 +247,10 @@
             </div>
             <span class="order-stat-label">已完成</span>
           </div>
-          <div class="order-stat-item cancelled">
+          <div
+            class="order-stat-item cancelled"
+            @click="goToOrders(OrderStatus.CANCELLED)"
+          >
             <div class="order-stat-ring">
               <svg class="ring-svg" viewBox="0 0 100 100">
                 <circle class="ring-bg" cx="50" cy="50" r="40" />
@@ -315,9 +355,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from "vue";
+import { ref, reactive, onMounted, computed, markRaw } from "vue";
+import type { Component } from "vue";
+import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { useShopStore } from "@/stores/shop";
+import {
+  ArrowRight,
+  CoffeeCup,
+  DataAnalysis,
+  Dish,
+  List,
+  Menu,
+  TakeawayBox,
+  UserFilled,
+} from "@element-plus/icons-vue";
+import { OrderStatus } from "@/views/pages/Orders/types/order";
 import {
   getBusinessData,
   getOverviewSetmeals,
@@ -333,10 +386,12 @@ import type {
 
 const userStore = useUserStore();
 const shopStore = useShopStore();
+const router = useRouter();
 
 const userName = ref(userStore.userInfo?.name || "管理员");
 const todayDate = ref("");
 const shopStatus = computed(() => shopStore.shopStatus);
+const shopLoading = computed(() => shopStore.loading);
 
 const businessData = reactive<BusinessData>({
   turnover: 0,
@@ -369,6 +424,108 @@ const orderOverview = reactive<OrderOverview>({
 const today = new Date();
 const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
 todayDate.value = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日 星期${weekDays[today.getDay()]}`;
+
+/**
+ * 快捷导航卡片图标
+ * 与侧边栏保持同一套 Element Plus 图标，用 markRaw 避免被 Vue 深度代理
+ */
+const NAV_ICONS = {
+  order: markRaw(List),
+  meal: markRaw(Dish),
+  combo: markRaw(TakeawayBox),
+  category: markRaw(Menu),
+  flavor: markRaw(CoffeeCup),
+  employee: markRaw(UserFilled),
+  statistics: markRaw(DataAnalysis),
+};
+
+interface NavItem {
+  key: string;
+  path: string;
+  title: string;
+  desc: string;
+  icon: Component;
+  value?: number;
+  unit?: string;
+  adminOnly?: boolean;
+}
+
+/**
+ * 快捷导航项
+ * 只有订单/菜品/套餐有工作台级统计接口，其余卡片只展示入口信息
+ */
+const navItems = computed<NavItem[]>(() => {
+  const items: NavItem[] = [
+    {
+      key: "order",
+      path: "/orders",
+      title: "订单管理",
+      desc: "接单与派送",
+      icon: NAV_ICONS.order,
+      value: orderOverview.allOrders,
+      unit: "单",
+    },
+    {
+      key: "meal",
+      path: "/meals",
+      title: "菜品管理",
+      desc: "上架与停售",
+      icon: NAV_ICONS.meal,
+      value: dishOverview.sold + dishOverview.discontinued,
+      unit: "道",
+    },
+    {
+      key: "combo",
+      path: "/combos",
+      title: "套餐管理",
+      desc: "组合与上架",
+      icon: NAV_ICONS.combo,
+      value: setmealOverview.sold + setmealOverview.discontinued,
+      unit: "个",
+    },
+    {
+      key: "category",
+      path: "/categories",
+      title: "分类管理",
+      desc: "分类维护",
+      icon: NAV_ICONS.category,
+    },
+    {
+      key: "flavor",
+      path: "/flavors",
+      title: "口味管理",
+      desc: "口味配置",
+      icon: NAV_ICONS.flavor,
+    },
+    {
+      key: "employee",
+      path: "/employees",
+      title: "员工管理",
+      desc: "账号与权限",
+      icon: NAV_ICONS.employee,
+      adminOnly: true,
+    },
+    {
+      key: "statistics",
+      path: "/statistics",
+      title: "数据统计",
+      desc: "营业与订单",
+      icon: NAV_ICONS.statistics,
+    },
+  ];
+  return items.filter((item) => !item.adminOnly || userStore.isAdmin);
+});
+
+function goTo(path: string) {
+  router.push(path);
+}
+
+/**
+ * 点击订单环形图直达订单页，并携带状态筛选
+ */
+function goToOrders(status: number) {
+  router.push({ path: "/orders", query: { status: String(status) } });
+}
 
 function formatNumber(num: number): string {
   return num.toLocaleString("zh-CN", {

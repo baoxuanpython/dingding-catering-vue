@@ -297,7 +297,7 @@
   --table-header-bg: var(--bg-primary);
   --table-row-bg: var(--bg-card);
   --table-row-striped-bg: var(--bg-primary);
-  --table-row-hover-bg: rgba(var(--primary-rgb), 0.08);
+  --table-row-hover-bg: color-mix(in srgb, var(--primary) 12%, var(--bg-card));
   --table-border: var(--border-color);
   --table-text: var(--text-primary);
 

@@ -1,0 +1,223 @@
+/* ============================================================
+   消息通知面板 — 组件样式（浅色 / 深色 / 赛博朋克 三主题自动适配）
+   ============================================================
+   本文件仅使用 var() 引用主题变量，不写任何色值，
+   因此三套主题无需各自维护一份样式：切换 html 上的主题类名即可自动换肤。
+
+   为什么必须放在全局样式里：
+   el-popover 的弹出层通过 Teleport 渲染到 body，
+   scoped 样式编译后会带上 [data-v-xxx]，而弹出层没有该属性，规则不会命中。
+
+   BEM 命名（message-panel__xxx）用于避开 .panel-header / .panel-title
+   这类在 common-page.scss、workbench.scss 中已存在的全局同名类。
+   ============================================================ */
+
+/* ==================== 一、弹出层容器（含箭头） ==================== */
+
+.message-popover.el-popper {
+  padding: 14px 14px 8px !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  /* 先用实色打底再叠渐变：赛博朋克的 --gradient-card 是半透明霓虹色，
+     只写 background 会让弹层透出下方页面内容 */
+  background-color: var(--bg-card) !important;
+  background-image: var(--gradient-card) !important;
+  box-shadow: var(--shadow-heavy), var(--shadow-glow) !important;
+}
+
+.message-popover .el-popper__arrow::before {
+  border: 1px solid var(--border-color) !important;
+  background: var(--bg-card) !important;
+}
+
+/* 赛博朋克：霓虹描边 + 主色文字辉光，与其它两套主题形成明显区分 */
+html.cyberpunk .message-popover.el-popper {
+  border-color: var(--primary) !important;
+  box-shadow: var(--shadow-heavy), var(--shadow-glow-strong) !important;
+}
+
+/* ==================== 二、面板骨架 ==================== */
+
+.message-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.message-panel__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+html.cyberpunk .message-panel__title {
+  text-shadow: 0 0 8px rgba(var(--primary-rgb), 0.7);
+}
+
+.message-panel__sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.message-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 静音开关：无边框图标按钮，跟随主题色 */
+.message-panel__mute {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    background-color 0.2s;
+}
+
+.message-panel__mute:hover {
+  color: var(--color-primary);
+  background: var(--bg-card-hover);
+}
+
+/* 静音态用危险色，让「我现在不会响」一眼可见 */
+.message-panel__mute--off {
+  color: var(--color-danger);
+}
+
+.message-panel__mute--off:hover {
+  color: var(--color-danger);
+}
+
+.message-panel__list {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+/* 面板内滚动条：细、跟随主题色，hover 变主色 */
+.message-panel__list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.message-panel__list::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--border-color);
+}
+
+.message-panel__list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+.message-panel__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ==================== 三、消息条目 ==================== */
+
+.message-panel__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.message-panel__item:hover {
+  background: var(--bg-card-hover);
+}
+
+.message-panel__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+/* 催单：警告色；新订单：主色。辉光同样跟随语义色的 RGB 分量 */
+.message-panel__icon--reminder {
+  color: var(--color-warning);
+  background: var(--color-warning-bg);
+  box-shadow: 0 0 8px rgba(var(--warning-rgb), 0.35);
+}
+
+.message-panel__icon--order {
+  color: var(--color-primary);
+  background: var(--color-primary-bg);
+  box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.35);
+}
+
+.message-panel__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.message-panel__content {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.message-panel__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.message-panel__order {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.message-panel__time {
+  flex-shrink: 0;
+}
+
+.message-panel__unread {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: var(--color-danger);
+  box-shadow: 0 0 6px rgba(var(--danger-rgb), 0.7);
+}
+
+/* ==================== 四、空状态与加载态 ==================== */
+
+.message-popover .el-empty__description p {
+  color: var(--text-secondary);
+}
+
+.message-panel__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}

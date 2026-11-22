@@ -13,6 +13,7 @@ import "./styles/theme-dark.css";
 import "./styles/theme-cyberpunk.css";
 import "./styles/theme.css";
 import "./styles/common-page.scss";
+import "./styles/message-panel.scss";
 
 // 创建 Vue 应用实例
 const app = createApp(App);

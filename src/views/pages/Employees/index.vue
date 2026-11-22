@@ -164,9 +164,10 @@
           <template #default="{ row }">
             <el-switch
               v-if="row.id !== currentEmpId"
-              v-model="row.status"
+              :model-value="row.status"
               :active-value="1"
               :inactive-value="0"
+              :loading="statusLoadingId === row.id"
               @change="(val: number) => handleStatusChange(row, val)"
             />
             <el-tag v-else type="success" size="small">启用</el-tag>
@@ -212,7 +213,7 @@
           :total="pagination.total"
           :page-sizes="[10, 20, 50, 100]"
           layout="total, sizes, prev, pager, next, jumper"
-          @size-change="fetchEmployees"
+          @size-change="handleSizeChange"
           @current-change="fetchEmployees"
         />
       </div>
@@ -233,11 +234,19 @@
       :employee="currentEmployee"
     />
 
-    <!-- 修改密码弹窗 -->
+    <!-- 修改密码弹窗（改自己） -->
     <PasswordDialog
       v-model="passwordDialogVisible"
       @submit="handlePasswordSubmit"
       @reset="resetPasswordForm"
+    />
+
+    <!-- 修改员工密码弹窗（管理员改他人） -->
+    <SetEmployeePasswordDialog
+      v-model="setPasswordVisible"
+      :employee="setPasswordTarget"
+      @submit="handleSetPasswordSubmit"
+      @reset="resetSetPasswordForm"
     />
   </div>
 </template>
@@ -256,13 +265,15 @@ import {
 import { ElMessage, ElMessageBox } from "element-plus";
 import EmployeeFormDialog from "./components/EmployeeFormDialog.vue";
 import EmployeeDetailDialog from "./components/EmployeeDetailDialog.vue";
-import PasswordDialog from "./components/PasswordDialog.vue";
+import PasswordDialog from "@/components/PasswordDialog.vue";
+import SetEmployeePasswordDialog from "@/components/SetEmployeePasswordDialog.vue";
 import {
   getEmployeePage,
   createEmployee,
   updateEmployee,
   updateEmployeeStatus,
-  editPassword,
+  editSelfPassword,
+  updateEmployeePassword,
   batchDeleteEmployee,
 } from "./api/employeeApi";
 import type {
@@ -270,13 +281,14 @@ import type {
   EmployeePageQuery,
   EmployeeForm,
 } from "./types/employee";
-import { getSurnamePinyin, getAvatarColor } from "./utils/pinyin";
+import { getSurnamePinyin, getAvatarColor } from "@/utils/pinyin";
 import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();
 
-const isAdmin = computed(() => userStore.userInfo?.role === "admin");
+const isAdmin = computed(() => userStore.isAdmin);
 const currentEmpId = computed(() => userStore.userInfo?.id ?? 0);
+const statusLoadingId = ref<number | undefined>(undefined);
 
 // ==================== 统计卡片 ====================
 interface EmployeeStatistics {
@@ -292,12 +304,11 @@ const statistics = reactive<EmployeeStatistics>({
 const activeStatus = ref<number | undefined>(undefined);
 const isCustomQuery = ref(false);
 
+// 「全部员工」卡片：只有自定义查询时才显示查询结果数，点启用/禁用不影响它
 const displayCount = computed(() => {
   if (isCustomQuery.value) {
     return pagination.total;
   }
-  if (activeStatus.value === 1) return statistics.enabled;
-  if (activeStatus.value === 0) return statistics.disabled;
   return statistics.enabled + statistics.disabled;
 });
 
@@ -319,7 +330,7 @@ function handleStatusFilter(status: number | undefined) {
   isCustomQuery.value = false;
   searchForm.name = "";
   searchForm.phone = "";
-  searchForm.status = undefined;
+  searchForm.status = status;
   pagination.page = 1;
   fetchEmployees();
 }
@@ -344,6 +355,11 @@ const selectedIds = computed(() => selectedRows.value.map((row) => row.id));
 
 function handleSelectionChange(rows: EmployeeVO[]) {
   selectedRows.value = rows;
+}
+
+function handleSizeChange() {
+  pagination.page = 1;
+  fetchEmployees();
 }
 
 async function fetchEmployees() {
@@ -464,11 +480,24 @@ function handleView(row: EmployeeVO) {
 
 // ==================== 修改密码 ====================
 const passwordDialogVisible = ref(false);
-const currentPasswordEmpId = ref(0);
+const setPasswordVisible = ref(false);
+const setPasswordTarget = ref<{
+  id: number;
+  name: string;
+  username: string;
+} | null>(null);
 
 function handleEditPassword(row: EmployeeVO) {
-  currentPasswordEmpId.value = row.id;
-  passwordDialogVisible.value = true;
+  if (row.id === currentEmpId.value) {
+    passwordDialogVisible.value = true;
+  } else {
+    setPasswordTarget.value = {
+      id: row.id,
+      name: row.name,
+      username: row.username,
+    };
+    setPasswordVisible.value = true;
+  }
 }
 
 async function handlePasswordSubmit(data: {
@@ -476,8 +505,7 @@ async function handlePasswordSubmit(data: {
   newPassword: string;
 }) {
   try {
-    await editPassword({
-      empId: currentPasswordEmpId.value,
+    await editSelfPassword({
       oldPassword: data.oldPassword,
       newPassword: data.newPassword,
     });
@@ -489,7 +517,27 @@ async function handlePasswordSubmit(data: {
 }
 
 function resetPasswordForm() {
-  currentPasswordEmpId.value = 0;
+  passwordDialogVisible.value = false;
+}
+
+async function handleSetPasswordSubmit(data: { newPassword: string }) {
+  if (!setPasswordTarget.value) return;
+  try {
+    await updateEmployeePassword(setPasswordTarget.value.id, {
+      newPassword: data.newPassword,
+    });
+    ElMessage.success(
+      `已修改「${setPasswordTarget.value.name}」的密码，请线下告知本人`,
+    );
+    setPasswordVisible.value = false;
+  } catch (error) {
+    console.error("修改员工密码失败:", error);
+  }
+}
+
+function resetSetPasswordForm() {
+  setPasswordVisible.value = false;
+  setPasswordTarget.value = null;
 }
 
 // ==================== 状态切换 ====================
@@ -507,14 +555,17 @@ async function handleStatusChange(row: EmployeeVO, val: number) {
       );
     }
 
+    statusLoadingId.value = row.id;
     await updateEmployeeStatus(row.id, val);
+    row.status = val;
     ElMessage.success(val === 1 ? "已启用" : "已禁用");
     fetchStatistics();
   } catch (error) {
     if (error !== "cancel") {
       console.error("状态切换失败:", error);
-      row.status = val === 1 ? 0 : 1;
     }
+  } finally {
+    statusLoadingId.value = undefined;
   }
 }
 

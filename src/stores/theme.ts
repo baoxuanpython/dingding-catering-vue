@@ -7,7 +7,7 @@ export interface ThemeDef {
   cssClass: string | null;
 }
 
-export const THEMES: ThemeDef[] = [  
+export const THEMES: ThemeDef[] = [
   { name: "light", label: "浅色", cssClass: "light" },
   { name: "dark", label: "深色", cssClass: null },
   { name: "cyberpunk", label: "赛博朋克", cssClass: "cyberpunk" },
@@ -20,7 +20,7 @@ export const useThemeStore = defineStore("theme", () => {
     (localStorage.getItem("theme-mode") as ThemeName) || "dark",
   );
 
-  const isDark = computed(() => activeThemeName.value === "dark");
+  const isDark = computed(() => activeThemeName.value !== "light");
 
   const applyTheme = (name: ThemeName) => {
     activeThemeName.value = name;

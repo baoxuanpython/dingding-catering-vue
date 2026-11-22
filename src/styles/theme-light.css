@@ -63,6 +63,15 @@ html.light {
   --accent-teal: #26a69a;
   --accent-purple: #725eff;
 
+  /* 快捷导航卡片配色（RGB 分量，浅色主题下取深色调保证对比度） */
+  --nav-order-rgb: 25, 118, 210;
+  --nav-meal-rgb: 46, 125, 50;
+  --nav-combo-rgb: 239, 108, 0;
+  --nav-category-rgb: 106, 79, 214;
+  --nav-flavor-rgb: 0, 137, 123;
+  --nav-employee-rgb: 194, 24, 91;
+  --nav-statistics-rgb: 69, 90, 100;
+
   /* 中性色 */
   --neutral-100: #f5f5f5;
   --neutral-200: #eeeeee;

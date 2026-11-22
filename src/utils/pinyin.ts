@@ -1,5 +1,5 @@
 /**
- * 员工管理 - 拼音工具函数
+ * 拼音与头像工具
  */
 import { pinyin } from "pinyin-pro";
 

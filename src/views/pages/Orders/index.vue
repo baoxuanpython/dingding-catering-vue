@@ -321,7 +321,7 @@
           :total="pagination.total"
           :page-sizes="[10, 20, 50, 100]"
           layout="total, sizes, prev, pager, next, jumper"
-          @size-change="fetchOrders"
+          @size-change="handleSizeChange"
           @current-change="fetchOrders"
           class="pagination"
         />
@@ -348,8 +348,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, computed, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { useMessageStore } from "@/stores/message";
 import {
   Search,
   Refresh,
@@ -386,6 +388,7 @@ const loading = ref(false);
 const orderList = ref<OrderVO[]>([]);
 const detailVisible = ref(false);
 const orderDetail = ref<OrderVO | null>(null);
+const messageStore = useMessageStore();
 const rejectVisible = ref(false);
 const rejectLoading = ref(false);
 const cancelVisible = ref(false);
@@ -393,6 +396,8 @@ const cancelLoading = ref(false);
 const currentOrderId = ref(0);
 
 const dateRange = ref<[string, string] | null>(null);
+
+const route = useRoute();
 
 const searchForm = reactive({
   number: "",
@@ -423,8 +428,10 @@ const activeStatus = ref<number | undefined>(undefined);
 // 是否是自定义混合查询（状态 + 其他条件）
 const isCustomQuery = ref(false);
 
-// "全部订单"卡片显示的数量（正常是 allOrdersCount，混合查询时是 pagination.total）
-const displayCount = ref(0);
+// "全部订单"卡片显示的数量：混合查询时为查询结果数，否则为全部订单总数
+const displayCount = computed(() =>
+  isCustomQuery.value ? pagination.total : allOrdersCount.value,
+);
 
 function getStatusText(status: number): string {
   return ORDER_STATUS_MAP[status]?.text || "未知";
@@ -465,11 +472,6 @@ async function fetchOrders() {
     orderList.value = res.records || [];
     pagination.total = res.total || 0;
 
-    // 如果是自定义查询，更新"全部订单"卡片显示的数量为本次查询结果数
-    if (isCustomQuery.value) {
-      displayCount.value = pagination.total;
-    }
-
     // 当没有筛选条件时，更新全部订单总数
     const hasFilter =
       searchForm.number ||
@@ -478,7 +480,6 @@ async function fetchOrders() {
       dateRange.value;
     if (!hasFilter && pagination.page === 1) {
       allOrdersCount.value = res.total || 0;
-      displayCount.value = allOrdersCount.value; // 同步更新显示数量
     }
   } catch {
     // 错误已在拦截器处理
@@ -491,18 +492,38 @@ async function fetchStatistics() {
   try {
     const res = await getOrderStatistics();
     Object.assign(statistics, res);
-    // 初始化"全部订单"卡片的显示数量
-    allOrdersCount.value =
-      (statistics.toBeConfirmed || 0) +
-      (statistics.confirmed || 0) +
-      (statistics.deliveryInProgress || 0) +
-      (statistics.completed || 0) +
-      (statistics.cancelled || 0) +
-      (statistics.refunded || 0);
-    displayCount.value = allOrdersCount.value; // 同步更新显示数量
+    // 统计接口不含待付款订单，"全部订单"数量以列表 total 为准；
+    // 列表尚未返回时才用统计合计兜底，避免并发时覆盖成偏小的值
+    if (!isCustomQuery.value && pagination.total === 0) {
+      allOrdersCount.value =
+        (statistics.toBeConfirmed || 0) +
+        (statistics.confirmed || 0) +
+        (statistics.deliveryInProgress || 0) +
+        (statistics.completed || 0) +
+        (statistics.cancelled || 0) +
+        (statistics.refunded || 0);
+    }
   } catch {
     // 错误已在拦截器处理
   }
+}
+
+let refreshing = false;
+
+/**
+ * 订单状态变更后的统一刷新：列表 + 统计并发，带 in-flight 保护防止连点叠加
+ */
+function refreshAll() {
+  if (refreshing) return;
+  refreshing = true;
+  Promise.all([fetchOrders(), fetchStatistics()]).finally(() => {
+    refreshing = false;
+  });
+}
+
+function handleSizeChange() {
+  pagination.page = 1;
+  fetchOrders();
 }
 
 function handleSearch() {
@@ -518,22 +539,18 @@ function handleSearch() {
     // 混合查询：状态 + 其他条件
     isCustomQuery.value = true;
     activeStatus.value = undefined; // 不高亮状态卡片
-    // displayCount 会在 fetchOrders 成功后更新为 pagination.total
   } else if (hasStatus && !hasOtherConditions) {
     // 单独状态查询
     isCustomQuery.value = false;
     activeStatus.value = searchForm.status; // 高亮对应的状态卡片
-    displayCount.value = allOrdersCount.value; // 恢复显示全部订单数量
   } else if (hasOtherConditions && !hasStatus) {
     // 只有其他条件，没有状态（也算自定义查询）
     isCustomQuery.value = true;
     activeStatus.value = undefined;
-    // displayCount 会在 fetchOrders 成功后更新为 pagination.total
   } else {
     // 没有任何查询条件（理论上不会走到这里，因为会走 reset）
     isCustomQuery.value = false;
     activeStatus.value = undefined;
-    displayCount.value = allOrdersCount.value;
   }
 
   pagination.page = 1;
@@ -547,7 +564,6 @@ function handleReset() {
   dateRange.value = null;
   activeStatus.value = undefined;
   isCustomQuery.value = false;
-  displayCount.value = allOrdersCount.value; // 恢复显示全部订单数量
   pagination.page = 1;
   fetchOrders();
 }
@@ -562,13 +578,11 @@ function handleStatusFilter(status: number | undefined) {
     searchForm.number = "";
     searchForm.phone = "";
     dateRange.value = null;
-    displayCount.value = allOrdersCount.value; // 显示全部订单数量
   } else {
     // 点击"全部订单"卡片：查看全部
     activeStatus.value = undefined;
     searchForm.status = undefined;
     isCustomQuery.value = false;
-    displayCount.value = allOrdersCount.value; // 显示全部订单数量
   }
 
   pagination.page = 1;
@@ -584,10 +598,11 @@ async function handleConfirm(row: OrderVO) {
     });
     await confirmOrder({ id: row.id, status: 3 });
     ElMessage.success("接单成功");
-    fetchOrders();
-    fetchStatistics();
-  } catch {
-    // 用户取消
+    refreshAll();
+  } catch (error) {
+    if (error !== "cancel") {
+      console.error("接单失败:", error);
+    }
   }
 }
 
@@ -609,8 +624,7 @@ async function submitReject(reason: string) {
     });
     ElMessage.success("拒单成功");
     rejectVisible.value = false;
-    fetchOrders();
-    fetchStatistics();
+    refreshAll();
   } catch {
     // 错误已在拦截器处理
   } finally {
@@ -636,8 +650,7 @@ async function submitCancel(reason: string) {
     });
     ElMessage.success("取消成功");
     cancelVisible.value = false;
-    fetchOrders();
-    fetchStatistics();
+    refreshAll();
   } catch {
     // 错误已在拦截器处理
   } finally {
@@ -654,10 +667,11 @@ async function handleDelivery(row: OrderVO) {
     });
     await deliveryOrder(row.id);
     ElMessage.success("已派送");
-    fetchOrders();
-    fetchStatistics();
-  } catch {
-    // 用户取消
+    refreshAll();
+  } catch (error) {
+    if (error !== "cancel") {
+      console.error("派送失败:", error);
+    }
   }
 }
 
@@ -670,10 +684,11 @@ async function handleComplete(row: OrderVO) {
     });
     await completeOrder(row.id);
     ElMessage.success("订单已完成");
-    fetchOrders();
-    fetchStatistics();
-  } catch {
-    // 用户取消
+    refreshAll();
+  } catch (error) {
+    if (error !== "cancel") {
+      console.error("完成订单失败:", error);
+    }
   }
 }
 
@@ -687,10 +702,59 @@ async function handleViewDetail(row: OrderVO) {
   }
 }
 
+/**
+ * 从路由 query 读取跳转筛选条件，命中则填入并查询，返回是否命中
+ * - number：消息中心点击订单号跳转
+ * - status：工作台订单环形图点击跳转（携带状态码）
+ */
+function applyQueryFilters(): boolean {
+  const { number, status } = route.query;
+  let handled = false;
+
+  if (typeof number === "string" && number.trim()) {
+    searchForm.number = number.trim();
+    searchForm.phone = "";
+    dateRange.value = null;
+    handled = true;
+  } else {
+    searchForm.number = "";
+    searchForm.phone = "";
+    dateRange.value = null;
+  }
+
+  if (typeof status === "string" && status.trim()) {
+    const parsed = Number(status);
+    if (Number.isFinite(parsed)) {
+      searchForm.status = parsed;
+      handled = true;
+    }
+  } else {
+    searchForm.status = undefined;
+  }
+
+  if (!handled) return false;
+
+  handleSearch();
+  return true;
+}
+
 onMounted(() => {
-  fetchOrders();
+  if (!applyQueryFilters()) {
+    fetchOrders();
+  }
   fetchStatistics();
 });
+
+watch([() => route.fullPath, () => messageStore.orderFocusTick], () => {
+  applyQueryFilters();
+});
+
+watch(
+  () => messageStore.orderPushTick,
+  () => {
+    refreshAll();
+  },
+);
 </script>
 
 <style scoped lang="scss">

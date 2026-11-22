@@ -707,6 +707,24 @@
   color: var(--text-secondary) !important;
 }
 
+/* 弹窗内表单的规则提示行（与输入框左对齐，右侧可放操作按钮） */
+.rule-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 弹窗表单最后一个字段不额外留白，间距交给 footer 的分割线 */
+.el-dialog .el-form-item:last-child {
+  margin-bottom: 0;
+}
+
 /* 弹窗内 el-upload 上传组件深色主题 */
 .el-dialog .avatar-uploader {
   .el-upload {
@@ -1129,7 +1147,7 @@
 .el-table {
   --el-table-border-color: var(--border-color);
   --el-table-header-bg-color: var(--bg-primary);
-  --el-table-row-hover-bg-color: rgba(var(--primary-dark-rgb), 0.04);
+  --el-table-row-hover-bg-color: var(--table-row-hover-bg);
   --el-table-tr-bg-color: var(--bg-card);
   --el-table-expanded-row-bg-color: var(--bg-card);
   background-color: var(--bg-card);
@@ -1173,7 +1191,7 @@
 }
 
 .el-table__body tr:hover > td.el-table__cell {
-  background-color: rgba(var(--primary-dark-rgb), 0.08) !important;
+  background-color: var(--table-row-hover-bg) !important;
 }
 
 /* 表格单元格水平垂直居中 */
@@ -1721,16 +1739,7 @@
 
 /* ---------- 8. 表格行悬停效果 ---------- */
 
-/* 表格行悬停 */
-.table-row-hover {
-  :deep(.el-table__row) {
-    transition: background 0.2s;
-
-    &:hover {
-      background: rgba(var(--primary-dark-rgb), 0.04);
-    }
-  }
-}
+/* 表格行悬停统一由 theme.css 的 --table-row-hover-bg 驱动，见第 2 节 el-table 覆盖 */
 
 /* ---------- 9. 上传组件 ---------- */
 
@@ -1933,9 +1942,161 @@
   border: 1px solid var(--border-color) !important;
 }
 
+/* ---------- 13. 快捷导航宫格 ---------- */
+
+/* 导航宫格容器：默认 4 列 */
+.nav-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* 导航卡片：左侧主题色竖条 + 图标 + 标题描述 + 汇总数字 */
+.nav-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  cursor: pointer;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    background: rgb(var(--nav-accent-rgb));
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgba(var(--nav-accent-rgb), 0.45);
+    box-shadow: 0 6px 18px rgba(var(--nav-accent-rgb), 0.18);
+
+    .nav-card-icon {
+      background: rgba(var(--nav-accent-rgb), 0.2);
+    }
+
+    .nav-card-arrow {
+      opacity: 1;
+      color: rgb(var(--nav-accent-rgb));
+      transform: translateX(3px);
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px);
+  }
+}
+
+/* 每个模块的强调色，由主题文件提供 RGB 分量 */
+.nav-card--order {
+  --nav-accent-rgb: var(--nav-order-rgb);
+}
+.nav-card--meal {
+  --nav-accent-rgb: var(--nav-meal-rgb);
+}
+.nav-card--combo {
+  --nav-accent-rgb: var(--nav-combo-rgb);
+}
+.nav-card--category {
+  --nav-accent-rgb: var(--nav-category-rgb);
+}
+.nav-card--flavor {
+  --nav-accent-rgb: var(--nav-flavor-rgb);
+}
+.nav-card--employee {
+  --nav-accent-rgb: var(--nav-employee-rgb);
+}
+.nav-card--statistics {
+  --nav-accent-rgb: var(--nav-statistics-rgb);
+}
+
+/* 卡片图标 */
+.nav-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  color: rgb(var(--nav-accent-rgb));
+  background: rgba(var(--nav-accent-rgb), 0.12);
+  transition: all 0.3s ease;
+}
+
+/* 卡片文字区 */
+.nav-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.nav-card-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 卡片汇总数字 */
+.nav-card-value {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  flex-shrink: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  color: rgb(var(--nav-accent-rgb));
+}
+
+.nav-card-unit {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+/* 卡片箭头 */
+.nav-card-arrow {
+  flex-shrink: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  opacity: 0.45;
+  transition: all 0.3s ease;
+}
+
 /* ==================== 响应式断点 ==================== */
+@media (max-width: 1400px) {
+  .nav-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 1200px) {
   .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .nav-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -1972,5 +2133,10 @@
 
   .detail-grid {
     grid-template-columns: 1fr;
+  }
+
+  .nav-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }

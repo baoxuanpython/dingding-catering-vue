@@ -35,6 +35,7 @@
       @batch-delete="handleBatchDelete"
       @selection-change="handleSelectionChange"
       @page-change="fetchFlavors"
+      @size-change="handleSizeChange"
     />
 
     <FlavorFormDialog
@@ -79,6 +80,11 @@ const {
 } = useFlavors();
 
 fetchFlavors();
+
+function handleSizeChange() {
+  pagination.page = 1;
+  fetchFlavors();
+}
 </script>
 
 <style scoped lang="scss">

@@ -63,6 +63,15 @@ html.cyberpunk {
   --accent-teal: #006064;
   --accent-purple: #7c4dff;
 
+  /* 快捷导航卡片配色（RGB 分量，霓虹高饱和） */
+  --nav-order-rgb: 0, 240, 255;
+  --nav-meal-rgb: 57, 255, 20;
+  --nav-combo-rgb: 255, 230, 0;
+  --nav-category-rgb: 179, 136, 255;
+  --nav-flavor-rgb: 255, 94, 184;
+  --nav-employee-rgb: 255, 158, 64;
+  --nav-statistics-rgb: 138, 111, 166;
+
   /* 中性色（冷灰蓝紫底） */
   --neutral-100: #1a0d26;
   --neutral-200: #261a36;

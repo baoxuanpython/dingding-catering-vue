@@ -39,7 +39,7 @@
         />
       </div>
       <el-button type="primary" @click="showExportDialog = true">
-        <el-icon ><Download /></el-icon>
+        <el-icon><Download /></el-icon>
         导出报表
       </el-button>
     </div>
@@ -176,7 +176,6 @@ const {
   userData,
   top10Data,
   loading,
-  computedDateRange,
 } = useStatistics();
 
 const themeStore = useThemeStore();
@@ -743,11 +742,25 @@ onUnmounted(() => {
 
 // --- 导出 ---
 
+function getWeekStartDate(): string {
+  const d = new Date();
+  const day = d.getDay();
+  const diff = day === 0 ? 6 : day - 1;
+  d.setDate(d.getDate() - diff);
+  return formatExportDate(d);
+}
+
+function getMonthStartDate(): string {
+  const d = new Date();
+  d.setDate(1);
+  return formatExportDate(d);
+}
+
 function computeExportDates(): { begin: string; end: string } {
-  const today = computedDateRange.value;
+  const today = formatExportDate(new Date());
   switch (exportRange.value) {
     case "today":
-      return today;
+      return { begin: today, end: today };
     case "yesterday": {
       const d = new Date();
       d.setDate(d.getDate() - 1);
@@ -755,16 +768,16 @@ function computeExportDates(): { begin: string; end: string } {
       return { begin: s, end: s };
     }
     case "week":
-      return today;
+      return { begin: getWeekStartDate(), end: today };
     case "month":
-      return today;
+      return { begin: getMonthStartDate(), end: today };
     case "custom":
       return {
         begin: exportCustomDate.value[0] || "",
         end: exportCustomDate.value[1] || "",
       };
     default:
-      return today;
+      return { begin: today, end: today };
   }
 }
 

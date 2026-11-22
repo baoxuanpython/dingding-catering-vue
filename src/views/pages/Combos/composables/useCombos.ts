@@ -68,6 +68,7 @@ export function useCombos() {
     );
   });
 
+  // 是否只有状态筛选（未附加名称/分类等条件）
   const isOnlyStatusFilter = computed(() => {
     return (
       searchForm.status !== undefined &&
@@ -76,41 +77,20 @@ export function useCombos() {
     );
   });
 
+  // 是否为自定义查询（状态之外还有名称/分类条件，或只有名称/分类）
+  const isStatCustom = computed(() => {
+    return (
+      hasSearchCondition.value && hasQueried.value && !isOnlyStatusFilter.value
+    );
+  });
+
+  // 「套餐总数」卡片：只有自定义查询时才显示查询结果数，点起售/停售不影响它
   const statCardLabel = computed(() => {
-    if (
-      hasSearchCondition.value &&
-      hasQueried.value &&
-      !isOnlyStatusFilter.value
-    ) {
-      return "指定状态查询";
-    }
-    if (isOnlyStatusFilter.value && hasQueried.value) {
-      return searchForm.status === 1 ? "已启售" : "已停售";
-    }
-    return "套餐总数";
+    return isStatCustom.value ? "指定条件查询" : "套餐总数";
   });
 
   const statCardValue = computed(() => {
-    if (
-      hasSearchCondition.value &&
-      hasQueried.value &&
-      !isOnlyStatusFilter.value
-    ) {
-      return pagination.total;
-    }
-    if (isOnlyStatusFilter.value && hasQueried.value) {
-      return searchForm.status === 1 ? statistics.onSale : statistics.offSale;
-    }
-    return statistics.total;
-  });
-
-  const isStatCustom = computed(() => {
-    return (
-      hasSearchCondition.value &&
-      hasQueried.value &&
-      !isOnlyStatusFilter.value &&
-      activeStat.value === "total"
-    );
+    return isStatCustom.value ? pagination.total : statistics.total;
   });
 
   async function fetchStatistics() {
@@ -171,6 +151,19 @@ export function useCombos() {
   function handleSearch() {
     pagination.page = 1;
     hasQueried.value = true;
+
+    // 有名称/分类条件即视为自定义查询，此时不高亮状态卡片
+    const hasOtherConditions =
+      !!searchForm.name || searchForm.categoryId !== undefined;
+
+    if (hasOtherConditions) {
+      activeStat.value = "total";
+    } else if (searchForm.status !== undefined) {
+      activeStat.value = searchForm.status === 1 ? "onSale" : "offSale";
+    } else {
+      activeStat.value = "total";
+    }
+
     fetchCombos();
   }
 

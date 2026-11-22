@@ -88,7 +88,7 @@
         :total="pagination.total"
         :page-sizes="[10, 20, 50]"
         layout="total, sizes, prev, pager, next, jumper"
-        @size-change="$emit('page-change')"
+        @size-change="$emit('size-change')"
         @current-change="$emit('page-change')"
       />
     </div>
@@ -117,6 +117,7 @@ defineEmits<{
   (e: "batch-delete"): void;
   (e: "selection-change", rows: Flavor[]): void;
   (e: "page-change"): void;
+  (e: "size-change"): void;
 }>();
 </script>
 

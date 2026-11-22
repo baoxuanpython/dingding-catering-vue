@@ -14,6 +14,10 @@ export default defineConfig({
     },
   },
   server: {
+    // 固定端口：后端 WebSocket 的 Origin 白名单按 5173 配置，
+    // 端口漂移会导致握手被 403 拒绝，表现为「连不上且没有任何提示」
+    port: 5173,
+    strictPort: true,
     proxy: {
       "/api": {
         target: "http://localhost:8080",
