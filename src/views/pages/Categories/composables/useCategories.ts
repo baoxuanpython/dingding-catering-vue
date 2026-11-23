@@ -147,9 +147,14 @@ export function useCategories() {
     sort: number;
     type: number;
   }) {
-    await createCategory(data);
-    ElMessage.success("新增成功");
-    await Promise.all([fetchCategories(), fetchStats()]);
+    try {
+      await createCategory(data);
+      ElMessage.success("新增成功");
+      await Promise.all([fetchCategories(), fetchStats()]);
+    } catch (error) {
+      // 错误已在 Axios 拦截器中弹窗提示，此处捕获避免冒泡到全局异常处理器重复弹窗
+      console.error("新增分类失败:", error);
+    }
   }
 
   /**
@@ -161,9 +166,14 @@ export function useCategories() {
     sort: number;
     type: number;
   }) {
-    await updateCategory(data);
-    ElMessage.success("修改成功");
-    await Promise.all([fetchCategories(), fetchStats()]);
+    try {
+      await updateCategory(data);
+      ElMessage.success("修改成功");
+      await Promise.all([fetchCategories(), fetchStats()]);
+    } catch (error) {
+      // 错误已在 Axios 拦截器中弹窗提示，此处捕获避免冒泡到全局异常处理器重复弹窗
+      console.error("修改分类失败:", error);
+    }
   }
 
   /**

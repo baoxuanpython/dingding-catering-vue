@@ -92,6 +92,7 @@ const businessErrorMessageMap: Record<number, string> = {
   // 分类模块 (3xxx)
   [ErrorCode.CATEGORY_HAS_SETMEAL]: "当前分类关联了套餐，不能删除",
   [ErrorCode.CATEGORY_HAS_DISH]: "当前分类关联了菜品，不能删除",
+  [ErrorCode.CATEGORY_DUPLICATE_NAME]: "分类名称已存在",
 
   // 菜品模块 (4xxx)
   [ErrorCode.DISH_ON_SALE_CANNOT_DELETE]: "起售中的菜品不能删除",

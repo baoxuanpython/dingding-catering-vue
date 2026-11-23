@@ -168,7 +168,7 @@ async function handleFormSubmit(data: {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 @use "@/styles/common-page.scss";
 
 /* 分类页面特有样式（如有） */

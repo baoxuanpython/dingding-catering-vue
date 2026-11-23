@@ -37,6 +37,7 @@ export enum ErrorCode {
   // ========== 分类模块 (3xxx) ==========
   CATEGORY_HAS_SETMEAL = 3001, // 当前分类关联了套餐，不能删除
   CATEGORY_HAS_DISH = 3002, // 当前分类关联了菜品，不能删除
+  CATEGORY_DUPLICATE_NAME = 3003, // 分类名称已存在
 
   // ========== 菜品模块 (4xxx) ==========
   DISH_ON_SALE_CANNOT_DELETE = 4001, // 起售中的菜品不能删除
@@ -107,6 +108,7 @@ export const ErrorCodeToHttpStatus: Record<number, number> = {
 
   [ErrorCode.CATEGORY_HAS_SETMEAL]: HttpStatusCode.CONFLICT,
   [ErrorCode.CATEGORY_HAS_DISH]: HttpStatusCode.CONFLICT,
+  [ErrorCode.CATEGORY_DUPLICATE_NAME]: HttpStatusCode.CONFLICT,
 
   [ErrorCode.DISH_ON_SALE_CANNOT_DELETE]: HttpStatusCode.CONFLICT,
   [ErrorCode.DISH_HAS_SETMEAL]: HttpStatusCode.CONFLICT,

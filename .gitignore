@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 .trae/
+reference/
+docs/
